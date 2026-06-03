@@ -1,0 +1,21 @@
+.DS_Store
+*.xcuserstate
+xcuserdata/
+DerivedData/
+build/
+*.moved-aside
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+
+# Generated dictionary artifact (rebuild via tools/build_jmdict.py).
+# 116 MB — exceeds GitHub's 100 MB per-file push limit.
+FuriganaLens/Resources/jmdict.sqlite
+
+# Local raw JMdict / Tanaka downloads used by the build script.
+tools/jmdict-eng-*.json
+tools/jmdict-eng-*.json.tgz
+tools/jmdict-eng-*.json.zip
+tools/examples.utf
+tools/examples.utf.gz
