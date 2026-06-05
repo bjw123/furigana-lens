@@ -4,11 +4,11 @@ Personal iOS app for reading Japanese from your TV while gaming. Point the camer
 
 ## Demo
 
-[![Demo walkthrough — click to play](docs/screenshots/01.png)](docs/demo.mp4)
+[![Demo walkthrough — 81 seconds](docs/screenshots/01.png)](https://github.com/bjw123/furigana-lens/releases/download/v0.1.0/demo.mp4)
 
-▶ [**Watch the 81-second walkthrough**](docs/demo.mp4) — point the camera at a TV running Persona 5, capture, tap a chip, reveal a reading, save it to a deck, then review it.
+▶ [**Download the 81-second walkthrough**](https://github.com/bjw123/furigana-lens/releases/download/v0.1.0/demo.mp4) (released as a [v0.1.0](https://github.com/bjw123/furigana-lens/releases/tag/v0.1.0) asset). Point the camera at a TV running Persona 5, capture, tap a chip, reveal a reading, save it to a deck, then review it.
 
-> GitHub's README renderer won't inline-play `.mp4` files referenced from repo paths — only video pasted into the GitHub web editor (which lands on the `user-attachments` CDN) plays inline. The link above downloads / opens the committed `docs/demo.mp4` in a player.
+> Why not inline-embedded? GitHub's README sanitizer only allows `<video>` tags pointing at the `user-attachments` CDN, and repo paths (raw + release assets) are served with a sandbox CSP that forces download. To inline-embed: open `README.md` on github.com → Edit → drag the mp4 into the editor → GitHub uploads it to `user-attachments/assets/<uuid>` → replace the link above with the resulting markdown. The screenshot gallery below covers the same ground without that step.
 
 ## Screenshots
 
