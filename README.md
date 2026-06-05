@@ -2,6 +2,63 @@
 
 Personal iOS app for reading Japanese from your TV while gaming. Point the camera, capture text, tap a word for furigana, optionally reveal meaning via [Jisho](https://jisho.org/), and save flashcards with SM-2 spaced repetition.
 
+## Demo
+
+[![Demo walkthrough — click to play](docs/screenshots/01.png)](docs/demo.mp4)
+
+▶ [**Watch the 81-second walkthrough**](docs/demo.mp4) — point the camera at a TV running Persona 5, capture, tap a chip, reveal a reading, save it to a deck, then review it.
+
+> GitHub's README renderer won't inline-play `.mp4` files referenced from repo paths — only video pasted into the GitHub web editor (which lands on the `user-attachments` CDN) plays inline. The link above downloads / opens the committed `docs/demo.mp4` in a player.
+
+## Screenshots
+
+<table>
+  <tr>
+    <td align="center" width="20%">
+      <img src="docs/screenshots/01.png" width="180"><br>
+      <sub><b>Scan a TV</b><br>frozen frame + word chips</sub>
+    </td>
+    <td align="center" width="20%">
+      <img src="docs/screenshots/02.png" width="180"><br>
+      <sub><b>Tap for reading</b><br>furigana over the kanji</sub>
+    </td>
+    <td align="center" width="20%">
+      <img src="docs/screenshots/03.png" width="180"><br>
+      <sub><b>Word detail</b><br>mark known or look up meaning</sub>
+    </td>
+    <td align="center" width="20%">
+      <img src="docs/screenshots/04.png" width="180"><br>
+      <sub><b>Save flashcard</b><br>reading / meaning / sentence</sub>
+    </td>
+    <td align="center" width="20%">
+      <img src="docs/screenshots/05.png" width="180"><br>
+      <sub><b>Decks</b><br>tagged by game / anime</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="20%">
+      <img src="docs/screenshots/06.png" width="180"><br>
+      <sub><b>Deck overview</b><br>new · learning · mature</sub>
+    </td>
+    <td align="center" width="20%">
+      <img src="docs/screenshots/07.png" width="180"><br>
+      <sub><b>Edit a card</b><br>expression · meaning · interval</sub>
+    </td>
+    <td align="center" width="20%">
+      <img src="docs/screenshots/08.png" width="180"><br>
+      <sub><b>Review home</b><br>review all, or pick a deck</sub>
+    </td>
+    <td align="center" width="20%">
+      <img src="docs/screenshots/09.png" width="180"><br>
+      <sub><b>Front of card</b><br>show answer when ready</sub>
+    </td>
+    <td align="center" width="20%">
+      <img src="docs/screenshots/10.png" width="180"><br>
+      <sub><b>Grade the answer</b><br>SM-2: Again · Hard · Good · Easy</sub>
+    </td>
+  </tr>
+</table>
+
 ## Features
 
 - **Freeze-frame camera** + on-device Vision OCR (Japanese)

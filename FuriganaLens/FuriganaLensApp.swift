@@ -4,8 +4,13 @@ import UIKit
 
 @main
 struct FuriganaLensApp: App {
+    private let container: ModelContainer
+
     init() {
+        let schema = Schema([Deck.self, Flashcard.self, ReviewLog.self, KnownWord.self])
+        self.container = try! ModelContainer(for: schema)
         configureGlobalAppearance()
+        MockDataSeeder.seedIfRequested(container: container)
     }
 
     var body: some Scene {
@@ -13,7 +18,7 @@ struct FuriganaLensApp: App {
             RootTabView()
                 .tint(Palette.indigo)
         }
-        .modelContainer(for: [Deck.self, Flashcard.self, ReviewLog.self, KnownWord.self])
+        .modelContainer(container)
     }
 
     private func configureGlobalAppearance() {

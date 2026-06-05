@@ -127,25 +127,32 @@ final class DictionaryService {
     }
 
     private func decompressGzip(_ data: Data) throws -> Data {
-        // Inflate using the Compression framework's zlib (raw deflate). The gzip
-        // wrapper has a 10-byte header + 8-byte trailer (CRC + size) around a
-        // raw deflate stream — strip both so the algorithm sees only the deflate
-        // payload it understands.
-        guard data.count > 18 else {
+        // Inflate using the Compression framework's zlib (raw deflate). gzip wraps
+        // a raw deflate stream with a variable-length header (10 bytes fixed plus
+        // optional FEXTRA / FNAME / FCOMMENT / FHCRC fields) and an 8-byte
+        // trailer (CRC32 + uncompressed-size). Parse the header so we feed only
+        // the deflate payload into the decoder.
+        let payloadStart = try gzipPayloadOffset(data)
+        guard data.count > payloadStart + 8 else {
             throw NSError(domain: "DictionaryService", code: 2,
                           userInfo: [NSLocalizedDescriptionKey: "gzip payload too small"])
         }
-        let payload = data.subdata(in: 10..<(data.count - 8))
+        let payload = data.subdata(in: payloadStart..<(data.count - 8))
 
-        // Output buffer sized for the known uncompressed DB (~120 MB).
-        let estimatedSize = 140 * 1024 * 1024
-        let destination = UnsafeMutablePointer<UInt8>.allocate(capacity: estimatedSize)
+        // Trailer ends with ISIZE (uncompressed size mod 2^32) — use it to size
+        // the output buffer exactly so larger dictionaries still fit.
+        let isize = UInt32(data[data.count - 4])
+                  | (UInt32(data[data.count - 3]) << 8)
+                  | (UInt32(data[data.count - 2]) << 16)
+                  | (UInt32(data[data.count - 1]) << 24)
+        let destinationSize = max(Int(isize), 64 * 1024 * 1024) + 1024 * 1024
+        let destination = UnsafeMutablePointer<UInt8>.allocate(capacity: destinationSize)
         defer { destination.deallocate() }
 
         let written = payload.withUnsafeBytes { (srcRaw: UnsafeRawBufferPointer) -> Int in
             guard let srcBase = srcRaw.bindMemory(to: UInt8.self).baseAddress else { return 0 }
             return compression_decode_buffer(
-                destination, estimatedSize,
+                destination, destinationSize,
                 srcBase, payload.count,
                 nil, COMPRESSION_ZLIB
             )
@@ -156,6 +163,56 @@ final class DictionaryService {
                           userInfo: [NSLocalizedDescriptionKey: "gzip decompression failed"])
         }
         return Data(bytes: destination, count: written)
+    }
+
+    /// Returns the byte index where the deflate payload begins after a valid
+    /// gzip header. Throws if the magic/method bytes look wrong.
+    private func gzipPayloadOffset(_ data: Data) throws -> Int {
+        guard data.count >= 18, data[0] == 0x1f, data[1] == 0x8b else {
+            throw NSError(domain: "DictionaryService", code: 4,
+                          userInfo: [NSLocalizedDescriptionKey: "not a gzip stream"])
+        }
+        guard data[2] == 0x08 else {
+            throw NSError(domain: "DictionaryService", code: 5,
+                          userInfo: [NSLocalizedDescriptionKey: "unsupported gzip compression method"])
+        }
+        let flags = data[3]
+        var offset = 10  // fixed header
+
+        // FEXTRA — 2-byte little-endian length, then that many bytes.
+        if flags & 0x04 != 0 {
+            guard offset + 2 <= data.count else { throw gzipHeaderTruncated() }
+            let xlen = Int(data[offset]) | (Int(data[offset + 1]) << 8)
+            offset += 2 + xlen
+        }
+        // FNAME — null-terminated original filename.
+        if flags & 0x08 != 0 {
+            offset = try indexAfterNullTerminator(in: data, from: offset)
+        }
+        // FCOMMENT — null-terminated comment.
+        if flags & 0x10 != 0 {
+            offset = try indexAfterNullTerminator(in: data, from: offset)
+        }
+        // FHCRC — 2-byte header CRC.
+        if flags & 0x02 != 0 {
+            offset += 2
+        }
+        guard offset < data.count else { throw gzipHeaderTruncated() }
+        return offset
+    }
+
+    private func indexAfterNullTerminator(in data: Data, from start: Int) throws -> Int {
+        var i = start
+        while i < data.count {
+            if data[i] == 0 { return i + 1 }
+            i += 1
+        }
+        throw gzipHeaderTruncated()
+    }
+
+    private func gzipHeaderTruncated() -> NSError {
+        NSError(domain: "DictionaryService", code: 6,
+                userInfo: [NSLocalizedDescriptionKey: "gzip header truncated"])
     }
 
     /// Returns matches for the given form (kanji or kana), ordered by commonness then entry id.

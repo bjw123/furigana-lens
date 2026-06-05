@@ -14,6 +14,7 @@ struct ReviewSessionView: View {
 
     @State private var currentIndex = 0
     @State private var showBack = false
+    @State private var seeMoreExpanded = false
 
     enum SessionKind {
         case review   // applies SRS + writes a ReviewLog
@@ -76,24 +77,29 @@ struct ReviewSessionView: View {
 
             Spacer()
 
-            VStack(spacing: 18) {
-                front(for: card)
-                if showBack {
-                    BrushDivider().frame(width: 120)
-                    back(for: card)
-                        .transition(.opacity.combined(with: .move(edge: .bottom)))
+            ScrollView {
+                VStack(spacing: 18) {
+                    front(for: card)
+                    if showBack {
+                        BrushDivider().frame(width: 120)
+                        back(for: card)
+                            .transition(.opacity.combined(with: .move(edge: .bottom)))
+                        seeMoreSection(for: card)
+                            .transition(.opacity)
+                    }
                 }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 32)
+                .padding(.horizontal, 20)
+                .background(Palette.washi, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 24, style: .continuous)
+                        .strokeBorder(Palette.hairline, lineWidth: 0.75)
+                )
+                .shadow(color: Palette.sumi.opacity(0.08), radius: 14, y: 6)
+                .padding(.horizontal)
             }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 32)
-            .padding(.horizontal, 20)
-            .background(Palette.washi, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: 24, style: .continuous)
-                    .strokeBorder(Palette.hairline, lineWidth: 0.75)
-            )
-            .shadow(color: Palette.sumi.opacity(0.08), radius: 14, y: 6)
-            .padding(.horizontal)
+            .scrollIndicators(.hidden)
 
             Spacer()
 
@@ -161,6 +167,109 @@ struct ReviewSessionView: View {
         }
     }
 
+    private struct SeeMoreData {
+        let extraGlosses: [String]
+        let examples: [ExampleSentence]
+        var hasExtraMeaning: Bool { !extraGlosses.isEmpty }
+        var hasExamples: Bool { !examples.isEmpty }
+        var hasContent: Bool { hasExtraMeaning || hasExamples }
+    }
+
+    private func seeMoreData(for card: Flashcard) -> SeeMoreData {
+        let entries = DictionaryService.shared.lookup(card.expression, limit: 2)
+        let extraGlosses = (card.cardType != .meaning)
+            ? (entries.first.map { $0.glosses() } ?? [])
+            : []
+        let kanjiForms = entries.flatMap { $0.kanji }
+        let kanaForms = entries.flatMap { $0.kana }
+        let headwords = ([card.expression] + kanjiForms + kanaForms).filter { !$0.isEmpty }
+        let examples = headwords.isEmpty
+            ? []
+            : DictionaryService.shared.examples(for: headwords, limit: 2)
+        return SeeMoreData(extraGlosses: extraGlosses, examples: examples)
+    }
+
+    @ViewBuilder
+    private func seeMoreSection(for card: Flashcard) -> some View {
+        let data = seeMoreData(for: card)
+        if data.hasContent {
+            seeMoreToggle
+            if seeMoreExpanded {
+                seeMoreExpandedContent(data: data)
+            }
+        }
+    }
+
+    private var seeMoreToggle: some View {
+        Button {
+            withAnimation(.easeInOut(duration: 0.15)) {
+                seeMoreExpanded.toggle()
+            }
+        } label: {
+            HStack(spacing: 6) {
+                Image(systemName: seeMoreExpanded ? "chevron.up" : "chevron.down")
+                    .font(.caption.weight(.semibold))
+                Text(seeMoreExpanded ? "Hide details" : "See more")
+                    .font(.system(.caption, design: .rounded).weight(.semibold))
+            }
+            .padding(.horizontal, 14)
+            .padding(.vertical, 7)
+            .foregroundStyle(Palette.indigo)
+            .background(Capsule().fill(Palette.indigo.opacity(0.10)))
+        }
+        .buttonStyle(.plain)
+        .padding(.top, 4)
+    }
+
+    private func seeMoreExpandedContent(data: SeeMoreData) -> some View {
+        VStack(alignment: .leading, spacing: 14) {
+            if data.hasExtraMeaning {
+                meaningBlock(glosses: data.extraGlosses)
+            }
+            if data.hasExamples {
+                examplesBlock(examples: data.examples)
+            }
+        }
+        .padding(.horizontal, 4)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .transition(.opacity)
+    }
+
+    private func meaningBlock(glosses: [String]) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Meaning")
+                .font(.system(.caption2, design: .rounded).weight(.semibold))
+                .foregroundStyle(Palette.mist)
+                .textCase(.uppercase)
+                .tracking(0.6)
+            Text(glosses.joined(separator: "; "))
+                .font(.system(.subheadline, design: .rounded))
+                .foregroundStyle(Palette.sumi.opacity(0.88))
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    private func examplesBlock(examples: [ExampleSentence]) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Examples")
+                .font(.system(.caption2, design: .rounded).weight(.semibold))
+                .foregroundStyle(Palette.mist)
+                .textCase(.uppercase)
+                .tracking(0.6)
+            ForEach(examples, id: \.self) { ex in
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(ex.japanese)
+                        .font(.system(.subheadline, design: .serif))
+                        .foregroundStyle(Palette.sumi)
+                    Text(ex.english)
+                        .font(.caption)
+                        .foregroundStyle(Palette.mist)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
+    }
+
     private func gradeButtons(for card: Flashcard) -> some View {
         HStack(spacing: 8) {
             ForEach(ReviewGrade.allCases, id: \.rawValue) { grade in
@@ -220,6 +329,7 @@ struct ReviewSessionView: View {
 
         withAnimation(.easeInOut(duration: 0.15)) {
             showBack = false
+            seeMoreExpanded = false
             currentIndex += 1
         }
     }
