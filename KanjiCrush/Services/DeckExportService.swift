@@ -1,6 +1,7 @@
 import Foundation
 import SwiftData
 import UniformTypeIdentifiers
+import os
 
 /// Versioned JSON payload for sharing decks between Kanji Crush users.
 ///
@@ -47,6 +48,7 @@ enum DeckExportService {
     /// Build a `.kcdeck` JSON blob for the given deck. Pretty-printed so it's
     /// human-inspectable; gzipping isn't worth the complexity at this scale.
     static func export(deck: Deck) throws -> Data {
+        AppLog.deckExport.info("export start cards=\(deck.cards.count, privacy: .public)")
         let cards = deck.cards.map { card in
             DeckPayload.CardRecord(
                 expression: card.expression,
@@ -69,7 +71,9 @@ enum DeckExportService {
         )
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
-        return try encoder.encode(payload)
+        let data = try encoder.encode(payload)
+        AppLog.deckExport.info("export ok bytes=\(data.count, privacy: .public)")
+        return data
     }
 
     /// File name suggestion for sharing — sanitises the deck name so the
@@ -142,10 +146,18 @@ enum DeckExportService {
         into modelContext: ModelContext,
         existingDeckNames: Set<String>
     ) throws -> Deck {
+        AppLog.deckExport.info("import start bytes=\(data.count, privacy: .public)")
         let decoder = JSONDecoder()
-        let payload = try decoder.decode(DeckPayload.self, from: data)
+        let payload: DeckPayload
+        do {
+            payload = try decoder.decode(DeckPayload.self, from: data)
+        } catch {
+            AppLog.deckExport.error("import decode failed: \(error.localizedDescription, privacy: .public)")
+            throw error
+        }
 
         guard payload.version <= DeckPayload.currentVersion else {
+            AppLog.deckExport.error("import rejected: payload version=\(payload.version, privacy: .public) > current=\(DeckPayload.currentVersion, privacy: .public)")
             throw NSError(
                 domain: "DeckExportService", code: 1,
                 userInfo: [NSLocalizedDescriptionKey:
@@ -187,6 +199,7 @@ enum DeckExportService {
         }
 
         try modelContext.save()
+        AppLog.deckExport.info("import ok cards=\(payload.cards.count, privacy: .public)")
         return deck
     }
 }

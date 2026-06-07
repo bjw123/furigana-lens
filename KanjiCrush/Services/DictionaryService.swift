@@ -1,6 +1,7 @@
 import Foundation
 import SQLite3
 import Compression
+import os
 
 /// SQLite-backed offline JMdict + Tanaka Corpus lookup. The DB is preprocessed
 /// by `tools/build_jmdict.py`, gzipped, and bundled at `Resources/jmdict.sqlite.gz`.
@@ -99,13 +100,27 @@ final class DictionaryService {
             let dbURL = try ensureDatabaseUnpacked()
             let result = sqlite3_open_v2(dbURL.path, &db, SQLITE_OPEN_READONLY, nil)
             if result != SQLITE_OK {
+                AppLog.dictionary.error("sqlite open failed code=\(result, privacy: .public) path=\(dbURL.path, privacy: .public)")
                 assertionFailure("sqlite open failed: \(result)")
                 db = nil
+                return
             }
+            AppLog.dictionary.info("opened sqlite at \(dbURL.path, privacy: .public) entries=\(self.entryCountForLog(), privacy: .public)")
         } catch {
+            AppLog.dictionary.error("dictionary unpack failed: \(String(describing: error), privacy: .public)")
             assertionFailure("dictionary unpack failed: \(error)")
             db = nil
         }
+    }
+
+    /// Single COUNT(*) used only at startup logging; safe to run synchronously
+    /// off the open path because the DB is local and read-only.
+    private func entryCountForLog() -> Int {
+        guard let db else { return -1 }
+        var stmt: OpaquePointer?
+        guard sqlite3_prepare_v2(db, "SELECT COUNT(*) FROM entries;", -1, &stmt, nil) == SQLITE_OK else { return -1 }
+        defer { sqlite3_finalize(stmt) }
+        return sqlite3_step(stmt) == SQLITE_ROW ? Int(sqlite3_column_int64(stmt, 0)) : -1
     }
 
     /// On first launch, decompress the bundled `jmdict.sqlite.gz` into Application
@@ -135,6 +150,7 @@ final class DictionaryService {
                           userInfo: [NSLocalizedDescriptionKey: "jmdict.sqlite.gz missing from bundle"])
         }
 
+        AppLog.dictionary.notice("unpacking bundled dictionary stamp=\(bundleStamp, privacy: .public)")
         let gzData = try Data(contentsOf: gzURL)
         let raw = try decompressGzip(gzData)
         try raw.write(to: dbURL, options: .atomic)

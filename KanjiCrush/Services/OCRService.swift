@@ -1,5 +1,6 @@
 import UIKit
 import Vision
+import os
 
 enum OCRServiceError: LocalizedError {
     case noImage
@@ -29,12 +30,17 @@ final class OCRService {
     static let shared = OCRService()
 
     func recognize(in image: UIImage) async throws -> [OCRLine] {
-        guard let cgImage = image.cgImage else { throw OCRServiceError.noImage }
+        guard let cgImage = image.cgImage else {
+            AppLog.ocr.error("recognize called with no cgImage")
+            throw OCRServiceError.noImage
+        }
         let orientation = CGImagePropertyOrientation(image.imageOrientation)
+        AppLog.ocr.info("scan start size=\(cgImage.width, privacy: .public)x\(cgImage.height, privacy: .public)")
 
         return try await withCheckedThrowingContinuation { continuation in
             let request = VNRecognizeTextRequest { request, error in
                 if let error {
+                    AppLog.ocr.error("vision failed: \(error.localizedDescription, privacy: .public)")
                     continuation.resume(throwing: OCRServiceError.visionFailed(error))
                     return
                 }
@@ -70,6 +76,7 @@ final class OCRService {
                 if lines.isEmpty {
                     continuation.resume(throwing: OCRServiceError.noTextFound)
                 } else {
+                    AppLog.ocr.info("scan recognised lines=\(lines.count, privacy: .public)")
                     continuation.resume(returning: lines)
                 }
             }
@@ -83,6 +90,7 @@ final class OCRService {
             do {
                 try handler.perform([request])
             } catch {
+                AppLog.ocr.error("vision handler perform failed: \(error.localizedDescription, privacy: .public)")
                 continuation.resume(throwing: OCRServiceError.visionFailed(error))
             }
         }

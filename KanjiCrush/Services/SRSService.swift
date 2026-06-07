@@ -1,4 +1,5 @@
 import Foundation
+import os
 
 enum ReviewGrade: Int, CaseIterable {
     case again = 0
@@ -27,6 +28,7 @@ final class SRSService {
         var interval = card.interval
 
         if q < 3 {
+            AppLog.srs.notice("lapse expr=\(card.expression, privacy: .private) prevReps=\(reps, privacy: .public) prevInterval=\(interval, privacy: .public)")
             reps = 0
             interval = 1
         } else {

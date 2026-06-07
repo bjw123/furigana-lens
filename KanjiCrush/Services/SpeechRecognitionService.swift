@@ -2,6 +2,7 @@ import AVFoundation
 import Foundation
 import Speech
 import SwiftUI
+import os
 
 /// Live Japanese speech-to-text wrapper used by the typed-quiz "Speak" mode.
 ///
@@ -82,6 +83,9 @@ final class SpeechRecognitionService: ObservableObject {
             }
         }
 
+        if !speechGranted || !micGranted {
+            AppLog.speech.notice("permission denied speech=\(speechGranted, privacy: .public) mic=\(micGranted, privacy: .public)")
+        }
         return speechGranted && micGranted
     }
 
@@ -91,8 +95,10 @@ final class SpeechRecognitionService: ObservableObject {
     func start() throws {
         guard !isListening else { return }
         guard let recognizer, recognizer.isAvailable else {
+            AppLog.speech.error("start failed: recognizer unavailable")
             throw SpeechRecognitionError.unavailable
         }
+        AppLog.speech.info("session start continuous=\(self.continuousMode, privacy: .public) onDevice=\(recognizer.supportsOnDeviceRecognition, privacy: .public)")
 
         // Tear down any lingering state from a previous session.
         task?.cancel()
@@ -167,6 +173,7 @@ final class SpeechRecognitionService: ObservableObject {
                                 || nsErr.code == 1110 || nsErr.code == 1101
                                 || nsErr.code == 301)
                         if !recoverable {
+                            AppLog.speech.error("recognition error domain=\(nsErr.domain, privacy: .public) code=\(nsErr.code, privacy: .public) desc=\(nsErr.localizedDescription, privacy: .public)")
                             self.error = nsErr.localizedDescription
                         }
                     }
@@ -181,6 +188,7 @@ final class SpeechRecognitionService: ObservableObject {
                        self.continuousMode,
                        let recognizer = self.recognizer,
                        recognizer.isAvailable {
+                        AppLog.speech.debug("auto-recovery: restarting recognition task")
                         self.installRecognitionTask(on: recognizer)
                     } else {
                         self.teardown()
@@ -194,6 +202,7 @@ final class SpeechRecognitionService: ObservableObject {
     /// observed `transcript` value remains so the user can edit it.
     func stop() {
         guard isListening else { return }
+        AppLog.speech.info("session stop transcriptChars=\(self.transcript.count, privacy: .public)")
         // Flip the flag first so the recognition-task completion handler
         // doesn't try to spin up a replacement task under continuous mode.
         isListening = false

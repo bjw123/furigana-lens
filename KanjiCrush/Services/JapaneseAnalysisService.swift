@@ -1,4 +1,5 @@
 import Foundation
+import os
 
 /// On-device Japanese tokenization + reading lookup.
 /// Uses CFStringTokenizer with `kCFStringTokenizerAttributeLatinTranscription` —
@@ -28,6 +29,9 @@ final class JapaneseAnalysisService {
             tokens.append(JapaneseToken(surface: surface, reading: reading, range: range))
         }
 
+        if tokens.isEmpty {
+            AppLog.analysis.debug("tokenize produced no Japanese tokens len=\(trimmed.count, privacy: .public)")
+        }
         return tokens
     }
 
