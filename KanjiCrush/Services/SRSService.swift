@@ -38,8 +38,11 @@ final class SRSService {
                 interval = ceil(interval * ef)
             }
             reps += 1
-            ef = max(1.3, ef + (0.1 - Double(5 - q) * (0.08 + Double(5 - q) * 0.02)))
         }
+        // SM-2 updates ease for every review, including failures — without
+        // this, repeated lapses never reduce the ease factor and the card
+        // keeps the same difficulty forever.
+        ef = max(1.3, ef + (0.1 - Double(5 - q) * (0.08 + Double(5 - q) * 0.02)))
 
         card.easeFactor = ef
         card.repetitions = reps
