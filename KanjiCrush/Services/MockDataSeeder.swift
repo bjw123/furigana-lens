@@ -140,6 +140,7 @@ enum MockDataSeeder {
         for card in try ctx.fetch(FetchDescriptor<Flashcard>()) { ctx.delete(card) }
         for deck in try ctx.fetch(FetchDescriptor<Deck>()) { ctx.delete(deck) }
         for kw in try ctx.fetch(FetchDescriptor<KnownWord>()) { ctx.delete(kw) }
+        for stats in try ctx.fetch(FetchDescriptor<UserStats>()) { ctx.delete(stats) }
         try ctx.save()
     }
 

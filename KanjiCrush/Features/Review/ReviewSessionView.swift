@@ -679,7 +679,7 @@ struct ReviewSessionView: View {
         // Hard reset it. Only fire the burst on extensions of length ≥ 2.
         if grade.rawValue >= 3 {
             comboCount += 1
-            AchievementService.recordCombo(comboCount)
+            AchievementService.recordCombo(comboCount, in: modelContext)
             if comboCount >= 2 {
                 comboBurstId = UUID()
             }

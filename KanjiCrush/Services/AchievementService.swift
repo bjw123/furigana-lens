@@ -101,20 +101,23 @@ enum AchievementCatalog {
 }
 
 enum AchievementService {
-    /// Persisted high-water mark for combo length. Streak-of-the-session
+    /// Read the persisted high-water mark for combo length. Streak-of-the-session
     /// combo is volatile; we want the *best* combo ever for the
     /// `combo_5` / `combo_10` predicates.
-    private static let bestComboKey = "achievementBestCombo"
-
-    static var bestCombo: Int {
-        get { UserDefaults.standard.integer(forKey: bestComboKey) }
-        set { UserDefaults.standard.set(newValue, forKey: bestComboKey) }
+    @MainActor
+    static func bestCombo(in context: ModelContext) -> Int {
+        UserStats.current(in: context).bestCombo
     }
 
     /// Push the current run's combo length into the all-time best store so
     /// the predicates pick it up on the next evaluation.
-    static func recordCombo(_ count: Int) {
-        if count > bestCombo { bestCombo = count }
+    @MainActor
+    static func recordCombo(_ count: Int, in context: ModelContext) {
+        let stats = UserStats.current(in: context)
+        guard count > stats.bestCombo else { return }
+        stats.bestCombo = count
+        stats.updatedAt = Date()
+        try? context.save()
     }
 
     /// Walk the catalog, insert `UnlockedAchievement` rows for newly-met
@@ -130,7 +133,7 @@ enum AchievementService {
         let context = AchievementContext(
             cards: cards,
             reviewLogs: reviewLogs,
-            bestCombo: bestCombo,
+            bestCombo: bestCombo(in: modelContext),
             streak: streak
         )
         let knownKeys = Set(unlocked.map { $0.key })

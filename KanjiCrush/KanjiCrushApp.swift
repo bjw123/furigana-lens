@@ -13,11 +13,32 @@ struct KanjiCrushApp: App {
             ReviewLog.self,
             KnownWord.self,
             UnlockedAchievement.self,
-            DailyChallengeLog.self
+            DailyChallengeLog.self,
+            UserStats.self
         ])
         self.container = try! ModelContainer(for: schema)
         configureGlobalAppearance()
+        Self.migrateLegacyBestCombo(into: container)
         MockDataSeeder.seedIfRequested(container: container)
+    }
+
+    /// One-shot migration: `bestCombo` used to live in UserDefaults under
+    /// `"achievementBestCombo"`. Copy it into the SwiftData `UserStats` row on
+    /// first launch after the move and drop the legacy key so subsequent
+    /// launches are no-ops.
+    @MainActor
+    private static func migrateLegacyBestCombo(into container: ModelContainer) {
+        let key = "achievementBestCombo"
+        let legacy = UserDefaults.standard.integer(forKey: key)
+        guard legacy > 0 else { return }
+        let context = container.mainContext
+        let stats = UserStats.current(in: context)
+        if legacy > stats.bestCombo {
+            stats.bestCombo = legacy
+            stats.updatedAt = Date()
+            try? context.save()
+        }
+        UserDefaults.standard.removeObject(forKey: key)
     }
 
     var body: some Scene {
