@@ -426,8 +426,7 @@ struct SettingsView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 8) {
-                    storyParagraph("While there are a few alternative apps out there, I wanted to build my own. I use this specifically for gaming, when I come across kanji I find difficult to read.")
-                    storyParagraph("Unlike other apps in the space, this one will never have ads or subscriptions — it's built by me, for me. Feel free to use it.")
+                    storyParagraph("There are a number of alternative apps in this space — most of them freemium. I wanted my own: built by me, actively used by me, no ads, no subscription. Feel free to use it.")
 
                     VStack(alignment: .leading, spacing: 2) {
                         HStack(spacing: 6) {
