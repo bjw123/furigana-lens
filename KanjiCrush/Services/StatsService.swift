@@ -281,16 +281,18 @@ enum StatsService {
     /// (kana-fold to hiragana) so substring matching against a typical
     /// hiragana card reading works.
     private static func normalizeKanjiReading(_ raw: String) -> String {
-        let stripped = String(raw.unicodeScalars.compactMap { scalar -> Unicode.Scalar? in
-            if scalar == "." || scalar == "-" { return nil }
+        var result = ""
+        for scalar in raw.unicodeScalars {
+            if scalar == "." || scalar == "-" { continue }
             // Katakana → hiragana: U+30A1..U+30F6 maps to U+3041..U+3096.
             if (0x30A1...0x30F6).contains(scalar.value),
                let mapped = Unicode.Scalar(scalar.value - 0x60) {
-                return mapped
+                result.unicodeScalars.append(mapped)
+            } else {
+                result.unicodeScalars.append(scalar)
             }
-            return scalar
-        })
-        return stripped
+        }
+        return result
     }
 
     /// Build a `StrugglingKanji`-shaped view of an arbitrary kanji — used when navigating from

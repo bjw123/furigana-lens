@@ -8,7 +8,7 @@ import SwiftData
 /// • `reset`  — wipe existing decks/flashcards/known words first
 /// • `append` — only seed if the store has no decks yet
 ///
-/// Activated automatically from `FuriganaLensApp` when the matching launch
+/// Activated automatically from `KanjiCrushApp` when the matching launch
 /// argument is present.
 enum MockDataSeeder {
     enum Mode: String { case reset, append }

@@ -88,15 +88,18 @@ struct SettingsView: View {
 
             HStack(alignment: .center, spacing: 14) {
                 ZStack {
-                    Circle()
-                        .fill(.ultraThinMaterial)
-                        .frame(width: 56, height: 56)
-                    Text("文")
-                        .font(.system(size: 30, weight: .bold, design: .serif))
-                        .foregroundStyle(Palette.sumi)
+                    KanjiGemBadge(
+                        kanji: "漢",
+                        tint: Palette.sakura,
+                        deeperTint: Color(red: 0.870, green: 0.486, blue: 0.580),
+                        size: 64,
+                        foreground: Palette.cream
+                    )
+                    SparkleAccent(size: 5, tint: Palette.cream)
+                        .offset(x: 24, y: -22)
                 }
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Furigana Lens")
+                    Text("Kanji Crush")
                         .font(.system(.title3, design: .rounded).weight(.bold))
                         .foregroundStyle(Palette.sumi)
                     Text("Read Japanese from anything")
@@ -333,7 +336,7 @@ struct SettingsView: View {
                     storyParagraph("I made this because I like playing games in Japanese — and looking up the kanji on the fly is tedious.")
                     storyParagraph("You can point Google Lens at the screen, copy the word, paste it into a dictionary… by the time you've finished, you've forgotten the sentence and the word never really sticks.")
                     storyParagraph("On top of that, games are full of vocab that isn't your daily-Japanese textbook stuff — half the time you have no clue how to even read the kanji.")
-                    storyParagraph("Furigana Lens scans the text, gives you the reading instantly, and lets you save it so it actually lands. It's built for me, but it's here if you fall into the same niche.")
+                    storyParagraph("Kanji Crush scans the text, gives you the reading instantly, and lets you save it so it actually lands. It's built for me, but it's here if you fall into the same niche.")
 
                     VStack(alignment: .leading, spacing: 2) {
                         HStack(spacing: 6) {

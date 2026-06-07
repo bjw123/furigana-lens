@@ -167,6 +167,157 @@ extension View {
     }
 }
 
+// MARK: - Candy-tile primitives (Kanji-Crush identity)
+
+/// Single glossy "candy gem" tile used throughout the app — the same building
+/// block that appears in the app icon. A vertical gradient gives it the
+/// jelly-candy sheen; the top highlight is what reads as "glossy" at all sizes.
+struct GemTile<Content: View>: View {
+    var tint: Color = Palette.sakura
+    var deeperTint: Color? = nil
+    var cornerRadius: CGFloat = 18
+    var size: CGFloat? = nil
+    var shadowStrength: Double = 1.0
+    @ViewBuilder let content: () -> Content
+
+    private var bottomTint: Color {
+        deeperTint ?? tint.opacity(0.78)
+    }
+
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                .fill(
+                    LinearGradient(
+                        colors: [tint, bottomTint],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+            // Glossy white highlight near the top edge — the "candy coat".
+            RoundedRectangle(cornerRadius: cornerRadius * 0.55, style: .continuous)
+                .fill(Color.white.opacity(0.40))
+                .blur(radius: 4)
+                .padding(.horizontal, cornerRadius * 0.5)
+                .padding(.top, cornerRadius * 0.35)
+                .padding(.bottom, cornerRadius * 1.4)
+                .blendMode(.plusLighter)
+                .allowsHitTesting(false)
+
+            content()
+        }
+        .frame(width: size, height: size)
+        .shadow(color: Palette.sumi.opacity(0.20 * shadowStrength), radius: 14 * shadowStrength, x: 0, y: 8 * shadowStrength)
+    }
+}
+
+/// Kanji glyph painted on a `GemTile`. Used as the brand mark and in hero
+/// grids. The default cream foreground matches the app icon.
+struct KanjiGemBadge: View {
+    let kanji: String
+    var tint: Color = Palette.sakura
+    var deeperTint: Color? = nil
+    var size: CGFloat = 56
+    var foreground: Color = Palette.cream
+    var fontWeight: Font.Weight = .bold
+
+    var body: some View {
+        GemTile(tint: tint, deeperTint: deeperTint, cornerRadius: size * 0.22, size: size) {
+            Text(kanji)
+                .font(.system(size: size * 0.58, weight: fontWeight, design: .serif))
+                .foregroundStyle(foreground)
+                .minimumScaleFactor(0.6)
+        }
+    }
+}
+
+/// 3×3 grid of small kanji gems with a single hero gem in the centre —
+/// the same composition as the app icon. The 8 background tiles cycle the
+/// brand palette; the centre slot is whatever caller provides.
+struct KanjiGemBoard<Centre: View>: View {
+    var sideTiles: CGFloat = 56
+    var spacing: CGFloat = 6
+    var centreSize: CGFloat = 116
+    /// 8 surrounding kanji (row-major, skipping centre):
+    /// row 1: 0 1 2 / row 2: 3 [centre] 4 / row 3: 5 6 7
+    var surroundingKanji: [String] = ["龍", "雷", "炎", "剣", "魂", "神", "月", "桜"]
+    @ViewBuilder let centre: () -> Centre
+
+    private let surroundingTints: [(Color, Color)] = [
+        (Palette.sakura, Color(red: 0.870, green: 0.486, blue: 0.580)),
+        (Palette.indigo, Color(red: 0.135, green: 0.165, blue: 0.310)),
+        (Palette.gold,   Color(red: 0.580, green: 0.460, blue: 0.270)),
+        (Palette.bamboo, Color(red: 0.330, green: 0.460, blue: 0.270)),
+        (Palette.indigo, Color(red: 0.135, green: 0.165, blue: 0.310)),
+        (Palette.bamboo, Color(red: 0.330, green: 0.460, blue: 0.270)),
+        (Palette.gold,   Color(red: 0.580, green: 0.460, blue: 0.270)),
+        (Palette.sakura, Color(red: 0.870, green: 0.486, blue: 0.580))
+    ]
+
+    var body: some View {
+        let kanji = surroundingKanji
+        let total = sideTiles * 3 + spacing * 2
+        ZStack {
+            VStack(spacing: spacing) {
+                ForEach(0..<3, id: \.self) { row in
+                    HStack(spacing: spacing) {
+                        ForEach(0..<3, id: \.self) { col in
+                            if row == 1 && col == 1 {
+                                Color.clear.frame(width: sideTiles, height: sideTiles)
+                            } else {
+                                let idx = surroundingIndex(row: row, col: col)
+                                let tints = surroundingTints[idx % surroundingTints.count]
+                                KanjiGemBadge(
+                                    kanji: kanji[idx % kanji.count],
+                                    tint: tints.0.opacity(0.55),
+                                    deeperTint: tints.1.opacity(0.55),
+                                    size: sideTiles,
+                                    foreground: Palette.cream.opacity(0.95)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+            .frame(width: total, height: total)
+
+            // Centre hero tile sits on top of the grid, slightly larger.
+            GemTile(
+                tint: Palette.sakura,
+                deeperTint: Color(red: 0.870, green: 0.486, blue: 0.580),
+                cornerRadius: centreSize * 0.26,
+                size: centreSize,
+                shadowStrength: 1.4
+            ) {
+                centre()
+            }
+        }
+        .frame(width: max(total, centreSize), height: max(total, centreSize))
+    }
+
+    /// Map a (row, col) position to an index into the 8-element surrounding list,
+    /// skipping the centre tile.
+    private func surroundingIndex(row: Int, col: Int) -> Int {
+        let flat = row * 3 + col
+        return flat < 4 ? flat : flat - 1
+    }
+}
+
+/// Twinkle accent used to decorate kanji-gem compositions. Tiny circle with
+/// a soft glow — sprinkle a few around hero surfaces.
+struct SparkleAccent: View {
+    var size: CGFloat = 8
+    var tint: Color = Palette.cream
+
+    var body: some View {
+        Circle()
+            .fill(tint)
+            .frame(width: size, height: size)
+            .shadow(color: tint.opacity(0.9), radius: size * 0.6)
+            .opacity(0.85)
+    }
+}
+
 // MARK: - Brush divider
 
 /// Hand-drawn horizontal brush stroke. Pairs with `SectionHeader`.

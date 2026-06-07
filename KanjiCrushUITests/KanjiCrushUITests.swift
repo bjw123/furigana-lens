@@ -1,6 +1,6 @@
 import XCTest
 
-final class FuriganaLensUITests: XCTestCase {
+final class KanjiCrushUITests: XCTestCase {
     private var app: XCUIApplication!
 
     override func setUpWithError() throws {

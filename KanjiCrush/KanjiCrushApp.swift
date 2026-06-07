@@ -3,7 +3,7 @@ import SwiftData
 import UIKit
 
 @main
-struct FuriganaLensApp: App {
+struct KanjiCrushApp: App {
     private let container: ModelContainer
 
     init() {

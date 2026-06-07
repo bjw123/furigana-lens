@@ -15,10 +15,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C7D8F5A85B961679C0D377FA"
-               BuildableName = "FuriganaLens.app"
-               BlueprintName = "FuriganaLens"
-               ReferencedContainer = "container:FuriganaLens.xcodeproj">
+               BlueprintIdentifier = "83406451EC2D26D522634FAB"
+               BuildableName = "KanjiCrush.app"
+               BlueprintName = "KanjiCrush"
+               ReferencedContainer = "container:KanjiCrush.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -29,10 +29,10 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "265ABA121768A8C111A72960"
-               BuildableName = "FuriganaLensTests.xctest"
-               BlueprintName = "FuriganaLensTests"
-               ReferencedContainer = "container:FuriganaLens.xcodeproj">
+               BlueprintIdentifier = "D6A7DCD60B29CB686034F737"
+               BuildableName = "KanjiCrushTests.xctest"
+               BlueprintName = "KanjiCrushTests"
+               ReferencedContainer = "container:KanjiCrush.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -43,10 +43,10 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2469D2B236B80E745EEF8C45"
-               BuildableName = "FuriganaLensUITests.xctest"
-               BlueprintName = "FuriganaLensUITests"
-               ReferencedContainer = "container:FuriganaLens.xcodeproj">
+               BlueprintIdentifier = "D5EA71EAAFD7EF357BFBFAE3"
+               BuildableName = "KanjiCrushUITests.xctest"
+               BlueprintName = "KanjiCrushUITests"
+               ReferencedContainer = "container:KanjiCrush.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -60,10 +60,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C7D8F5A85B961679C0D377FA"
-            BuildableName = "FuriganaLens.app"
-            BlueprintName = "FuriganaLens"
-            ReferencedContainer = "container:FuriganaLens.xcodeproj">
+            BlueprintIdentifier = "83406451EC2D26D522634FAB"
+            BuildableName = "KanjiCrush.app"
+            BlueprintName = "KanjiCrush"
+            ReferencedContainer = "container:KanjiCrush.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <Testables>
@@ -72,10 +72,10 @@
             parallelizable = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "265ABA121768A8C111A72960"
-               BuildableName = "FuriganaLensTests.xctest"
-               BlueprintName = "FuriganaLensTests"
-               ReferencedContainer = "container:FuriganaLens.xcodeproj">
+               BlueprintIdentifier = "D6A7DCD60B29CB686034F737"
+               BuildableName = "KanjiCrushTests.xctest"
+               BlueprintName = "KanjiCrushTests"
+               ReferencedContainer = "container:KanjiCrush.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -83,10 +83,10 @@
             parallelizable = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2469D2B236B80E745EEF8C45"
-               BuildableName = "FuriganaLensUITests.xctest"
-               BlueprintName = "FuriganaLensUITests"
-               ReferencedContainer = "container:FuriganaLens.xcodeproj">
+               BlueprintIdentifier = "D5EA71EAAFD7EF357BFBFAE3"
+               BuildableName = "KanjiCrushUITests.xctest"
+               BlueprintName = "KanjiCrushUITests"
+               ReferencedContainer = "container:KanjiCrush.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -107,10 +107,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C7D8F5A85B961679C0D377FA"
-            BuildableName = "FuriganaLens.app"
-            BlueprintName = "FuriganaLens"
-            ReferencedContainer = "container:FuriganaLens.xcodeproj">
+            BlueprintIdentifier = "83406451EC2D26D522634FAB"
+            BuildableName = "KanjiCrush.app"
+            BlueprintName = "KanjiCrush"
+            ReferencedContainer = "container:KanjiCrush.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -124,10 +124,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C7D8F5A85B961679C0D377FA"
-            BuildableName = "FuriganaLens.app"
-            BlueprintName = "FuriganaLens"
-            ReferencedContainer = "container:FuriganaLens.xcodeproj">
+            BlueprintIdentifier = "83406451EC2D26D522634FAB"
+            BuildableName = "KanjiCrush.app"
+            BlueprintName = "KanjiCrush"
+            ReferencedContainer = "container:KanjiCrush.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

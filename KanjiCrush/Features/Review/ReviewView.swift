@@ -80,31 +80,28 @@ struct ReviewView: View {
     }
 
     private var dueHero: some View {
-        VStack(spacing: 14) {
+        VStack(spacing: 18) {
             ZStack {
-                Circle()
-                    .fill(dueAll.isEmpty ? Palette.bamboo.opacity(0.16) : Palette.sakura.opacity(0.20))
-                    .frame(width: 132, height: 132)
-                if dueAll.isEmpty {
-                    Image(systemName: "checkmark.seal.fill")
-                        .font(.system(size: 56))
-                        .foregroundStyle(Palette.bamboo)
-                } else {
-                    VStack(spacing: 2) {
-                        Text("\(dueAll.count)")
-                            .font(.system(size: 44, weight: .bold, design: .rounded))
-                            .foregroundStyle(Palette.indigo)
-                        Text("due")
-                            .font(.system(.caption, design: .rounded).weight(.medium))
-                            .foregroundStyle(Palette.mist)
-                            .textCase(.uppercase)
-                            .tracking(0.8)
-                    }
+                // Tiny twinkles around the gem board — same accent the icon uses.
+                SparkleAccent(size: 6, tint: Palette.cream)
+                    .offset(x: -110, y: -90)
+                SparkleAccent(size: 5, tint: Palette.sakura)
+                    .offset(x: 120, y: -70)
+                SparkleAccent(size: 4, tint: Palette.gold)
+                    .offset(x: 100, y: 100)
+
+                KanjiGemBoard(
+                    sideTiles: 60,
+                    spacing: 7,
+                    centreSize: 124
+                ) {
+                    dueCentre
                 }
             }
+            .frame(height: 230)
 
             VStack(spacing: 4) {
-                Text(dueAll.isEmpty ? "Nothing due" : "Time to review")
+                Text(dueAll.isEmpty ? "Nothing due" : "Time to crush kanji")
                     .font(.system(.title2, design: .rounded).weight(.semibold))
                     .foregroundStyle(Palette.sumi)
                 Text(
@@ -116,6 +113,25 @@ struct ReviewView: View {
                 .foregroundStyle(Palette.mist)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 32)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var dueCentre: some View {
+        if dueAll.isEmpty {
+            Image(systemName: "checkmark.seal.fill")
+                .font(.system(size: 40, weight: .bold))
+                .foregroundStyle(Palette.cream)
+        } else {
+            VStack(spacing: -2) {
+                Text("\(dueAll.count)")
+                    .font(.system(size: 44, weight: .heavy, design: .rounded))
+                    .foregroundStyle(Palette.cream)
+                Text("DUE")
+                    .font(.system(.caption2, design: .rounded).weight(.bold))
+                    .foregroundStyle(Palette.cream.opacity(0.85))
+                    .tracking(1.4)
             }
         }
     }

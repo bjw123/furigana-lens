@@ -1,0 +1,721 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		018309967D9123C5791139E8 /* FuriganaText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AD71B6D179002407C5E6F4 /* FuriganaText.swift */; };
+		1F592127D2217B5B05EB7827 /* SRSService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9DA80B47F978748982EE4C /* SRSService.swift */; };
+		24E2ED4BE13B4C2E680B0976 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD372E4A3B23128F9B2FA6A2 /* SettingsView.swift */; };
+		2AC0B88E0F0DAE407402F00E /* OCRPipelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891FD33B3970E032500E6843 /* OCRPipelineTests.swift */; };
+		2E465C9206353DCBA7FF399F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9FBDF3600DFD26E6C1EBF305 /* Assets.xcassets */; };
+		37D7D914AB8E35A2F9111C0D /* KanjiDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC8CBDE0F1E948BA875541C2 /* KanjiDetailView.swift */; };
+		3D593FCDBA041E0B78A2FC51 /* OCRService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9A4D7694D52435FB445E95 /* OCRService.swift */; };
+		3FEE86BE1357065B871E5C88 /* Flashcard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 823A7BE537B3727C787980FE /* Flashcard.swift */; };
+		5A90BFC5D59BD39EB63F0E93 /* JapaneseAnalysisService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE74DC8E0766DDCE99AE84A0 /* JapaneseAnalysisService.swift */; };
+		61FDAAD960CE24ACAC7DCE5D /* WordDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078463155A7D721875DACBCB /* WordDetailView.swift */; };
+		645DBAC9D540C34CD1CE55C3 /* DecksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8C8C427735498D90B8404 /* DecksView.swift */; };
+		6A89C7C3455B74C225ECA367 /* KnownWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFDA2F2F96AF807139D157C /* KnownWord.swift */; };
+		73396257EEF5D432942E5C4C /* StatsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1D25565072B0B16D0C326E /* StatsService.swift */; };
+		7803BBF04D20B19EDFD575EA /* Knownness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B07B5DB94D5FF64743FDF90 /* Knownness.swift */; };
+		7A2CCBCFADAEA78E3C58578A /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41349B7FE4C8941D99C95E93 /* RootTabView.swift */; };
+		7B2E6E365771F20DC4C08C7C /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8573B1A7672F443BC2C42559 /* Theme.swift */; };
+		7E708069A3FF48EE9139E6CA /* KanjiTypedReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6335C5233FA238D2474A4BFB /* KanjiTypedReviewView.swift */; };
+		8452BC03D2BA34EEFF543C34 /* Deck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639089187F485FCC4D5DD646 /* Deck.swift */; };
+		90926AFFD72C47CEB0290462 /* KanjiCrushApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46D8DEC1AECBF7799793277B /* KanjiCrushApp.swift */; };
+		90A8F6E72EA66EA2E75C028E /* MockDataSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE94356A1F078093DC61C52 /* MockDataSeeder.swift */; };
+		96D08F3605D58B890A9D5F6A /* KanjiCrushUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F81B4592A468869DE9DC3C /* KanjiCrushUITests.swift */; };
+		9B940DA9AF9BD960FFFD6C3D /* ReviewSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF244FA6F44A387A5A9EDB34 /* ReviewSessionView.swift */; };
+		9E2A8E495D0ECBD4B8EC5461 /* jmdict.sqlite.gz in Resources */ = {isa = PBXBuildFile; fileRef = F8960B4740139682A4D92446 /* jmdict.sqlite.gz */; };
+		AA3E3156B2D124565373C3C4 /* ReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBCEB7020E1F75F253EF2A99 /* ReviewView.swift */; };
+		B1FDBCF92CB85368FC0E3103 /* ReadingOverrideStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D4459A9CED977F1831952A /* ReadingOverrideStore.swift */; };
+		BF59D6A62B3A5B7A50FA4B5C /* DictionaryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2165FACC51F9B6110D4F6A /* DictionaryService.swift */; };
+		C6B1052E61C21B8D7E09AED0 /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B565DD4011B1B0CDAB9D3EBE /* CameraPreviewView.swift */; };
+		CBC22BFE600F52A751C25745 /* ScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C8FD25EFBD2F072063248F /* ScanView.swift */; };
+		CF05607C3ECCE1771285CE44 /* reading_overrides.json in Resources */ = {isa = PBXBuildFile; fileRef = 9328AB6145C00516601FA825 /* reading_overrides.json */; };
+		DD0CF79499AA36384BBD44F5 /* JapaneseToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5621C2637E6ED31061C9DB /* JapaneseToken.swift */; };
+		F94226BF0A11AF288D8BB752 /* SpeechService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AEE441BC1A1FC2D014BA884 /* SpeechService.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2EB5976359E2FD1218673E62 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5DF5569BB107B961B4197C98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 83406451EC2D26D522634FAB;
+			remoteInfo = KanjiCrush;
+		};
+		E9D55A63A26F301D210DE259 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5DF5569BB107B961B4197C98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 83406451EC2D26D522634FAB;
+			remoteInfo = KanjiCrush;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		078463155A7D721875DACBCB /* WordDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordDetailView.swift; sourceTree = "<group>"; };
+		0B07B5DB94D5FF64743FDF90 /* Knownness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Knownness.swift; sourceTree = "<group>"; };
+		0B9DA80B47F978748982EE4C /* SRSService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SRSService.swift; sourceTree = "<group>"; };
+		0BE94356A1F078093DC61C52 /* MockDataSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDataSeeder.swift; sourceTree = "<group>"; };
+		22C8FD25EFBD2F072063248F /* ScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
+		2C5621C2637E6ED31061C9DB /* JapaneseToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapaneseToken.swift; sourceTree = "<group>"; };
+		41349B7FE4C8941D99C95E93 /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
+		46D8DEC1AECBF7799793277B /* KanjiCrushApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiCrushApp.swift; sourceTree = "<group>"; };
+		4FFDA2F2F96AF807139D157C /* KnownWord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownWord.swift; sourceTree = "<group>"; };
+		6335C5233FA238D2474A4BFB /* KanjiTypedReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiTypedReviewView.swift; sourceTree = "<group>"; };
+		639089187F485FCC4D5DD646 /* Deck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deck.swift; sourceTree = "<group>"; };
+		69AD71B6D179002407C5E6F4 /* FuriganaText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuriganaText.swift; sourceTree = "<group>"; };
+		6AF06594A11C119C872E6A46 /* KanjiCrush.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = KanjiCrush.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		78F81B4592A468869DE9DC3C /* KanjiCrushUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiCrushUITests.swift; sourceTree = "<group>"; };
+		7D2165FACC51F9B6110D4F6A /* DictionaryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryService.swift; sourceTree = "<group>"; };
+		81D4459A9CED977F1831952A /* ReadingOverrideStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingOverrideStore.swift; sourceTree = "<group>"; };
+		823A7BE537B3727C787980FE /* Flashcard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flashcard.swift; sourceTree = "<group>"; };
+		8573B1A7672F443BC2C42559 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		891FD33B3970E032500E6843 /* OCRPipelineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRPipelineTests.swift; sourceTree = "<group>"; };
+		8E26DBF657E311E2A17F97BB /* KanjiCrushTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = KanjiCrushTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9328AB6145C00516601FA825 /* reading_overrides.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = reading_overrides.json; sourceTree = "<group>"; };
+		9AEE441BC1A1FC2D014BA884 /* SpeechService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechService.swift; sourceTree = "<group>"; };
+		9BC81C73CBABAE4B1F865E69 /* KanjiCrushUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = KanjiCrushUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9FBDF3600DFD26E6C1EBF305 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AD372E4A3B23128F9B2FA6A2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		AF9A4D7694D52435FB445E95 /* OCRService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRService.swift; sourceTree = "<group>"; };
+		B565DD4011B1B0CDAB9D3EBE /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
+		C1F8C8C427735498D90B8404 /* DecksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecksView.swift; sourceTree = "<group>"; };
+		CA1D25565072B0B16D0C326E /* StatsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsService.swift; sourceTree = "<group>"; };
+		DC8CBDE0F1E948BA875541C2 /* KanjiDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiDetailView.swift; sourceTree = "<group>"; };
+		EE74DC8E0766DDCE99AE84A0 /* JapaneseAnalysisService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapaneseAnalysisService.swift; sourceTree = "<group>"; };
+		EF244FA6F44A387A5A9EDB34 /* ReviewSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewSessionView.swift; sourceTree = "<group>"; };
+		F8960B4740139682A4D92446 /* jmdict.sqlite.gz */ = {isa = PBXFileReference; lastKnownFileType = archive.gzip; path = jmdict.sqlite.gz; sourceTree = "<group>"; };
+		FBCEB7020E1F75F253EF2A99 /* ReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0A64AFC109CD6644BC9B1822 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				41349B7FE4C8941D99C95E93 /* RootTabView.swift */,
+				8FB43785D3063FCE0D38104D /* Decks */,
+				8DFEFED477C384DDEB6B5C77 /* Kanji */,
+				FB1C094DD7F37EC6EAB079CB /* Review */,
+				CB8D9A1ED88DA634813E139B /* Scan */,
+				BAD4F83500A0113EE13185BA /* Settings */,
+				B43F974BCB3DC1CA5B03EF8E /* WordDetail */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		0B865184A1D596D4005F7058 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6AF06594A11C119C872E6A46 /* KanjiCrush.app */,
+				8E26DBF657E311E2A17F97BB /* KanjiCrushTests.xctest */,
+				9BC81C73CBABAE4B1F865E69 /* KanjiCrushUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1081CD7E74C80701B9698D09 /* KanjiCrushUITests */ = {
+			isa = PBXGroup;
+			children = (
+				78F81B4592A468869DE9DC3C /* KanjiCrushUITests.swift */,
+			);
+			path = KanjiCrushUITests;
+			sourceTree = "<group>";
+		};
+		486192241D0991B21073A43A /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				7D2165FACC51F9B6110D4F6A /* DictionaryService.swift */,
+				EE74DC8E0766DDCE99AE84A0 /* JapaneseAnalysisService.swift */,
+				2C5621C2637E6ED31061C9DB /* JapaneseToken.swift */,
+				0B07B5DB94D5FF64743FDF90 /* Knownness.swift */,
+				0BE94356A1F078093DC61C52 /* MockDataSeeder.swift */,
+				AF9A4D7694D52435FB445E95 /* OCRService.swift */,
+				81D4459A9CED977F1831952A /* ReadingOverrideStore.swift */,
+				9AEE441BC1A1FC2D014BA884 /* SpeechService.swift */,
+				0B9DA80B47F978748982EE4C /* SRSService.swift */,
+				CA1D25565072B0B16D0C326E /* StatsService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		4FA4F8673B993B694DEE11DB /* KanjiCrushTests */ = {
+			isa = PBXGroup;
+			children = (
+				891FD33B3970E032500E6843 /* OCRPipelineTests.swift */,
+			);
+			path = KanjiCrushTests;
+			sourceTree = "<group>";
+		};
+		7C6F5569B47B2C3F3DDABEBC /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				8573B1A7672F443BC2C42559 /* Theme.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		882356936639F95C6D2EFE07 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				639089187F485FCC4D5DD646 /* Deck.swift */,
+				823A7BE537B3727C787980FE /* Flashcard.swift */,
+				4FFDA2F2F96AF807139D157C /* KnownWord.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		8DFEFED477C384DDEB6B5C77 /* Kanji */ = {
+			isa = PBXGroup;
+			children = (
+				DC8CBDE0F1E948BA875541C2 /* KanjiDetailView.swift */,
+				6335C5233FA238D2474A4BFB /* KanjiTypedReviewView.swift */,
+			);
+			path = Kanji;
+			sourceTree = "<group>";
+		};
+		8FB43785D3063FCE0D38104D /* Decks */ = {
+			isa = PBXGroup;
+			children = (
+				C1F8C8C427735498D90B8404 /* DecksView.swift */,
+			);
+			path = Decks;
+			sourceTree = "<group>";
+		};
+		9D836F8356FB24230E0973D1 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				69AD71B6D179002407C5E6F4 /* FuriganaText.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		B43F974BCB3DC1CA5B03EF8E /* WordDetail */ = {
+			isa = PBXGroup;
+			children = (
+				078463155A7D721875DACBCB /* WordDetailView.swift */,
+			);
+			path = WordDetail;
+			sourceTree = "<group>";
+		};
+		BAD4F83500A0113EE13185BA /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				AD372E4A3B23128F9B2FA6A2 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		BE71144CB8E2A04C170CCE55 /* KanjiCrush */ = {
+			isa = PBXGroup;
+			children = (
+				46D8DEC1AECBF7799793277B /* KanjiCrushApp.swift */,
+				0A64AFC109CD6644BC9B1822 /* Features */,
+				882356936639F95C6D2EFE07 /* Models */,
+				EBD3D175CCEFBE606F343163 /* Resources */,
+				486192241D0991B21073A43A /* Services */,
+				7C6F5569B47B2C3F3DDABEBC /* Theme */,
+				9D836F8356FB24230E0973D1 /* Utilities */,
+			);
+			path = KanjiCrush;
+			sourceTree = "<group>";
+		};
+		CB8D9A1ED88DA634813E139B /* Scan */ = {
+			isa = PBXGroup;
+			children = (
+				B565DD4011B1B0CDAB9D3EBE /* CameraPreviewView.swift */,
+				22C8FD25EFBD2F072063248F /* ScanView.swift */,
+			);
+			path = Scan;
+			sourceTree = "<group>";
+		};
+		EBD3D175CCEFBE606F343163 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				9FBDF3600DFD26E6C1EBF305 /* Assets.xcassets */,
+				F8960B4740139682A4D92446 /* jmdict.sqlite.gz */,
+				9328AB6145C00516601FA825 /* reading_overrides.json */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		F46DFA2FA26D4D68F1302EF4 = {
+			isa = PBXGroup;
+			children = (
+				BE71144CB8E2A04C170CCE55 /* KanjiCrush */,
+				4FA4F8673B993B694DEE11DB /* KanjiCrushTests */,
+				1081CD7E74C80701B9698D09 /* KanjiCrushUITests */,
+				0B865184A1D596D4005F7058 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		FB1C094DD7F37EC6EAB079CB /* Review */ = {
+			isa = PBXGroup;
+			children = (
+				EF244FA6F44A387A5A9EDB34 /* ReviewSessionView.swift */,
+				FBCEB7020E1F75F253EF2A99 /* ReviewView.swift */,
+			);
+			path = Review;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		83406451EC2D26D522634FAB /* KanjiCrush */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A8EC1B98E0AE459C4407F65D /* Build configuration list for PBXNativeTarget "KanjiCrush" */;
+			buildPhases = (
+				809F95CF87E053D7A860144F /* Sources */,
+				3BD3A2CC7295FE3E2621287A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KanjiCrush;
+			packageProductDependencies = (
+			);
+			productName = KanjiCrush;
+			productReference = 6AF06594A11C119C872E6A46 /* KanjiCrush.app */;
+			productType = "com.apple.product-type.application";
+		};
+		D5EA71EAAFD7EF357BFBFAE3 /* KanjiCrushUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9256208EFAB2E175B885BC5D /* Build configuration list for PBXNativeTarget "KanjiCrushUITests" */;
+			buildPhases = (
+				C3719870587B789423DF9C26 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4C92E23D983FF883586C849A /* PBXTargetDependency */,
+			);
+			name = KanjiCrushUITests;
+			packageProductDependencies = (
+			);
+			productName = KanjiCrushUITests;
+			productReference = 9BC81C73CBABAE4B1F865E69 /* KanjiCrushUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		D6A7DCD60B29CB686034F737 /* KanjiCrushTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5A1BE1B1F1683D16374A1FE5 /* Build configuration list for PBXNativeTarget "KanjiCrushTests" */;
+			buildPhases = (
+				B64C8287EB84378ED4981D57 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CA00DB85F545634D2855E618 /* PBXTargetDependency */,
+			);
+			name = KanjiCrushTests;
+			packageProductDependencies = (
+			);
+			productName = KanjiCrushTests;
+			productReference = 8E26DBF657E311E2A17F97BB /* KanjiCrushTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5DF5569BB107B961B4197C98 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1640;
+				TargetAttributes = {
+					83406451EC2D26D522634FAB = {
+						ProvisioningStyle = Automatic;
+					};
+					D5EA71EAAFD7EF357BFBFAE3 = {
+						ProvisioningStyle = Automatic;
+						TestTargetID = 83406451EC2D26D522634FAB;
+					};
+					D6A7DCD60B29CB686034F737 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 3DC8AF8D6807B479F58CA860 /* Build configuration list for PBXProject "KanjiCrush" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = F46DFA2FA26D4D68F1302EF4;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 0B865184A1D596D4005F7058 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				83406451EC2D26D522634FAB /* KanjiCrush */,
+				D6A7DCD60B29CB686034F737 /* KanjiCrushTests */,
+				D5EA71EAAFD7EF357BFBFAE3 /* KanjiCrushUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3BD3A2CC7295FE3E2621287A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2E465C9206353DCBA7FF399F /* Assets.xcassets in Resources */,
+				9E2A8E495D0ECBD4B8EC5461 /* jmdict.sqlite.gz in Resources */,
+				CF05607C3ECCE1771285CE44 /* reading_overrides.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		809F95CF87E053D7A860144F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C6B1052E61C21B8D7E09AED0 /* CameraPreviewView.swift in Sources */,
+				8452BC03D2BA34EEFF543C34 /* Deck.swift in Sources */,
+				645DBAC9D540C34CD1CE55C3 /* DecksView.swift in Sources */,
+				BF59D6A62B3A5B7A50FA4B5C /* DictionaryService.swift in Sources */,
+				3FEE86BE1357065B871E5C88 /* Flashcard.swift in Sources */,
+				018309967D9123C5791139E8 /* FuriganaText.swift in Sources */,
+				5A90BFC5D59BD39EB63F0E93 /* JapaneseAnalysisService.swift in Sources */,
+				DD0CF79499AA36384BBD44F5 /* JapaneseToken.swift in Sources */,
+				90926AFFD72C47CEB0290462 /* KanjiCrushApp.swift in Sources */,
+				37D7D914AB8E35A2F9111C0D /* KanjiDetailView.swift in Sources */,
+				7E708069A3FF48EE9139E6CA /* KanjiTypedReviewView.swift in Sources */,
+				6A89C7C3455B74C225ECA367 /* KnownWord.swift in Sources */,
+				7803BBF04D20B19EDFD575EA /* Knownness.swift in Sources */,
+				90A8F6E72EA66EA2E75C028E /* MockDataSeeder.swift in Sources */,
+				3D593FCDBA041E0B78A2FC51 /* OCRService.swift in Sources */,
+				B1FDBCF92CB85368FC0E3103 /* ReadingOverrideStore.swift in Sources */,
+				9B940DA9AF9BD960FFFD6C3D /* ReviewSessionView.swift in Sources */,
+				AA3E3156B2D124565373C3C4 /* ReviewView.swift in Sources */,
+				7A2CCBCFADAEA78E3C58578A /* RootTabView.swift in Sources */,
+				1F592127D2217B5B05EB7827 /* SRSService.swift in Sources */,
+				CBC22BFE600F52A751C25745 /* ScanView.swift in Sources */,
+				24E2ED4BE13B4C2E680B0976 /* SettingsView.swift in Sources */,
+				F94226BF0A11AF288D8BB752 /* SpeechService.swift in Sources */,
+				73396257EEF5D432942E5C4C /* StatsService.swift in Sources */,
+				7B2E6E365771F20DC4C08C7C /* Theme.swift in Sources */,
+				61FDAAD960CE24ACAC7DCE5D /* WordDetailView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B64C8287EB84378ED4981D57 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2AC0B88E0F0DAE407402F00E /* OCRPipelineTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C3719870587B789423DF9C26 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				96D08F3605D58B890A9D5F6A /* KanjiCrushUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4C92E23D983FF883586C849A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 83406451EC2D26D522634FAB /* KanjiCrush */;
+			targetProxy = 2EB5976359E2FD1218673E62 /* PBXContainerItemProxy */;
+		};
+		CA00DB85F545634D2855E618 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 83406451EC2D26D522634FAB /* KanjiCrush */;
+			targetProxy = E9D55A63A26F301D210DE259 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		01D199DA769C8AE32EB20E4D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		12776341BEDFF261B9CA673A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.kanjicrush.app.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KanjiCrush.app/KanjiCrush";
+			};
+			name = Release;
+		};
+		1C873B64A578F618266ACEAD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.kanjicrush.app.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KanjiCrush.app/KanjiCrush";
+			};
+			name = Debug;
+		};
+		45943FC10A1B866099651117 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.kanjicrush.app.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = KanjiCrush;
+			};
+			name = Debug;
+		};
+		8606C7E3794F0D1F9165F3EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		899E5132CC47300E194AD7BF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Kanji Crush";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Point your camera at Japanese text on your TV or screen to read words and furigana.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kanjicrush.app;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		C9BB6FB34D639A168110D483 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.kanjicrush.app.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = KanjiCrush;
+			};
+			name = Release;
+		};
+		DAB52BB8A0A121398C3466E0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Kanji Crush";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Point your camera at Japanese text on your TV or screen to read words and furigana.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kanjicrush.app;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3DC8AF8D6807B479F58CA860 /* Build configuration list for PBXProject "KanjiCrush" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				01D199DA769C8AE32EB20E4D /* Debug */,
+				8606C7E3794F0D1F9165F3EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		5A1BE1B1F1683D16374A1FE5 /* Build configuration list for PBXNativeTarget "KanjiCrushTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1C873B64A578F618266ACEAD /* Debug */,
+				12776341BEDFF261B9CA673A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		9256208EFAB2E175B885BC5D /* Build configuration list for PBXNativeTarget "KanjiCrushUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				45943FC10A1B866099651117 /* Debug */,
+				C9BB6FB34D639A168110D483 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A8EC1B98E0AE459C4407F65D /* Build configuration list for PBXNativeTarget "KanjiCrush" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DAB52BB8A0A121398C3466E0 /* Debug */,
+				899E5132CC47300E194AD7BF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5DF5569BB107B961B4197C98 /* Project object */;
+}

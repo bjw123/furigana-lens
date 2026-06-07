@@ -1,11 +1,11 @@
 #!/usr/bin/env swift
-// Renders the FuriganaLens app icon to a 1024x1024 PNG.
+// Renders the KanjiCrush app icon to a 1024x1024 PNG.
 // Usage: swift tools/generate_icon.swift [output-path]
 
 import SwiftUI
 import AppKit
 
-// MARK: - Palette (matches FuriganaLens/Theme/Theme.swift, light values)
+// MARK: - Palette (matches KanjiCrush/Theme/Theme.swift, light values)
 private extension Color {
     static let cream     = Color(red: 0.984, green: 0.965, blue: 0.929)
     static let washi     = Color(red: 1.000, green: 0.992, blue: 0.973)
@@ -163,7 +163,7 @@ func render(to outputURL: URL) throws {
     FileHandle.standardOutput.write("wrote \(outputURL.path) (\(pngData.count) bytes)\n".data(using: .utf8)!)
 }
 
-let defaultOutput = "FuriganaLens/Resources/Assets.xcassets/AppIcon.appiconset/Icon-1024.png"
+let defaultOutput = "KanjiCrush/Resources/Assets.xcassets/AppIcon.appiconset/Icon-1024.png"
 let outArg = CommandLine.arguments.dropFirst().first ?? defaultOutput
 let outURL = URL(fileURLWithPath: outArg)
 

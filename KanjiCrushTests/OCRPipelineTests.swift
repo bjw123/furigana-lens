@@ -1,6 +1,6 @@
 import XCTest
 import UIKit
-@testable import FuriganaLens
+@testable import KanjiCrush
 
 /// E2E tests for the OCR + tokenization pipeline using real game screenshots
 /// as fixtures. Each fixture is a frame the app realistically sees when the

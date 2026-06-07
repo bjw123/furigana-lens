@@ -1,12 +1,12 @@
-# Furigana Lens
+# Kanji Crush
 
 Personal iOS app for reading Japanese from your TV while gaming. Point the camera, capture text, tap a word for furigana, optionally reveal meaning via [Jisho](https://jisho.org/), and save flashcards with SM-2 spaced repetition.
 
 ## Demo
 
-[![Demo walkthrough — 81 seconds](docs/screenshots/01.png)](https://github.com/bjw123/furigana-lens/releases/download/v0.1.0/demo.mp4)
+[![Demo walkthrough — 81 seconds](docs/screenshots/01.png)](https://github.com/bjw123/kanjicrush/releases/download/v0.1.0/demo.mp4)
 
-▶ [**Download the 81-second walkthrough**](https://github.com/bjw123/furigana-lens/releases/download/v0.1.0/demo.mp4) (released as a [v0.1.0](https://github.com/bjw123/furigana-lens/releases/tag/v0.1.0) asset). Point the camera at a TV running Persona 5, capture, tap a chip, reveal a reading, save it to a deck, then review it.
+▶ [**Download the 81-second walkthrough**](https://github.com/bjw123/kanjicrush/releases/download/v0.1.0/demo.mp4) (released as a [v0.1.0](https://github.com/bjw123/kanjicrush/releases/tag/v0.1.0) asset). Point the camera at a TV running Persona 5, capture, tap a chip, reveal a reading, save it to a deck, then review it.
 
 > Why not inline-embedded? GitHub's README sanitizer only allows `<video>` tags pointing at the `user-attachments` CDN, and repo paths (raw + release assets) are served with a sandbox CSP that forces download. To inline-embed: open `README.md` on github.com → Edit → drag the mp4 into the editor → GitHub uploads it to `user-attachments/assets/<uuid>` → replace the link above with the resulting markdown. The screenshot gallery below covers the same ground without that step.
 
@@ -77,22 +77,22 @@ Personal iOS app for reading Japanese from your TV while gaming. Point the camer
 ## Open in Xcode
 
 ```bash
-cd furigana-lens
+cd kanjicrush
 xcodegen generate   # requires: brew install xcodegen
-open FuriganaLens.xcodeproj
+open KanjiCrush.xcodeproj
 ```
 
-Then select the **FuriganaLens** scheme, your iPhone simulator or device, and Run.
+Then select the **KanjiCrush** scheme, your iPhone simulator or device, and Run.
 
-If `xcodegen` is unavailable, create a new **App** project in Xcode named `FuriganaLens`, set deployment target iOS 17, and add all files under `FuriganaLens/` to the target. Add camera usage description:
+If `xcodegen` is unavailable, create a new **App** project in Xcode named `KanjiCrush`, set deployment target iOS 17, and add all files under `KanjiCrush/` to the target. Add camera usage description:
 
 `NSCameraUsageDescription` = Point your camera at Japanese text on your TV or screen to read words and furigana.
 
 ## Project layout
 
 ```
-FuriganaLens/
-├── FuriganaLensApp.swift
+KanjiCrush/
+├── KanjiCrushApp.swift
 ├── Features/Scan/          Camera + OCR + word chips
 ├── Features/WordDetail/    Furigana sheet, Jisho, save card
 ├── Features/Decks/

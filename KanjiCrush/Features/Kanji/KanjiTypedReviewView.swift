@@ -437,13 +437,16 @@ private enum AnswerNormalizer {
         }
 
         // Katakana → hiragana.
-        s = String(s.unicodeScalars.map { scalar -> Unicode.Scalar in
+        var folded = ""
+        for scalar in s.unicodeScalars {
             if (0x30A1...0x30F6).contains(scalar.value),
                let mapped = Unicode.Scalar(scalar.value - 0x60) {
-                return mapped
+                folded.unicodeScalars.append(mapped)
+            } else {
+                folded.unicodeScalars.append(scalar)
             }
-            return scalar
-        })
+        }
+        s = folded
 
         return s.trimmingCharacters(in: .whitespacesAndNewlines)
     }
