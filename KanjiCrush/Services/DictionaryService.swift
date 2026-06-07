@@ -77,7 +77,14 @@ final class DictionaryService {
 
     private var db: OpaquePointer?
     private let queue = DispatchQueue(label: "DictionaryService.sqlite")
-    private var cache: [String: [DictionaryEntry]] = [:]
+
+    // 512 ~ covers a heavy scan session without growing without bound across
+    // the app lifetime; NSCache handles LRU eviction + thread safety.
+    private let entryCache: NSCache<NSString, CachedEntries> = {
+        let c = NSCache<NSString, CachedEntries>()
+        c.countLimit = 512
+        return c
+    }()
 
     private init() {
         openDatabase()
@@ -241,7 +248,8 @@ final class DictionaryService {
         guard !trimmed.isEmpty, let db else { return [] }
 
         return queue.sync {
-            if let hit = cache[trimmed] { return hit }
+            let cacheKey = trimmed as NSString
+            if let hit = entryCache.object(forKey: cacheKey) { return hit.value }
 
             let sql = """
                 SELECT e.id, e.kanji_json, e.kana_json, e.senses_json
@@ -273,7 +281,7 @@ final class DictionaryService {
                 results.append(DictionaryEntry(id: id, kanji: kanji, kana: kana, senses: senses))
             }
 
-            cache[trimmed] = results
+            entryCache.setObject(CachedEntries(value: results), forKey: cacheKey)
             return results
         }
     }
@@ -495,6 +503,12 @@ final class DictionaryService {
             return out
         }
     }
+}
+
+// Box for NSCache, which requires class-typed values.
+private final class CachedEntries {
+    let value: [DictionaryEntry]
+    init(value: [DictionaryEntry]) { self.value = value }
 }
 
 // SQLite needs SQLITE_TRANSIENT to copy the bound text — Swift bridges it as this sentinel.
