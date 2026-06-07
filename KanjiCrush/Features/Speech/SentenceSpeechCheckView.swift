@@ -38,6 +38,16 @@ struct SentenceSpeechCheckView: View {
     @State private var sessionComplete = false
     @State private var isEditing = false
     @State private var chunkFeedback: ChunkFeedback?
+    /// Portion of the normalised live transcript already accounted for by a
+    /// previous chunk's auto-advance. Subsequent matches are looked for in
+    /// the suffix after this prefix so we never re-match the same span twice.
+    @State private var consumedPrefix: String = ""
+    /// Snapshot of `consumedPrefix.count` at the moment the *current* chunk
+    /// became active. Used to enforce a minimum suffix growth before short
+    /// candidate readings (1-2 mora) are allowed to match — prevents the
+    /// previous chunk's trailing kana from bleeding into a one-syllable
+    /// match for the new chunk.
+    @State private var chunkConsumedBaseline: Int = 0
     @FocusState private var inputFocused: Bool
 
     init(sentence: String, expectedReading: String, meaning: String, showFurigana: Bool) {
@@ -142,6 +152,7 @@ struct SentenceSpeechCheckView: View {
             }
             .onChange(of: speech.transcript) { _, new in
                 input = new
+                processTranscript(new)
             }
             .sheet(item: $pendingSaveToken) { req in
                 let meaningLookup = DictionaryService.shared.lookup(req.surface, limit: 1).first
@@ -275,6 +286,19 @@ struct SentenceSpeechCheckView: View {
                 opacity: 1.0
             )
         }
+        // Post-session pending chunks (never heard, never explicitly wrong)
+        // get a softly tinted gold to call them out without the harsh
+        // vermillion of a real failure.
+        if sessionComplete {
+            return ChunkPillState(
+                background: Palette.gold.opacity(0.12),
+                border: Palette.gold.opacity(0.45),
+                borderWidth: 0.75,
+                surfaceColor: Palette.sumi.opacity(0.7),
+                readingColor: Palette.indigo.opacity(0.7),
+                opacity: 0.9
+            )
+        }
         return ChunkPillState(
             background: .clear,
             border: .clear,
@@ -316,13 +340,17 @@ struct SentenceSpeechCheckView: View {
             VStack(spacing: 14) {
                 micRow
                 transcriptField
-                Text("Tap the mic, read the highlighted part, then Submit. Edit the transcript if needed.")
+                Text(speech.isListening
+                     ? "Read the sentence at your own pace — each part lights up green as it's heard."
+                     : "Tap the mic and read the sentence aloud. The session ends when every part matches.")
                     .font(.system(.caption2, design: .rounded))
                     .foregroundStyle(Palette.mist)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
                 chunkFeedbackView
-                actionButton
+                manualOverrideRow
+                    .padding(.horizontal)
+                finishEarlyButton
                     .padding(.horizontal)
             }
         } else {
@@ -357,23 +385,43 @@ struct SentenceSpeechCheckView: View {
         }
     }
 
+    @ViewBuilder
     private var transcriptField: some View {
-        TextField("What you said", text: $input)
-            .focused($inputFocused)
-            .submitLabel(.go)
-            .onSubmit { submitChunk() }
-            .textInputAutocapitalization(.never)
-            .autocorrectionDisabled()
-            .font(.system(.title3, design: .rounded))
-            .multilineTextAlignment(.center)
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
-            .background(Palette.cream, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .strokeBorder(strokeColor, lineWidth: 1)
-            )
-            .padding(.horizontal)
+        // While the recogniser is live the transcript is a read-only mirror so
+        // a stray keystroke can't desync the live transcript-watching logic.
+        // When the mic is off, the user can still hand-edit if they want to
+        // visually inspect what was captured.
+        if speech.isListening {
+            Text(input.isEmpty ? "Listening…" : input)
+                .font(.system(.title3, design: .rounded))
+                .foregroundStyle(input.isEmpty ? Palette.mist : Palette.sumi)
+                .frame(maxWidth: .infinity, minHeight: 28)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .background(Palette.cream, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        .strokeBorder(strokeColor, lineWidth: 1)
+                )
+                .padding(.horizontal)
+        } else {
+            TextField("What you said", text: $input)
+                .focused($inputFocused)
+                .submitLabel(.done)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                .font(.system(.title3, design: .rounded))
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .background(Palette.cream, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        .strokeBorder(strokeColor, lineWidth: 1)
+                )
+                .padding(.horizontal)
+        }
     }
 
     private var strokeColor: Color {
@@ -417,31 +465,40 @@ struct SentenceSpeechCheckView: View {
         }
     }
 
+    /// Small "I read this" capsule that lets the user force-advance the
+    /// active chunk if the recogniser dropped a word. Only shown when the
+    /// mic is live (otherwise the user can just tap mic again to retry).
     @ViewBuilder
-    private var actionButton: some View {
-        switch chunkFeedback {
-        case nil:
-            Button { submitChunk() } label: {
-                Text("Submit").frame(maxWidth: .infinity)
-            }
-            .buttonStyle(SumiButtonStyle())
-            .disabled(input.trimmingCharacters(in: .whitespaces).isEmpty)
-        case .wrong:
-            VStack(spacing: 8) {
-                Button { retryChunk() } label: {
-                    Text("Try again").frame(maxWidth: .infinity)
+    private var manualOverrideRow: some View {
+        if speech.isListening, let chunk = activeChunk {
+            Button {
+                manuallyAdvance(chunk: chunk)
+            } label: {
+                HStack(spacing: 6) {
+                    Image(systemName: "hand.tap.fill")
+                        .font(.caption2)
+                    Text("I read \"\(chunk.surface)\"")
+                        .font(.system(.caption, design: .rounded).weight(.semibold))
                 }
-                .buttonStyle(SumiButtonStyle())
-                Button { advanceChunk() } label: {
-                    Text(isLastChunk ? "Move on · Finish" : "Move on").frame(maxWidth: .infinity)
-                }
-                .buttonStyle(WashiButtonStyle())
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6)
+                .background(Capsule().fill(Palette.indigo.opacity(0.12)))
+                .foregroundStyle(Palette.indigo)
             }
-        case .correct:
-            Button { advanceChunk() } label: {
-                Text(isLastChunk ? "Finish" : "Next chunk").frame(maxWidth: .infinity)
+            .buttonStyle(.plain)
+        }
+    }
+
+    /// While listening, give the user a way to end the session early without
+    /// dropping back to the mic toggle. Pending (un-heard) chunks land in the
+    /// summary's save-list alongside any explicit misses.
+    @ViewBuilder
+    private var finishEarlyButton: some View {
+        if speech.isListening {
+            Button { finishSessionEarly() } label: {
+                Text("Finish session").frame(maxWidth: .infinity)
             }
-            .buttonStyle(SumiButtonStyle())
+            .buttonStyle(WashiButtonStyle())
         }
     }
 
@@ -572,12 +629,17 @@ struct SentenceSpeechCheckView: View {
 
     @ViewBuilder
     private var summaryView: some View {
-        let matched = results.allSatisfy(\.matched) && !results.isEmpty
-        let solvedStruggling: [Character] = matched
+        // All chunks got a `matched: true` result AND none are pending (i.e.
+        // every chunk in the list has a corresponding result entry).
+        let allMatched = !chunks.isEmpty
+            && chunks.allSatisfy { chunk in
+                results.contains { $0.id == chunk.id && $0.matched }
+            }
+        let solvedStruggling: [Character] = allMatched
             ? Array(Set(sentence.filter { isKanji($0) }).intersection(strugglingKanjiChars)).sorted()
             : []
         VStack(spacing: 14) {
-            if matched {
+            if allMatched {
                 HStack(spacing: 6) {
                     Image(systemName: "checkmark.seal.fill")
                     Text("Read aloud correctly!")
@@ -607,7 +669,7 @@ struct SentenceSpeechCheckView: View {
             } else {
                 HStack(spacing: 6) {
                     Image(systemName: "exclamationmark.triangle.fill")
-                    Text("Some chunks were missed")
+                    Text(pendingOrMissedHeadline)
                         .font(.system(.subheadline, design: .rounded).weight(.semibold))
                 }
                 .foregroundStyle(Palette.vermillion)
@@ -637,28 +699,46 @@ struct SentenceSpeechCheckView: View {
         .padding(.horizontal)
     }
 
+    /// Chunks the user never matched — either explicit wrong results, or
+    /// chunks that simply never got their candidate reading in the suffix
+    /// before the session ended. Both end up in the save-list because the
+    /// learner cares about the *word*, not how the session ended.
+    private var unmatchedChunks: [Chunk] {
+        chunks.filter { chunk in
+            !results.contains { $0.id == chunk.id && $0.matched }
+        }
+    }
+
+    private var pendingOrMissedHeadline: String {
+        let unmatchedCount = unmatchedChunks.count
+        if unmatchedCount == chunks.count {
+            return "Session stopped — nothing matched"
+        }
+        return unmatchedCount == 1 ? "1 part wasn't heard" : "\(unmatchedCount) parts weren't heard"
+    }
+
     @ViewBuilder
     private var missedChunksSection: some View {
-        let missed = results.filter { !$0.matched }
-        if !missed.isEmpty {
+        let unmatched = unmatchedChunks
+        if !unmatched.isEmpty {
             VStack(alignment: .leading, spacing: 6) {
-                Text("Save missed words as flashcards")
+                Text("Save these as flashcards")
                     .font(.system(.caption, design: .rounded).weight(.semibold))
                     .foregroundStyle(Palette.sumi.opacity(0.85))
                     .frame(maxWidth: .infinity, alignment: .leading)
                 FlowLayout(spacing: 6) {
-                    ForEach(missed.filter { containsKanji($0.surface) }) { result in
+                    ForEach(unmatched.filter { containsKanji($0.surface) }) { chunk in
                         Button {
                             pendingSaveToken = SaveTokenRequest(
-                                surface: result.surface,
-                                reading: result.expectedReading,
+                                surface: chunk.surface,
+                                reading: chunk.reading,
                                 context: sentence
                             )
                         } label: {
                             HStack(spacing: 4) {
                                 Image(systemName: "bookmark.fill")
                                     .font(.caption2)
-                                Text(result.surface)
+                                Text(chunk.surface)
                                     .font(.system(.subheadline, design: .serif))
                             }
                             .padding(.horizontal, 10)
@@ -706,79 +786,146 @@ struct SentenceSpeechCheckView: View {
         }
     }
 
-    // MARK: - Submit / advance
+    // MARK: - Continuous auto-advance
 
-    private func submitChunk() {
-        guard let chunk = activeChunk else { return }
-        if speech.isListening { speech.stop() }
-        let answer = input.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !answer.isEmpty else { return }
-
-        // Apple's Japanese recognizer emits mixed kanji+kana (e.g. "見る"),
-        // not pure hiragana, so we have to accept either form. Build a small
-        // set of acceptable canonical strings:
-        //   1. The chunk's reading from the tokenizer — fast but unreliable on
-        //      compounds (CFStringTokenizer often returns the sum-of-characters
-        //      reading, e.g. 人間 → "じんかん" instead of "にんげん").
-        //   2. The chunk's surface (so a transcript that came back as the kanji
-        //      still matches).
-        //   3. Every JMdict kana form for the chunk's surface — this is the
-        //      canonical reading for the compound, so user typing "ningen" for
-        //      人間 lands on "にんげん" from JMdict and matches.
-        // All candidates get folded through AnswerNormalizer so the comparison
-        // is invariant to hiragana/katakana/romaji.
-        let normalisedAnswer = AnswerNormalizer.normalizeReading(answer)
-        var rawCandidates: [String] = [chunk.reading, chunk.surface]
+    /// Candidate normalised readings the live transcript suffix must contain
+    /// for `chunk` to count as spoken. Mirrors the per-chunk Submit logic the
+    /// view used to do on demand, but built up-front because the transcript
+    /// stream may match the same chunk many times during a single utterance.
+    ///
+    /// Sources:
+    ///   1. Tokenizer reading (fast, occasionally wrong on compounds).
+    ///   2. Surface form (covers transcripts that came back as kanji).
+    ///   3. Every JMdict kana form for the surface — the canonical compound
+    ///      reading lives here.
+    /// All candidates are folded through `AnswerNormalizer` so kana/katakana/
+    /// romaji + long-vowel marks reduce to the same hiragana stem.
+    private func candidates(for chunk: Chunk) -> [String] {
+        var raw: [String] = [chunk.reading, chunk.surface]
         let dictEntries = DictionaryService.shared.lookup(chunk.surface, limit: 3)
-        rawCandidates.append(contentsOf: dictEntries.flatMap { $0.kana })
-        let candidates = rawCandidates
+        raw.append(contentsOf: dictEntries.flatMap { $0.kana })
+        return raw
             .map(AnswerNormalizer.normalizeReading)
             .filter { !$0.isEmpty }
-        let matched: Bool = candidates.contains { candidate in
-            if normalisedAnswer == candidate { return true }
-            // Either-direction containment so the recogniser picking up a
-            // slightly longer or shorter span still counts.
-            return normalisedAnswer.contains(candidate) || candidate.contains(normalisedAnswer)
+    }
+
+    /// Drives the auto-advance loop. Folds the live transcript, slices off
+    /// the prefix already consumed by past chunks, and if the suffix contains
+    /// any candidate for the current chunk, marks it correct and advances.
+    /// Loops because a single transcript update can resolve multiple chunks
+    /// at once when the user reads quickly.
+    private func processTranscript(_ raw: String) {
+        guard speech.isListening || !raw.isEmpty else { return }
+        guard !sessionComplete else { return }
+        let normalised = AnswerNormalizer.normalizeReading(raw)
+
+        // If the recogniser truncated the transcript (rare — happens when a
+        // cycle restarts and the new partial is shorter than the prefix), pull
+        // `consumedPrefix` back so we don't get stuck.
+        if !consumedPrefix.isEmpty, !normalised.hasPrefix(consumedPrefix) {
+            consumedPrefix = ""
+            chunkConsumedBaseline = 0
         }
 
-        if matched {
-            UINotificationFeedbackGenerator().notificationOccurred(.success)
-            chunkFeedback = .correct
-        } else {
-            UINotificationFeedbackGenerator().notificationOccurred(.error)
-            chunkFeedback = .wrong(expected: chunk.reading, heard: answer)
+        var progressed = true
+        while progressed, currentIndex < chunks.count {
+            progressed = false
+            let chunk = chunks[currentIndex]
+            let suffix = String(normalised.dropFirst(consumedPrefix.count))
+            guard !suffix.isEmpty else { break }
+
+            let cands = candidates(for: chunk)
+            guard !cands.isEmpty else {
+                // Nothing to match against (empty reading + empty surface) —
+                // skip the chunk so the user isn't blocked.
+                advanceCurrentChunk(matched: false, transcriptForResult: nil)
+                progressed = true
+                continue
+            }
+
+            // Short-reading guard: if the chunk's shortest candidate is only
+            // 1-2 mora, require enough new suffix since this chunk became
+            // active to avoid premature matches against the previous chunk's
+            // trailing kana (e.g. "ningen wo" wouldn't pre-match "wo" before
+            // 人間 is consumed).
+            let shortestCandidate = cands.map(\.count).min() ?? 0
+            let suffixGrowthSinceActive = consumedPrefix.count - chunkConsumedBaseline
+            if shortestCandidate <= 2, suffixGrowthSinceActive < max(shortestCandidate - 1, 0) {
+                // Don't try to match this chunk yet — wait for more audio.
+                break
+            }
+
+            // Look for the earliest position in `suffix` that contains any
+            // candidate as a contiguous substring. Picking the earliest hit
+            // keeps the consumed prefix tight against the spoken span.
+            var bestEnd: Int?
+            for cand in cands {
+                if let range = suffix.range(of: cand) {
+                    let endOffset = suffix.distance(from: suffix.startIndex, to: range.upperBound)
+                    if bestEnd == nil || endOffset < bestEnd! {
+                        bestEnd = endOffset
+                    }
+                }
+            }
+            guard let endOffset = bestEnd else { break }
+
+            // Snap consumedPrefix forward through the matched span.
+            let newPrefixCount = consumedPrefix.count + endOffset
+            consumedPrefix = String(normalised.prefix(newPrefixCount))
+            advanceCurrentChunk(matched: true, transcriptForResult: chunk.surface)
+            progressed = true
         }
 
-        // Replace any prior result for this chunk id.
+        if currentIndex >= chunks.count {
+            finishSession()
+        }
+    }
+
+    /// Marks the active chunk's outcome and bumps the index. Does NOT touch
+    /// `consumedPrefix` — the caller handles that.
+    private func advanceCurrentChunk(matched: Bool, transcriptForResult: String?) {
+        guard currentIndex < chunks.count else { return }
+        let chunk = chunks[currentIndex]
         results.removeAll { $0.id == chunk.id }
         results.append(ChunkResult(
             id: chunk.id,
             surface: chunk.surface,
             expectedReading: chunk.reading,
             matched: matched,
-            transcript: answer
+            transcript: transcriptForResult ?? ""
         ))
+        if matched {
+            UINotificationFeedbackGenerator().notificationOccurred(.success)
+            chunkFeedback = .correct
+        }
+        currentIndex += 1
+        chunkConsumedBaseline = consumedPrefix.count
     }
 
-    private func retryChunk() {
-        // Drop the failed attempt so the chunk-pill goes back to the active
-        // state instead of staying tinted vermillion.
-        if let chunk = activeChunk {
-            results.removeAll { $0.id == chunk.id }
+    /// Manual "I read this" override — same effect as an auto-match without
+    /// changing `consumedPrefix` (the recogniser may still be lagging behind).
+    private func manuallyAdvance(chunk: Chunk) {
+        guard let idx = chunks.firstIndex(where: { $0.id == chunk.id }), idx == currentIndex else { return }
+        UINotificationFeedbackGenerator().notificationOccurred(.success)
+        advanceCurrentChunk(matched: true, transcriptForResult: chunk.surface)
+        if currentIndex >= chunks.count {
+            finishSession()
         }
-        input = ""
-        chunkFeedback = nil
-        inputFocused = true
     }
 
-    private func advanceChunk() {
-        input = ""
+    /// Wraps up the session normally — recogniser off, summary on. Any chunks
+    /// the user didn't reach simply have no `results` entry and the summary
+    /// shows them as pending.
+    private func finishSession() {
+        if speech.isListening { speech.stop() }
+        sessionComplete = true
         chunkFeedback = nil
-        if currentIndex + 1 >= chunks.count {
-            sessionComplete = true
-        } else {
-            currentIndex += 1
-        }
+    }
+
+    /// User-initiated early end — same as `finishSession` but explicit so the
+    /// call-site reads clearly.
+    private func finishSessionEarly() {
+        finishSession()
     }
 
     private func resetSession() {
@@ -787,6 +934,8 @@ struct SentenceSpeechCheckView: View {
         input = ""
         chunkFeedback = nil
         sessionComplete = false
+        consumedPrefix = ""
+        chunkConsumedBaseline = 0
     }
 
     // MARK: - Edit operations
@@ -838,10 +987,19 @@ struct SentenceSpeechCheckView: View {
             authChecked = true
         }
         if speech.isListening {
-            speech.stop()
+            // Pressing mic again while live ends the session — same flow as
+            // tapping "Finish session". Anything not yet matched lands in
+            // the pending bucket in the summary.
+            finishSessionEarly()
         } else {
             input = ""
             chunkFeedback = nil
+            consumedPrefix = ""
+            chunkConsumedBaseline = 0
+            // Continuous reading needs the service to keep listening across
+            // silence pauses — flip the flag back on (it's the default but
+            // KanjiTypedReviewView shares the same type and disables it).
+            speech.continuousMode = true
             do { try speech.start() } catch {
                 // Service exposes the error on its own publisher; we don't
                 // surface inline failures here.
@@ -888,8 +1046,26 @@ struct SentenceSpeechCheckView: View {
             }
         }
 
-        // Drop any chunks that ended up empty / whitespace-only after gluing.
-        chunks = chunks.filter { !$0.surface.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+        // Drop any chunks that ended up empty / whitespace-only after gluing
+        // AND any chunks whose surface is just punctuation / quote marks
+        // (e.g. a leading 「 or trailing 。) — those have nothing to speak
+        // and otherwise show up as empty / orphan capsules in the UI.
+        chunks = chunks.filter { chunk in
+            let trimmed = chunk.surface.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !trimmed.isEmpty else { return false }
+            return trimmed.unicodeScalars.contains { scalar in
+                // Hiragana
+                (0x3040...0x309F).contains(scalar.value)
+                    // Katakana (full + halfwidth)
+                    || (0x30A0...0x30FF).contains(scalar.value)
+                    || (0xFF66...0xFF9D).contains(scalar.value)
+                    // CJK Unified Ideographs + common extensions
+                    || (0x4E00...0x9FFF).contains(scalar.value)
+                    || (0x3400...0x4DBF).contains(scalar.value)
+                    || (0xF900...0xFAFF).contains(scalar.value)
+                    || (0x20000...0x2A6DF).contains(scalar.value)
+            }
+        }
 
         if chunks.isEmpty {
             let reading = JapaneseAnalysisService.shared.localReading(for: sentence)

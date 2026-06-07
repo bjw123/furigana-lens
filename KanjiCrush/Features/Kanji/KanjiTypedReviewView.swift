@@ -633,6 +633,10 @@ private struct SessionRunner: View {
             speech.stop()
         } else {
             input = ""
+            // Per-kanji speech reads are one-shot — flip the recognizer out of
+            // continuous mode so a silence pause cleanly ends the recording
+            // instead of restarting the task.
+            speech.continuousMode = false
             do { try speech.start() } catch {
                 // Service exposes error; UI shows it via the existing feedback path.
             }
