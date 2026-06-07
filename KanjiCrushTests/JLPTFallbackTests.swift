@@ -42,4 +42,59 @@ final class JLPTFallbackTests: XCTestCase {
         // Pure kana — fallback must bail out and keep current behaviour.
         XCTAssertNil(DictionaryService.shared.jlptLevel(forWord: "あいうえお"))
     }
+
+    // MARK: - Exact-form path takes priority
+
+    func testExactDictionaryFormHitsBeforeFallback() {
+        // 見る IS in `word_jlpt` (dictionary form) at N5. We expect the exact
+        // lookup to return level 5 — same answer the kanji fallback would give,
+        // but for the right reason. This guards against accidentally removing
+        // the exact-form branch and relying entirely on fallback.
+        let level = DictionaryService.shared.jlptLevel(forWord: "見る")
+        XCTAssertEqual(level, 5, "見る is in the JLPT vocab list at N5; must resolve via direct lookup")
+    }
+
+    // MARK: - Pure-kana words must short-circuit before fallback
+
+    func testCommonKanaPhraseUsesExactLookup() {
+        // こんにちは contains zero kanji, so the fallback path is structurally
+        // incapable of classifying it — a non-nil result here can only come
+        // from the exact-form (word_jlpt) path. We don't pin the exact level
+        // (the bundled Tanos-style vocab list has it at N3, not N5 as casual
+        // intuition suggests), just that the lookup succeeds and returns a
+        // valid 1..5 level.
+        let level = DictionaryService.shared.jlptLevel(forWord: "こんにちは")
+        let unwrapped = try? XCTUnwrap(level, "こんにちは is in the JLPT vocab list; exact-form lookup must hit since there are no kanji to fall back on")
+        XCTAssertNotNil(unwrapped)
+        if let unwrapped { XCTAssertTrue((1...5).contains(unwrapped), "got level \(unwrapped) outside 1..5") }
+    }
+
+    // MARK: - Conjugated kanji-bearing forms
+
+    func testConjugatedFormWithMultipleKanji() {
+        // 食べる is N5 in the vocab list; 食べた (past tense) is not.
+        // The fallback should classify it via 食 (N5) → level 5.
+        let level = DictionaryService.shared.jlptLevel(forWord: "食べた")
+        XCTAssertEqual(level, 5, "食 is N5; conjugated 食べた should fall back to N5")
+    }
+
+    // MARK: - All-kanji must have a level
+
+    func testFallbackReturnsNilWhenAnyKanjiIsUnrated() {
+        // The fallback is intentionally strict: if even ONE kanji in the word
+        // has no JLPT classification, we must return nil rather than silently
+        // grading the word by its easier neighbours. 鬱 (depression) is a
+        // jouyou kanji but not in any JLPT level, while 見 is N5. Combining
+        // them in a non-existent surface forces the all-rated guard and
+        // should return nil — NOT N5.
+        let level = DictionaryService.shared.jlptLevel(forWord: "鬱見")
+        XCTAssertNil(level, "鬱 has no JLPT rating; presence of an unrated kanji must veto the fallback")
+    }
+
+    func testFallbackReturnsNilWhenAllKanjiUnrated() {
+        // 鬱鬱 — every kanji is unrated → nil. (Also exercises the per-row
+        // SQLite reset/clear_bindings loop with duplicate characters.)
+        let level = DictionaryService.shared.jlptLevel(forWord: "鬱鬱")
+        XCTAssertNil(level)
+    }
 }
