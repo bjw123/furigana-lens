@@ -97,4 +97,53 @@ final class JLPTFallbackTests: XCTestCase {
         let level = DictionaryService.shared.jlptLevel(forWord: "鬱鬱")
         XCTAssertNil(level)
     }
+
+    // MARK: - Graceful degradation
+
+    /// Each test in this MARK section flips the service into the degraded state
+    /// to assert the short-circuit, then resets it in `tearDown` so the rest of
+    /// the suite (and future test runs in the same process) sees a healthy DB.
+    /// The flag is on the shared singleton, so leaving it set would poison the
+    /// other tests in this file that exercise real lookups.
+    func testDegradedFlagSuppressesLookup() {
+        DictionaryService._testForceDegraded(true)
+        defer { DictionaryService._testForceDegraded(false) }
+        // lookup must return empty without crashing, even for input that would
+        // normally hit a real entry (見る is N5 in the bundled DB).
+        XCTAssertEqual(DictionaryService.shared.lookup("見る"), [])
+        XCTAssertNil(DictionaryService.shared.first("見る"))
+    }
+
+    func testDegradedFlagSuppressesJlptLookup() {
+        DictionaryService._testForceDegraded(true)
+        defer { DictionaryService._testForceDegraded(false) }
+        XCTAssertNil(DictionaryService.shared.jlptLevel(forWord: "見て"))
+        XCTAssertNil(DictionaryService.shared.jlptLevel(forWord: "見学"))
+    }
+
+    func testDegradedFlagSuppressesKanjiInfoAndExamples() {
+        DictionaryService._testForceDegraded(true)
+        defer { DictionaryService._testForceDegraded(false) }
+        XCTAssertNil(DictionaryService.shared.kanjiInfo("見"))
+        XCTAssertEqual(DictionaryService.shared.jlptExamples(forKanji: "見"), [])
+        XCTAssertEqual(DictionaryService.shared.examples(for: ["見る"]), [])
+    }
+
+    func testIsDegradedReflectsSubjectValue() {
+        // Sanity-check the publisher contract task #31 will rely on: the static
+        // `isDegraded` accessor must mirror the subject's current value.
+        DictionaryService._testForceDegraded(true)
+        XCTAssertTrue(DictionaryService.isDegraded)
+        DictionaryService._testForceDegraded(false)
+        XCTAssertFalse(DictionaryService.isDegraded)
+    }
+
+    func testNormalLookupStillWorksAfterToggle() {
+        // After degradation is cleared, the service must resume serving real
+        // results — the flag is the only thing gating queries, not any
+        // permanently-cached "broken" state.
+        DictionaryService._testForceDegraded(true)
+        DictionaryService._testForceDegraded(false)
+        XCTAssertEqual(DictionaryService.shared.jlptLevel(forWord: "見る"), 5)
+    }
 }

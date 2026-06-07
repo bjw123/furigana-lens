@@ -1,6 +1,7 @@
 import Foundation
 import SQLite3
 import Compression
+import Combine
 import os
 
 /// SQLite-backed offline JMdict + Tanaka Corpus lookup. The DB is preprocessed
@@ -76,6 +77,37 @@ enum DictionaryServiceError: LocalizedError {
 final class DictionaryService {
     static let shared = DictionaryService()
 
+    /// Set when SQLite open / cache unpack fails. UI surfaces (task #31) can
+    /// subscribe to surface an error banner; meanwhile every query short-circuits
+    /// to empty results so the app keeps running instead of crashing.
+    static let degraded = CurrentValueSubject<Bool, Never>(false)
+    static var isDegraded: Bool { degraded.value }
+
+    /// Flips the degraded flag without re-emitting when it's already set, so
+    /// subscribers don't see spurious notifications.
+    fileprivate static func markDegraded() {
+        if degraded.value == false { degraded.send(true) }
+    }
+
+    /// Emit a one-shot debug log the first time a query is suppressed by the
+    /// degraded flag. Avoids spamming the log for every lookup on a broken DB.
+    private static var loggedDegradedQuery = false
+    fileprivate static func logDegradedQueryOnce() {
+        guard !loggedDegradedQuery else { return }
+        loggedDegradedQuery = true
+        AppLog.dictionary.debug("query short-circuited: service is degraded")
+    }
+
+    #if DEBUG
+    /// Test-only hooks for `DictionaryService` graceful-degradation tests. Lets
+    /// the suite force the service into / out of the degraded state without
+    /// having to corrupt the bundled SQLite cache on disk.
+    static func _testForceDegraded(_ value: Bool) {
+        loggedDegradedQuery = false
+        degraded.send(value)
+    }
+    #endif
+
     private var db: OpaquePointer?
     private let queue = DispatchQueue(label: "DictionaryService.sqlite")
 
@@ -100,15 +132,24 @@ final class DictionaryService {
             let dbURL = try ensureDatabaseUnpacked()
             let result = sqlite3_open_v2(dbURL.path, &db, SQLITE_OPEN_READONLY, nil)
             if result != SQLITE_OK {
-                AppLog.dictionary.error("sqlite open failed code=\(result, privacy: .public) path=\(dbURL.path, privacy: .public)")
-                assertionFailure("sqlite open failed: \(result)")
+                // Graceful degradation: log at .fault so it surfaces in Console + crash
+                // analytics, flip the degraded flag for the UI (task #31), and return —
+                // every query method will now short-circuit to empty results. Previously
+                // we hit assertionFailure here, which crashed debug builds and left
+                // release builds with a silently-broken dictionary.
+                AppLog.dictionary.fault("sqlite open failed code=\(result, privacy: .public) path=\(dbURL.path, privacy: .public)")
+                Self.markDegraded()
                 db = nil
                 return
             }
             AppLog.dictionary.info("opened sqlite at \(dbURL.path, privacy: .public) entries=\(self.entryCountForLog(), privacy: .public)")
         } catch {
-            AppLog.dictionary.error("dictionary unpack failed: \(String(describing: error), privacy: .public)")
-            assertionFailure("dictionary unpack failed: \(error)")
+            // Same rationale as the sqlite_open branch above: log + degrade instead
+            // of crashing. ensureDatabaseUnpacked throwing means the bundled gzip is
+            // missing or corrupt — recoverable from the user's POV (they get an empty
+            // dictionary + banner) but not from the service's POV.
+            AppLog.dictionary.fault("dictionary unpack failed: \(String(describing: error), privacy: .public)")
+            Self.markDegraded()
             db = nil
         }
     }
@@ -261,6 +302,7 @@ final class DictionaryService {
     /// Returns matches for the given form (kanji or kana), ordered by commonness then entry id.
     func lookup(_ keyword: String, limit: Int = 5) -> [DictionaryEntry] {
         let trimmed = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
+        if Self.isDegraded { Self.logDegradedQueryOnce(); return [] }
         guard !trimmed.isEmpty, let db else { return [] }
 
         return queue.sync {
@@ -311,6 +353,7 @@ final class DictionaryService {
     /// Pass the entry's kanji + kana forms (plus the originally-tapped surface) to maximize hits.
     func examples(for headwords: [String], limit: Int = 4) -> [ExampleSentence] {
         let unique = Array(Set(headwords.filter { !$0.isEmpty }))
+        if Self.isDegraded { Self.logDegradedQueryOnce(); return [] }
         guard !unique.isEmpty, let db else { return [] }
 
         return queue.sync {
@@ -361,6 +404,7 @@ final class DictionaryService {
     /// silently treated as known just because their neighbours are easy).
     func jlptLevel(forWord word: String) -> Int? {
         let trimmed = word.trimmingCharacters(in: .whitespacesAndNewlines)
+        if Self.isDegraded { Self.logDegradedQueryOnce(); return nil }
         guard !trimmed.isEmpty, let db else { return nil }
 
         return queue.sync { () -> Int? in
@@ -423,6 +467,7 @@ final class DictionaryService {
     /// when the character isn't a kanji we have an entry for.
     func kanjiInfo(_ character: Character) -> KanjiInfo? {
         let key = String(character)
+        if Self.isDegraded { Self.logDegradedQueryOnce(); return nil }
         guard let db else { return nil }
 
         return queue.sync { () -> KanjiInfo? in
@@ -461,6 +506,7 @@ final class DictionaryService {
     /// AND a JLPT classification (from the word list ingested at build time).
     func jlptExamples(forKanji character: Character, perLevel: Int = 4) -> [JLPTWordExample] {
         let key = String(character)
+        if Self.isDegraded { Self.logDegradedQueryOnce(); return [] }
         guard let db else { return [] }
 
         return queue.sync { () -> [JLPTWordExample] in
