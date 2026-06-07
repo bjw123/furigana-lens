@@ -1,0 +1,315 @@
+{
+  "sourceLanguage" : "en",
+  "version" : "1.0",
+  "strings" : {
+    "Scan" : {
+      "comment" : "Tab label / nav title",
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "スキャン" } } }
+    },
+    "Decks" : {
+      "comment" : "Tab label / nav title",
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "デッキ" } } }
+    },
+    "Review" : {
+      "comment" : "Tab label / nav title",
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "復習" } } }
+    },
+    "Settings" : {
+      "comment" : "Tab label / nav title",
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "設定" } } }
+    },
+    "Save" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "保存" } } }
+    },
+    "Done" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "完了" } } }
+    },
+    "Cancel" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "キャンセル" } } }
+    },
+    "Edit" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "編集" } } }
+    },
+    "OK" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "OK" } } }
+    },
+    "Next" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "次へ" } } }
+    },
+    "Finish" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "終了" } } }
+    },
+    "Submit" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "送信" } } }
+    },
+    "Show answer" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "答えを見る" } } }
+    },
+    "Show meaning" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "意味を見る" } } }
+    },
+    "Mark as known" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "覚えた" } } }
+    },
+    "Marked known" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "覚えた状態" } } }
+    },
+    "Tap to mark unknown" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "タップで覚えていないに" } } }
+    },
+    "Tap to confirm" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "タップで確定" } } }
+    },
+    "Save flashcard" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "フラッシュカードを保存" } } }
+    },
+    "Quiz this kanji" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "この漢字をクイズ" } } }
+    },
+    "Quiz" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "クイズ" } } }
+    },
+    "Reading" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "読み" } } }
+    },
+    "Meaning" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "意味" } } }
+    },
+    "Word" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "単語" } } }
+    },
+    "Sentence" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "文" } } }
+    },
+    "Type the reading" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "読みを入力" } } }
+    },
+    "Type the meaning" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "意味を入力" } } }
+    },
+    "Type ひらがな or romaji" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "ひらがな または ローマ字で入力" } } }
+    },
+    "Type the English meaning" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "英語の意味を入力" } } }
+    },
+    "Pick what you want to test" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "テストの種類を選択" } } }
+    },
+    "Correct" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "正解" } } }
+    },
+    "Try again later" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "後ほど再挑戦" } } }
+    },
+    "Your JLPT level" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "JLPTレベル" } } }
+    },
+    "Scan & reading" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "スキャンと読み" } } }
+    },
+    "Appearance" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "外観" } } }
+    },
+    "Library" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "ライブラリ" } } }
+    },
+    "Achievements" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "実績" } } }
+    },
+    "Why this exists" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "なぜこのアプリ？" } } }
+    },
+    "About" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "このアプリについて" } } }
+    },
+    "Accent colour" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "アクセントカラー" } } }
+    },
+    "Wave pattern" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "波の模様" } } }
+    },
+    "Kanji words only" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "漢字の単語のみ" } } }
+    },
+    "Hide known words" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "覚えた単語を非表示" } } }
+    },
+    "Time to crush kanji" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "漢字を倒そう" } } }
+    },
+    "Nothing due" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "予定なし" } } }
+    },
+    "Today's daily challenge" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "今日のチャレンジ" } } }
+    },
+    "Daily challenge · done" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "今日のチャレンジ・完了" } } }
+    },
+    "Daily challenge" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "今日のチャレンジ" } } }
+    },
+    "Today's challenge complete" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "今日のチャレンジ完了" } } }
+    },
+    "By deck" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "デッキ別" } } }
+    },
+    "Next 7 days" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "今後7日間" } } }
+    },
+    "Struggling kanji" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "苦手な漢字" } } }
+    },
+    "Struggling words" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "苦手な単語" } } }
+    },
+    "Success" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "正答率" } } }
+    },
+    "Day streak" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "連続日数" } } }
+    },
+    "Overview" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "概要" } } }
+    },
+    "New" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "新規" } } }
+    },
+    "Learning" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "学習中" } } }
+    },
+    "Mature" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "定着" } } }
+    },
+    "Total" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "合計" } } }
+    },
+    "Due" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "予定" } } }
+    },
+    "Pause from reviews" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "復習を一時停止" } } }
+    },
+    "Include in reviews" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "復習に含める" } } }
+    },
+    "Cram study" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "詰め込み学習" } } }
+    },
+    "Archive deck" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "デッキをアーカイブ" } } }
+    },
+    "Unarchive deck" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "アーカイブを戻す" } } }
+    },
+    "Delete deck" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "デッキを削除" } } }
+    },
+    "Export deck" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "デッキを書き出し" } } }
+    },
+    "Export for Anki" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "Anki向けに書き出し" } } }
+    },
+    "New deck" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "新しいデッキ" } } }
+    },
+    "Import .kcdeck file" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : ".kcdeckファイルを読み込み" } } }
+    },
+    "Type word" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "単語を入力" } } }
+    },
+    "Lookup a word" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "単語を検索" } } }
+    },
+    "Look up" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "検索" } } }
+    },
+    "Japanese word" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "日本語の単語" } } }
+    },
+    "Word breakdown" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "単語の解析" } } }
+    },
+    "In context" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "文脈" } } }
+    },
+    "Context" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "文脈" } } }
+    },
+    "Tags" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "タグ" } } }
+    },
+    "Add tag" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "タグを追加" } } }
+    },
+    "New tag" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "新しいタグ" } } }
+    },
+    "Tag name" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "タグ名" } } }
+    },
+    "Word" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "単語" } } }
+    },
+    "Sentence" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "文" } } }
+    },
+    "Card preview" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "カードプレビュー" } } }
+    },
+    "Deck" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "デッキ" } } }
+    },
+    "Create new deck" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "新しいデッキを作成" } } }
+    },
+    "Type" : {
+      "comment" : "Card-type picker label (Word / Sentence)",
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "種類" } } }
+    },
+    "Keyboard" : {
+      "comment" : "Scan-view button — open the typed-word lookup",
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "入力" } } }
+    },
+    "Interval" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "間隔" } } }
+    },
+    "Edit card" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "カードを編集" } } }
+    },
+    "Search cards…" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "カードを検索…" } } }
+    },
+    "Share progress" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "進捗を共有" } } }
+    },
+    "Achievement unlocked" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "実績解除" } } }
+    },
+    "MATURE!" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "定着！" } } }
+    },
+    "None" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "なし" } } }
+    },
+    "Readings" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "読み" } } }
+    },
+    "JLPT examples" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "JLPT例" } } }
+    },
+    "Words you've saved" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "保存した単語" } } }
+    },
+    "Should be known" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "覚えているはず" } } }
+    },
+    "Known" : {
+      "localizations" : { "ja" : { "stringUnit" : { "state" : "translated", "value" : "覚えた" } } }
+    }
+  }
+}

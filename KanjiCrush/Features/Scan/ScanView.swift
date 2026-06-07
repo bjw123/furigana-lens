@@ -316,7 +316,7 @@ struct ScanView: View {
                             .foregroundStyle(.white)
                             .background(Circle().fill(.white.opacity(0.16)))
                             .overlay(Circle().strokeBorder(.white.opacity(0.30), lineWidth: 0.75))
-                        Text("Type")
+                        Text("Keyboard")
                             .font(.caption2.weight(.medium))
                             .foregroundStyle(.white.opacity(0.85))
                     }

@@ -21,6 +21,7 @@
 		61FDAAD960CE24ACAC7DCE5D /* WordDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078463155A7D721875DACBCB /* WordDetailView.swift */; };
 		645DBAC9D540C34CD1CE55C3 /* DecksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8C8C427735498D90B8404 /* DecksView.swift */; };
 		6A89C7C3455B74C225ECA367 /* KnownWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFDA2F2F96AF807139D157C /* KnownWord.swift */; };
+		70BE82B5E305CC19619700DF /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 0D5D0816363E11A19E12C706 /* Localizable.xcstrings */; };
 		73396257EEF5D432942E5C4C /* StatsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1D25565072B0B16D0C326E /* StatsService.swift */; };
 		7803BBF04D20B19EDFD575EA /* Knownness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B07B5DB94D5FF64743FDF90 /* Knownness.swift */; };
 		7A2CCBCFADAEA78E3C58578A /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41349B7FE4C8941D99C95E93 /* RootTabView.swift */; };
@@ -69,6 +70,7 @@
 		0B07B5DB94D5FF64743FDF90 /* Knownness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Knownness.swift; sourceTree = "<group>"; };
 		0B9DA80B47F978748982EE4C /* SRSService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SRSService.swift; sourceTree = "<group>"; };
 		0BE94356A1F078093DC61C52 /* MockDataSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDataSeeder.swift; sourceTree = "<group>"; };
+		0D5D0816363E11A19E12C706 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		22C8FD25EFBD2F072063248F /* ScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
 		23877ACFD64791E83419B56C /* AchievementService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementService.swift; sourceTree = "<group>"; };
 		2C5621C2637E6ED31061C9DB /* JapaneseToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapaneseToken.swift; sourceTree = "<group>"; };
@@ -276,6 +278,7 @@
 			children = (
 				9FBDF3600DFD26E6C1EBF305 /* Assets.xcassets */,
 				F8960B4740139682A4D92446 /* jmdict.sqlite.gz */,
+				0D5D0816363E11A19E12C706 /* Localizable.xcstrings */,
 				9328AB6145C00516601FA825 /* reading_overrides.json */,
 			);
 			path = Resources;
@@ -384,6 +387,7 @@
 			knownRegions = (
 				Base,
 				en,
+				ja,
 			);
 			mainGroup = F46DFA2FA26D4D68F1302EF4;
 			minimizedProjectReferenceProxies = 1;
@@ -405,6 +409,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2E465C9206353DCBA7FF399F /* Assets.xcassets in Resources */,
+				70BE82B5E305CC19619700DF /* Localizable.xcstrings in Resources */,
 				9E2A8E495D0ECBD4B8EC5461 /* jmdict.sqlite.gz in Resources */,
 				CF05607C3ECCE1771285CE44 /* reading_overrides.json in Resources */,
 			);
