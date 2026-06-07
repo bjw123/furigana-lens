@@ -73,6 +73,8 @@ struct WordDetailView: View {
                             .padding(.horizontal)
                         } else {
                             meaningSection
+                            KanjiBreakdownView(expression: expression)
+                                .padding(.horizontal)
                             if !examples.isEmpty {
                                 examplesSection
                             }

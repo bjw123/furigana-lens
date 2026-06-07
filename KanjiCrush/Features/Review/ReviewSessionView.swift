@@ -319,6 +319,7 @@ struct ReviewSessionView: View {
                 if let sentence = frontExampleSentence(for: card) {
                     contextSentenceBlock(sentence: sentence)
                 }
+                KanjiBreakdownView(expression: card.expression)
             }
         case .sentence:
             VStack(spacing: 12) {
