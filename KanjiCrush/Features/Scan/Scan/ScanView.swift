@@ -73,6 +73,8 @@ struct ScanView: View {
     @Query var reviewLogs: [ReviewLog]
     @Query(sort: \Deck.createdAt, order: .reverse) var decks: [Deck]
     @StateObject var camera = CameraController()
+    @StateObject var frameCoordinator = FrameScanCoordinator()
+    @AppStorage("autoCaptureEnabled") var autoCaptureEnabled = true
     @State var frozenImage: UIImage?
     @State var recognizedText = ""
     @State var tokens: [JapaneseToken] = []
@@ -184,8 +186,23 @@ struct ScanView: View {
             .task {
                 await camera.configure()
                 camera.start()
+                frameCoordinator.attach(to: camera.session)
+                frameCoordinator.onAutoFire = {
+                    Task { await captureAndProcess() }
+                }
+                frameCoordinator.setEnabled(autoCaptureEnabled && frozenImage == nil)
             }
-            .onDisappear { camera.stop() }
+            .onChange(of: autoCaptureEnabled) { _, on in
+                frameCoordinator.setEnabled(on && frozenImage == nil)
+            }
+            .onChange(of: frozenImage) { _, frozen in
+                frameCoordinator.setEnabled(autoCaptureEnabled && frozen == nil)
+                if frozen != nil { frameCoordinator.noteAutoFireConsumed() }
+            }
+            .onDisappear {
+                camera.stop()
+                frameCoordinator.detach()
+            }
             .onChange(of: pickedPhoto) { _, newItem in
                 guard let newItem else { return }
                 Task { await loadPickedPhoto(newItem) }

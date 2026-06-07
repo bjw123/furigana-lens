@@ -102,6 +102,13 @@ extension ScanView {
                             .font(.title2.weight(.semibold))
                             .foregroundStyle(.white)
                     }
+                    .overlay(
+                        autoCaptureOverlay(
+                            progress: frameCoordinator.stabilityProgress,
+                            justFired: frameCoordinator.didJustAutoFire
+                        )
+                        .offset(y: -64)
+                    )
                 }
                 .accessibilityLabel("Capture")
 

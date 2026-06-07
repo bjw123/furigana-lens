@@ -10,6 +10,7 @@ struct SettingsView: View {
 
     @AppStorage("hideKanaOnlyTokens") private var hideKanaOnlyTokens = true
     @AppStorage("hideKnownWords") private var hideKnownWords = false
+    @AppStorage("autoCaptureEnabled") private var autoCaptureEnabled = true
     @AppStorage("appAccent") private var appAccentRaw: String = AppAccent.indigo.rawValue
     @AppStorage("showWavePattern") private var showWavePattern: Bool = true
     /// JLPT level the user is at: 0 = none, 5..1 maps to N5..N1.
@@ -184,6 +185,14 @@ struct SettingsView: View {
                 icon: "checkmark.seal.fill",
                 tint: Palette.bamboo,
                 isOn: $hideKnownWords
+            )
+            divider
+            settingsToggleRow(
+                title: "Auto-capture",
+                subtitle: "Snap the photo when the framed text holds still.",
+                icon: "viewfinder",
+                tint: Palette.sakura,
+                isOn: $autoCaptureEnabled
             )
         }
         .washiCard()

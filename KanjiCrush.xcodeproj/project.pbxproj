@@ -49,6 +49,7 @@
 		7803BBF04D20B19EDFD575EA /* Knownness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B07B5DB94D5FF64743FDF90 /* Knownness.swift */; };
 		7A2CCBCFADAEA78E3C58578A /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41349B7FE4C8941D99C95E93 /* RootTabView.swift */; };
 		7B2E6E365771F20DC4C08C7C /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8573B1A7672F443BC2C42559 /* Theme.swift */; };
+		7B4E08C9C61BEE037A361AD5 /* DiagnosticsReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFBD50E4BBE4BC76EF273465 /* DiagnosticsReporter.swift */; };
 		7DB9BDE1985284FC7DE734BB /* ReviewStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC6C828402EB034B9C920 /* ReviewStats.swift */; };
 		7E41021C8B455F5157A455E1 /* SentenceSpeechCheckView+Summary.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22B974852322FD9A2151E1B /* SentenceSpeechCheckView+Summary.swift */; };
 		7E708069A3FF48EE9139E6CA /* KanjiTypedReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6335C5233FA238D2474A4BFB /* KanjiTypedReviewView.swift */; };
@@ -67,6 +68,7 @@
 		9B99F484E04303EBF0807B5B /* test_washiCard_empty.1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0003DCF40CE42B692DBEC98B /* test_washiCard_empty.1.png */; };
 		9BFFB6C41F7F6EC329B05713 /* KnownnessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4519181C8A07B3CEB0A24CE2 /* KnownnessTests.swift */; };
 		9E2A8E495D0ECBD4B8EC5461 /* jmdict.sqlite.gz in Resources */ = {isa = PBXBuildFile; fileRef = F8960B4740139682A4D92446 /* jmdict.sqlite.gz */; };
+		A3384F28E46B3057C5E9A216 /* ScanView+AutoCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAB56EFBE7436BE46B31FC9 /* ScanView+AutoCapture.swift */; };
 		A4AB75001EB3B8BFC9B7FB82 /* DecksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77D7EF86EFFE706B4A862A82 /* DecksView.swift */; };
 		AA3E3156B2D124565373C3C4 /* ReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBCEB7020E1F75F253EF2A99 /* ReviewView.swift */; };
 		AC3A19B66F6D8AB3B96A3F38 /* DeckExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EB596CEEFDA3F6371672E9 /* DeckExportService.swift */; };
@@ -192,9 +194,11 @@
 		EE74DC8E0766DDCE99AE84A0 /* JapaneseAnalysisService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapaneseAnalysisService.swift; sourceTree = "<group>"; };
 		EEC3BABC91C4EECD18E15C52 /* test_gemTile_gold.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_gemTile_gold.1.png; sourceTree = "<group>"; };
 		EF244FA6F44A387A5A9EDB34 /* ReviewSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewSessionView.swift; sourceTree = "<group>"; };
+		EFBD50E4BBE4BC76EF273465 /* DiagnosticsReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticsReporter.swift; sourceTree = "<group>"; };
 		F8960B4740139682A4D92446 /* jmdict.sqlite.gz */ = {isa = PBXFileReference; lastKnownFileType = archive.gzip; path = jmdict.sqlite.gz; sourceTree = "<group>"; };
 		FBCEB7020E1F75F253EF2A99 /* ReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewView.swift; sourceTree = "<group>"; };
 		FE6A8A8602C62719745DEF29 /* AppLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLog.swift; sourceTree = "<group>"; };
+		FFAB56EFBE7436BE46B31FC9 /* ScanView+AutoCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ScanView+AutoCapture.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -258,6 +262,7 @@
 			children = (
 				23877ACFD64791E83419B56C /* AchievementService.swift */,
 				73EB596CEEFDA3F6371672E9 /* DeckExportService.swift */,
+				EFBD50E4BBE4BC76EF273465 /* DiagnosticsReporter.swift */,
 				7D2165FACC51F9B6110D4F6A /* DictionaryService.swift */,
 				EE74DC8E0766DDCE99AE84A0 /* JapaneseAnalysisService.swift */,
 				C8F2BC7FD25E7D4F2813FE29 /* JapaneseMatching.swift */,
@@ -397,6 +402,7 @@
 			isa = PBXGroup;
 			children = (
 				2FBC25869928C97C7893B5EB /* ScanView.swift */,
+				FFAB56EFBE7436BE46B31FC9 /* ScanView+AutoCapture.swift */,
 				E49E349AD78BEC7CEEBB863B /* ScanView+CameraViews.swift */,
 				267E38A68CB17A81D90AAC30 /* ScanView+FrozenCapture.swift */,
 				84BBE4DFB2446B21FAB052A9 /* SentenceCard.swift */,
@@ -642,6 +648,7 @@
 				6D8C530D53147B37F9D84249 /* DeckDetailView.swift in Sources */,
 				AC3A19B66F6D8AB3B96A3F38 /* DeckExportService.swift in Sources */,
 				A4AB75001EB3B8BFC9B7FB82 /* DecksView.swift in Sources */,
+				7B4E08C9C61BEE037A361AD5 /* DiagnosticsReporter.swift in Sources */,
 				BF59D6A62B3A5B7A50FA4B5C /* DictionaryService.swift in Sources */,
 				3FEE86BE1357065B871E5C88 /* Flashcard.swift in Sources */,
 				018309967D9123C5791139E8 /* FuriganaText.swift in Sources */,
@@ -663,6 +670,7 @@
 				AA3E3156B2D124565373C3C4 /* ReviewView.swift in Sources */,
 				7A2CCBCFADAEA78E3C58578A /* RootTabView.swift in Sources */,
 				1F592127D2217B5B05EB7827 /* SRSService.swift in Sources */,
+				A3384F28E46B3057C5E9A216 /* ScanView+AutoCapture.swift in Sources */,
 				86DC4C622312559B8C1CDB84 /* ScanView+CameraViews.swift in Sources */,
 				736E518EA2DDB01286D03960 /* ScanView+FrozenCapture.swift in Sources */,
 				2079BFAA1F9B1AD945FE0E8E /* ScanView.swift in Sources */,
