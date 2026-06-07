@@ -12,7 +12,8 @@ struct KanjiCrushApp: App {
             Flashcard.self,
             ReviewLog.self,
             KnownWord.self,
-            UnlockedAchievement.self
+            UnlockedAchievement.self,
+            DailyChallengeLog.self
         ])
         self.container = try! ModelContainer(for: schema)
         configureGlobalAppearance()

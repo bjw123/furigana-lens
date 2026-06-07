@@ -9,6 +9,8 @@ struct ReviewView: View {
 
     @State private var sessionQueue: [Flashcard]?
     @State private var sessionTitle: String = "Review"
+    @State private var showDailyChallenge = false
+    @Query private var dailyLogs: [DailyChallengeLog]
 
     private var dueAll: [Flashcard] {
         SRSService.shared.dueCards(from: allCards)
@@ -36,6 +38,9 @@ struct ReviewView: View {
                 ReviewSessionView(queue: queue, title: sessionTitle)
             }
         }
+        .fullScreenCover(isPresented: $showDailyChallenge) {
+            DailyChallengeView()
+        }
     }
 
     // MARK: - Home
@@ -57,6 +62,8 @@ struct ReviewView: View {
                     .padding(.horizontal, 24)
                     .padding(.top, 4)
                 }
+
+                dailyChallengeCard
 
                 if !deckRows.isEmpty {
                     byDeckCard
@@ -134,6 +141,84 @@ struct ReviewView: View {
                     .tracking(1.4)
             }
         }
+    }
+
+    // MARK: - Daily challenge
+
+    private var todayCompleted: Bool {
+        let today = DailyChallengeLog.todayKey()
+        return dailyLogs.contains { $0.day == today }
+    }
+
+    /// Consecutive days ending today (or yesterday if today isn't done yet)
+    /// the user finished a daily challenge.
+    private var dailyStreak: Int {
+        guard !dailyLogs.isEmpty else { return 0 }
+        let cal = Calendar.current
+        let days = Set(dailyLogs.map { $0.day })
+        var cursor = cal.startOfDay(for: Date())
+        if !days.contains(DailyChallengeLog.todayKey(now: cursor)) {
+            guard let yesterday = cal.date(byAdding: .day, value: -1, to: cursor) else { return 0 }
+            cursor = yesterday
+        }
+        var streak = 0
+        while days.contains(DailyChallengeLog.todayKey(now: cursor)) {
+            streak += 1
+            guard let prev = cal.date(byAdding: .day, value: -1, to: cursor) else { break }
+            cursor = prev
+        }
+        return streak
+    }
+
+    private var dailyChallengeCard: some View {
+        let done = todayCompleted
+        let streak = dailyStreak
+        return Button {
+            showDailyChallenge = true
+        } label: {
+            HStack(spacing: 14) {
+                ZStack {
+                    Circle()
+                        .fill((done ? Palette.bamboo : Palette.sakura).opacity(0.18))
+                        .frame(width: 46, height: 46)
+                    Image(systemName: done ? "checkmark.seal.fill" : "calendar.badge.exclamationmark")
+                        .font(.system(size: 19, weight: .semibold))
+                        .foregroundStyle(done ? Palette.bamboo : Palette.sakura)
+                }
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(done ? "Daily challenge · done" : "Today's daily challenge")
+                        .font(.system(.subheadline, design: .rounded).weight(.semibold))
+                        .foregroundStyle(Palette.sumi)
+                    Text(done
+                         ? "Come back tomorrow to keep the streak going."
+                         : "Five typed questions from words you've struggled with.")
+                        .font(.caption)
+                        .foregroundStyle(Palette.mist)
+                        .multilineTextAlignment(.leading)
+                }
+                Spacer()
+                if streak > 0 {
+                    HStack(spacing: 4) {
+                        Image(systemName: "flame.fill")
+                            .font(.caption2.weight(.semibold))
+                        Text("\(streak)")
+                            .font(.system(.subheadline, design: .rounded).weight(.bold))
+                    }
+                    .foregroundStyle(Palette.sakura)
+                }
+                Image(systemName: "chevron.right")
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(Palette.mist.opacity(0.7))
+            }
+            .padding(14)
+        }
+        .buttonStyle(.plain)
+        .background(Palette.washi, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .strokeBorder(Palette.hairline, lineWidth: 0.75)
+        )
+        .padding(.horizontal)
     }
 
     // MARK: - By deck

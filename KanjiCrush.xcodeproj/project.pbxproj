@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		018309967D9123C5791139E8 /* FuriganaText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AD71B6D179002407C5E6F4 /* FuriganaText.swift */; };
+		03AB8D5F4ABFD4DCCD583AF1 /* DailyChallengeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E29D376BBABE16AF1FB6E55A /* DailyChallengeView.swift */; };
 		1F592127D2217B5B05EB7827 /* SRSService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9DA80B47F978748982EE4C /* SRSService.swift */; };
 		24E2ED4BE13B4C2E680B0976 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD372E4A3B23128F9B2FA6A2 /* SettingsView.swift */; };
 		2AC0B88E0F0DAE407402F00E /* OCRPipelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891FD33B3970E032500E6843 /* OCRPipelineTests.swift */; };
@@ -25,6 +26,7 @@
 		7B2E6E365771F20DC4C08C7C /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8573B1A7672F443BC2C42559 /* Theme.swift */; };
 		7E708069A3FF48EE9139E6CA /* KanjiTypedReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6335C5233FA238D2474A4BFB /* KanjiTypedReviewView.swift */; };
 		8452BC03D2BA34EEFF543C34 /* Deck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639089187F485FCC4D5DD646 /* Deck.swift */; };
+		8F5A76718CABD884F0328EC6 /* DailyChallengeLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6401B2D2B89948F6523A4989 /* DailyChallengeLog.swift */; };
 		90926AFFD72C47CEB0290462 /* KanjiCrushApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46D8DEC1AECBF7799793277B /* KanjiCrushApp.swift */; };
 		90A8F6E72EA66EA2E75C028E /* MockDataSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE94356A1F078093DC61C52 /* MockDataSeeder.swift */; };
 		96D08F3605D58B890A9D5F6A /* KanjiCrushUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F81B4592A468869DE9DC3C /* KanjiCrushUITests.swift */; };
@@ -73,6 +75,7 @@
 		4FFDA2F2F96AF807139D157C /* KnownWord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownWord.swift; sourceTree = "<group>"; };
 		6335C5233FA238D2474A4BFB /* KanjiTypedReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiTypedReviewView.swift; sourceTree = "<group>"; };
 		639089187F485FCC4D5DD646 /* Deck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deck.swift; sourceTree = "<group>"; };
+		6401B2D2B89948F6523A4989 /* DailyChallengeLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyChallengeLog.swift; sourceTree = "<group>"; };
 		69AD71B6D179002407C5E6F4 /* FuriganaText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuriganaText.swift; sourceTree = "<group>"; };
 		6AF06594A11C119C872E6A46 /* KanjiCrush.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = KanjiCrush.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		73EB596CEEFDA3F6371672E9 /* DeckExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckExportService.swift; sourceTree = "<group>"; };
@@ -94,6 +97,7 @@
 		C1F8C8C427735498D90B8404 /* DecksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecksView.swift; sourceTree = "<group>"; };
 		CA1D25565072B0B16D0C326E /* StatsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsService.swift; sourceTree = "<group>"; };
 		DC8CBDE0F1E948BA875541C2 /* KanjiDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiDetailView.swift; sourceTree = "<group>"; };
+		E29D376BBABE16AF1FB6E55A /* DailyChallengeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyChallengeView.swift; sourceTree = "<group>"; };
 		EE74DC8E0766DDCE99AE84A0 /* JapaneseAnalysisService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapaneseAnalysisService.swift; sourceTree = "<group>"; };
 		EF244FA6F44A387A5A9EDB34 /* ReviewSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewSessionView.swift; sourceTree = "<group>"; };
 		F8960B4740139682A4D92446 /* jmdict.sqlite.gz */ = {isa = PBXFileReference; lastKnownFileType = archive.gzip; path = jmdict.sqlite.gz; sourceTree = "<group>"; };
@@ -105,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				41349B7FE4C8941D99C95E93 /* RootTabView.swift */,
+				1F4659E447C74B0AA7064B56 /* Daily */,
 				8FB43785D3063FCE0D38104D /* Decks */,
 				8DFEFED477C384DDEB6B5C77 /* Kanji */,
 				FB1C094DD7F37EC6EAB079CB /* Review */,
@@ -131,6 +136,14 @@
 				78F81B4592A468869DE9DC3C /* KanjiCrushUITests.swift */,
 			);
 			path = KanjiCrushUITests;
+			sourceTree = "<group>";
+		};
+		1F4659E447C74B0AA7064B56 /* Daily */ = {
+			isa = PBXGroup;
+			children = (
+				E29D376BBABE16AF1FB6E55A /* DailyChallengeView.swift */,
+			);
+			path = Daily;
 			sourceTree = "<group>";
 		};
 		486192241D0991B21073A43A /* Services */ = {
@@ -171,6 +184,7 @@
 		882356936639F95C6D2EFE07 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				6401B2D2B89948F6523A4989 /* DailyChallengeLog.swift */,
 				639089187F485FCC4D5DD646 /* Deck.swift */,
 				823A7BE537B3727C787980FE /* Flashcard.swift */,
 				4FFDA2F2F96AF807139D157C /* KnownWord.swift */,
@@ -391,6 +405,8 @@
 			files = (
 				BA9C55549FA8826EE990EB41 /* AchievementService.swift in Sources */,
 				C6B1052E61C21B8D7E09AED0 /* CameraPreviewView.swift in Sources */,
+				8F5A76718CABD884F0328EC6 /* DailyChallengeLog.swift in Sources */,
+				03AB8D5F4ABFD4DCCD583AF1 /* DailyChallengeView.swift in Sources */,
 				8452BC03D2BA34EEFF543C34 /* Deck.swift in Sources */,
 				AC3A19B66F6D8AB3B96A3F38 /* DeckExportService.swift in Sources */,
 				645DBAC9D540C34CD1CE55C3 /* DecksView.swift in Sources */,
