@@ -20,6 +20,7 @@ struct KanjiCrushApp: App {
         configureGlobalAppearance()
         Self.migrateLegacyBestCombo(into: container)
         MockDataSeeder.seedIfRequested(container: container)
+        DiagnosticsReporter.shared.register()
     }
 
     /// One-shot migration: `bestCombo` used to live in UserDefaults under

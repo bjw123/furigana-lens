@@ -9,4 +9,5 @@ enum AppLog {
     static let analysis = Logger(subsystem: subsystem, category: "analysis")
     static let srs = Logger(subsystem: subsystem, category: "srs")
     static let deckExport = Logger(subsystem: subsystem, category: "deck-export")
+    static let diagnostics = Logger(subsystem: subsystem, category: "diagnostics")
 }
