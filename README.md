@@ -41,7 +41,40 @@ Personal iOS app for reading Japanese kanji from anything you encounter — game
       <sub><b>Achievements</b><br>8-tile catalogue, gold when unlocked</sub>
     </td>
   </tr>
+  <tr>
+    <td align="center" width="25%">
+      <img src="docs/screenshots/09.png" width="180"><br>
+      <sub><b>Flashcard front</b><br>kanji + scanned context, no furigana</sub>
+    </td>
+    <td align="center" width="25%">
+      <img src="docs/screenshots/10.png" width="180"><br>
+      <sub><b>Flashcard back</b><br>furigana, meaning, audio, Read-aloud, SM-2 grades</sub>
+    </td>
+    <td align="center" width="25%">
+      <img src="docs/screenshots/11.png" width="180"><br>
+      <sub><b>Read aloud (speech-to-text)</b><br>chunked sentence, mic, auto-advance, skip</sub>
+    </td>
+    <td align="center" width="25%">
+      &nbsp;
+    </td>
+  </tr>
 </table>
+
+### Read-aloud, in detail
+
+Apple's `SFSpeechRecognizer` (Japanese, on-device-preferred, `$0`) backs the **Read aloud** sheet shown above. The flow is built for natural reading speed:
+
+- The sentence auto-splits into chunks by morphological tokenisation. The active chunk pulses sakura; matched chunks tint bamboo, missed vermillion, skipped grey.
+- Tap mic **once**. Read the whole sentence at natural speed. As each chunk's expected reading appears in the live transcript, the chunk auto-marks correct and advances. No per-chunk Submit.
+- Long pauses keep the session alive — the service auto-restarts the recognition task on silence-finalize without dropping the audio engine.
+- **Fuzzy matching** with Levenshtein distance handles the cases where the recogniser mangles boundaries when words run together (e.g. `ストレスでしょ` → `ストレッスでしょ`).
+- **JMdict-wide candidate set** — both kana AND kanji forms from JMdict are accepted, so the recogniser writing `判る` instead of `分かる` (same reading, different spelling) still matches.
+- **Tap a chunk** to set an endpoint — only chunks up to that point need to be read; the rest grey out and the session auto-completes on hit.
+- **Skip** capsule for chunks the recogniser is fighting you on; "I read this" capsule validates the live transcript before advancing (no free passes).
+- **Show furigana** toggle inside the sheet flips the prompt between "ruby visible" (easier — practising pronunciation) and "no ruby" (harder — practising recognition).
+- Misses + skips surface as **Save-as-flashcard** chips in the summary so the words that gave you trouble become tomorrow's drill.
+
+The same component (`SentenceSpeechCheckView`) is reachable from three places: the Scan tab's captured-sentence card, the front of a sentence flashcard during review (no furigana, the hard mode), and the back of a sentence or word flashcard (with furigana, pronunciation drill).
 
 ## Features
 
