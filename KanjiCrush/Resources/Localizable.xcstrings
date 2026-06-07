@@ -382,6 +382,9 @@
         }
       }
     },
+    "Edit the transcript above if needed, then Submit" : {
+
+    },
     "Enable camera access in Settings to scan Japanese text from your TV." : {
 
     },
@@ -573,6 +576,9 @@
         }
       }
     },
+    "Listening…" : {
+
+    },
     "Look up" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -650,6 +656,9 @@
           }
         }
       }
+    },
+    "Move on" : {
+
     },
     "N%@" : {
 
@@ -828,6 +837,9 @@
         }
       }
     },
+    "Read aloud correctly!" : {
+
+    },
     "Read Japanese from anything" : {
 
     },
@@ -888,6 +900,9 @@
           }
         }
       }
+    },
+    "Save missed words as flashcards" : {
+
     },
     "Save some flashcards from a scan or set your JLPT level in Settings to seed today's challenge." : {
 
@@ -995,6 +1010,9 @@
           }
         }
       }
+    },
+    "Some words were missed" : {
+
     },
     "Struggling kanji" : {
       "extractionState" : "stale",
@@ -1145,6 +1163,9 @@
 
     },
     "Translation failed" : {
+
+    },
+    "Try again" : {
 
     },
     "Try again later" : {
@@ -1298,6 +1319,9 @@
           }
         }
       }
+    },
+    "You read kanji you've been struggling with: %@" : {
+
     },
     "Your JLPT level" : {
       "extractionState" : "stale",

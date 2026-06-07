@@ -578,6 +578,7 @@ private struct SentenceCard: View {
     @State private var translationError: String?
     @State private var translationConfig: TranslationSession.Configuration?
     @State private var isTranslating = false
+    @State private var showReadAloud = false
     @ObservedObject private var speech = SpeechService.shared
 
     init(
@@ -633,6 +634,14 @@ private struct SentenceCard: View {
                 }
             }
         }
+        .sheet(isPresented: $showReadAloud) {
+            SentenceSpeechCheckView(
+                sentence: sentence,
+                expectedReading: JapaneseAnalysisService.shared.localReading(for: sentence),
+                meaning: "",
+                showFurigana: false
+            )
+        }
     }
 
     @ViewBuilder
@@ -644,6 +653,7 @@ private struct SentenceCard: View {
                     translateButton
                 }
                 saveButton
+                readAloudButton
                 Spacer()
             }
             .padding(.top, 6)
@@ -743,6 +753,21 @@ private struct SentenceCard: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel("Save sentence as flashcard")
+    }
+
+    private var readAloudButton: some View {
+        Button {
+            showReadAloud = true
+        } label: {
+            Label("Read aloud", systemImage: "mic.fill")
+                .font(.system(.caption, design: .rounded).weight(.semibold))
+                .padding(.horizontal, 12)
+                .padding(.vertical, 7)
+                .background(Capsule().fill(Palette.sumi.opacity(0.12)))
+                .foregroundStyle(Palette.sumi)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Read sentence aloud")
     }
 
     private func startTranslation() {

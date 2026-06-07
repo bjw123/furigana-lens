@@ -64,8 +64,24 @@ final class SentenceWrapTests: XCTestCase {
                 break
             }
 
-            let sentencePillVisible = app.staticTexts["Sentence"].exists
-            let targetVisible = app.staticTexts[targetSentence].exists
+            // The deck-detail page is rendered UNDERNEATH the cram modal,
+            // and (since the seeded sentence card's expression is the long
+            // sentence) its card row contains a StaticText with the same
+            // label as the cram front. Disambiguate by anchoring the
+            // sentence-text lookup to a frame above the `Show answer`
+            // button — only the cram modal's front text lives there.
+            let answerFrame = showAnswer.frame
+            let candidates = app.staticTexts
+                .matching(NSPredicate(format: "label == %@", targetSentence))
+                .allElementsBoundByIndex
+            let targetVisible = candidates.contains { $0.frame.maxY < answerFrame.minY }
+            // Same disambiguation for the "Sentence" type pill: the cram
+            // pill is at the very top of the modal, well above the answer
+            // button; the deck-detail row's "Sentence" pill is far below.
+            let pillCandidates = app.staticTexts
+                .matching(NSPredicate(format: "label == %@", "Sentence"))
+                .allElementsBoundByIndex
+            let sentencePillVisible = pillCandidates.contains { $0.frame.maxY < answerFrame.minY }
 
             if sentencePillVisible && targetVisible {
                 found = true
@@ -82,9 +98,18 @@ final class SentenceWrapTests: XCTestCase {
 
         // 4) Assert the sentence text is on screen and its frame sits inside
         //    the window bounds — this is the actual wrapping regression check.
-        let sentenceText = app.staticTexts[targetSentence]
-        XCTAssertTrue(sentenceText.exists, "Sentence front text should exist")
-        XCTAssertTrue(sentenceText.isHittable, "Sentence front text should be hittable (visible on screen)")
+        //    Don't use `isHittable`: SwiftUI `Text` isn't a hit target, so
+        //    that assertion would fail even when the text is fully visible.
+        //    The deck-detail card row UNDER the cram modal renders an
+        //    identical StaticText, so pick the one whose frame sits above
+        //    the `Show answer` button (i.e. the cram modal's front text).
+        let answerFrameBottom = app.buttons["Show answer"].frame.minY
+        let sentenceText = app.staticTexts
+            .matching(NSPredicate(format: "label == %@", targetSentence))
+            .allElementsBoundByIndex
+            .first { $0.frame.maxY < answerFrameBottom }
+        XCTAssertNotNil(sentenceText, "Sentence front text should exist on the cram session view")
+        guard let sentenceText else { return }
 
         let windowFrame = app.windows.firstMatch.frame
         let textFrame = sentenceText.frame

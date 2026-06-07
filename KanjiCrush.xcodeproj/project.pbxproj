@@ -11,7 +11,9 @@
 		03AB8D5F4ABFD4DCCD583AF1 /* DailyChallengeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E29D376BBABE16AF1FB6E55A /* DailyChallengeView.swift */; };
 		0B28383EBC05773F06DC9796 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A203BA7EE1851C1789C4A1A9 /* ShareSheet.swift */; };
 		1F592127D2217B5B05EB7827 /* SRSService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9DA80B47F978748982EE4C /* SRSService.swift */; };
+		200A2D3070C4F24B764033F2 /* SentenceSpeechCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 419B48C09125141359914874 /* SentenceSpeechCheckView.swift */; };
 		24E2ED4BE13B4C2E680B0976 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD372E4A3B23128F9B2FA6A2 /* SettingsView.swift */; };
+		28A91D5AA739FA3A3B9488F5 /* SpeechRecognitionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BECF1C8F412A74FE3DFA3A8E /* SpeechRecognitionService.swift */; };
 		2AC0B88E0F0DAE407402F00E /* OCRPipelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891FD33B3970E032500E6843 /* OCRPipelineTests.swift */; };
 		2E465C9206353DCBA7FF399F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9FBDF3600DFD26E6C1EBF305 /* Assets.xcassets */; };
 		37D7D914AB8E35A2F9111C0D /* KanjiDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC8CBDE0F1E948BA875541C2 /* KanjiDetailView.swift */; };
@@ -76,6 +78,7 @@
 		23877ACFD64791E83419B56C /* AchievementService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementService.swift; sourceTree = "<group>"; };
 		2C5621C2637E6ED31061C9DB /* JapaneseToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapaneseToken.swift; sourceTree = "<group>"; };
 		41349B7FE4C8941D99C95E93 /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
+		419B48C09125141359914874 /* SentenceSpeechCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentenceSpeechCheckView.swift; sourceTree = "<group>"; };
 		46D8DEC1AECBF7799793277B /* KanjiCrushApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiCrushApp.swift; sourceTree = "<group>"; };
 		4FFDA2F2F96AF807139D157C /* KnownWord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownWord.swift; sourceTree = "<group>"; };
 		6335C5233FA238D2474A4BFB /* KanjiTypedReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiTypedReviewView.swift; sourceTree = "<group>"; };
@@ -100,6 +103,7 @@
 		AD372E4A3B23128F9B2FA6A2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		AF9A4D7694D52435FB445E95 /* OCRService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRService.swift; sourceTree = "<group>"; };
 		B565DD4011B1B0CDAB9D3EBE /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
+		BECF1C8F412A74FE3DFA3A8E /* SpeechRecognitionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognitionService.swift; sourceTree = "<group>"; };
 		C1F8C8C427735498D90B8404 /* DecksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecksView.swift; sourceTree = "<group>"; };
 		C3DF95A8C683EA2602EC993D /* JLPTFallbackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JLPTFallbackTests.swift; sourceTree = "<group>"; };
 		CA1D25565072B0B16D0C326E /* StatsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsService.swift; sourceTree = "<group>"; };
@@ -123,6 +127,7 @@
 				FB1C094DD7F37EC6EAB079CB /* Review */,
 				CB8D9A1ED88DA634813E139B /* Scan */,
 				BAD4F83500A0113EE13185BA /* Settings */,
+				BAA1EDF02B67C57E6BF672E1 /* Speech */,
 				B43F974BCB3DC1CA5B03EF8E /* WordDetail */,
 			);
 			path = Features;
@@ -167,6 +172,7 @@
 				0BE94356A1F078093DC61C52 /* MockDataSeeder.swift */,
 				AF9A4D7694D52435FB445E95 /* OCRService.swift */,
 				81D4459A9CED977F1831952A /* ReadingOverrideStore.swift */,
+				BECF1C8F412A74FE3DFA3A8E /* SpeechRecognitionService.swift */,
 				9AEE441BC1A1FC2D014BA884 /* SpeechService.swift */,
 				0B9DA80B47F978748982EE4C /* SRSService.swift */,
 				CA1D25565072B0B16D0C326E /* StatsService.swift */,
@@ -235,6 +241,14 @@
 				078463155A7D721875DACBCB /* WordDetailView.swift */,
 			);
 			path = WordDetail;
+			sourceTree = "<group>";
+		};
+		BAA1EDF02B67C57E6BF672E1 /* Speech */ = {
+			isa = PBXGroup;
+			children = (
+				419B48C09125141359914874 /* SentenceSpeechCheckView.swift */,
+			);
+			path = Speech;
 			sourceTree = "<group>";
 		};
 		BAD4F83500A0113EE13185BA /* Settings */ = {
@@ -442,8 +456,10 @@
 				7A2CCBCFADAEA78E3C58578A /* RootTabView.swift in Sources */,
 				1F592127D2217B5B05EB7827 /* SRSService.swift in Sources */,
 				CBC22BFE600F52A751C25745 /* ScanView.swift in Sources */,
+				200A2D3070C4F24B764033F2 /* SentenceSpeechCheckView.swift in Sources */,
 				24E2ED4BE13B4C2E680B0976 /* SettingsView.swift in Sources */,
 				0B28383EBC05773F06DC9796 /* ShareSheet.swift in Sources */,
+				28A91D5AA739FA3A3B9488F5 /* SpeechRecognitionService.swift in Sources */,
 				F94226BF0A11AF288D8BB752 /* SpeechService.swift in Sources */,
 				73396257EEF5D432942E5C4C /* StatsService.swift in Sources */,
 				7B2E6E365771F20DC4C08C7C /* Theme.swift in Sources */,
@@ -669,6 +685,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Kanji Crush";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Point your camera at Japanese text on your TV or screen to read words and furigana.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Used to capture your reading of Japanese text so the app can check it.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Used to transcribe your reading on-device for grading.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -708,6 +726,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Kanji Crush";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Point your camera at Japanese text on your TV or screen to read words and furigana.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Used to capture your reading of Japanese text so the app can check it.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Used to transcribe your reading on-device for grading.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				LD_RUNPATH_SEARCH_PATHS = (

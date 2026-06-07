@@ -29,6 +29,8 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.kanjicrush.app
         INFOPLIST_KEY_CFBundleDisplayName: "Kanji Crush"
         INFOPLIST_KEY_NSCameraUsageDescription: "Point your camera at Japanese text on your TV or screen to read words and furigana."
+        INFOPLIST_KEY_NSMicrophoneUsageDescription: "Used to capture your reading of Japanese text so the app can check it."
+        INFOPLIST_KEY_NSSpeechRecognitionUsageDescription: "Used to transcribe your reading on-device for grading."
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         GENERATE_INFOPLIST_FILE: YES

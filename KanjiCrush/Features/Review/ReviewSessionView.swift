@@ -19,6 +19,7 @@ struct ReviewSessionView: View {
     @State private var showBack = false
     @State private var seeMoreExpanded = false
     @State private var editingCard: Flashcard?
+    @State private var readAloudRequest: ReadAloudRequest?
     @State private var comboCount: Int = 0
     @State private var comboBurstId: UUID?      // changes to trigger animation
     @State private var crushKanji: String?      // non-nil while crush animation runs
@@ -28,6 +29,14 @@ struct ReviewSessionView: View {
     enum SessionKind {
         case review   // applies SRS + writes a ReviewLog
         case cram     // doesn't mutate SRS; still writes a ReviewLog for stats
+    }
+
+    private struct ReadAloudRequest: Identifiable {
+        let id = UUID()
+        let sentence: String
+        let expectedReading: String
+        let meaning: String
+        let showFurigana: Bool
     }
 
     var body: some View {
@@ -80,6 +89,14 @@ struct ReviewSessionView: View {
                             }
                         }
                 }
+            }
+            .sheet(item: $readAloudRequest) { req in
+                SentenceSpeechCheckView(
+                    sentence: req.sentence,
+                    expectedReading: req.expectedReading,
+                    meaning: req.meaning,
+                    showFurigana: req.showFurigana
+                )
             }
         }
     }
@@ -226,13 +243,21 @@ struct ReviewSessionView: View {
                     }
                 }
             case .sentence:
-                Text(card.expression)
-                    .font(.system(.title3, design: .serif))
-                    .foregroundStyle(Palette.sumi)
-                    .multilineTextAlignment(.center)
-                    .frame(maxWidth: .infinity)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.horizontal)
+                VStack(spacing: 12) {
+                    Text(card.expression)
+                        .font(.system(.title3, design: .serif))
+                        .foregroundStyle(Palette.sumi)
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.horizontal)
+                    readAloudButton(
+                        sentence: card.expression,
+                        expectedReading: JapaneseAnalysisService.shared.localReading(for: card.expression),
+                        meaning: card.meaning ?? "",
+                        showFurigana: false
+                    )
+                }
             }
         }
     }
@@ -282,7 +307,15 @@ struct ReviewSessionView: View {
                         .multilineTextAlignment(.center)
                         .padding(.horizontal)
                 }
-                audioButton(for: displayReading.isEmpty ? card.expression : displayReading)
+                HStack(spacing: 8) {
+                    audioButton(for: displayReading.isEmpty ? card.expression : displayReading)
+                    readAloudButton(
+                        sentence: card.expression,
+                        expectedReading: card.reading,
+                        meaning: card.meaning ?? "",
+                        showFurigana: true
+                    )
+                }
                 if let sentence = frontExampleSentence(for: card) {
                     contextSentenceBlock(sentence: sentence)
                 }
@@ -297,7 +330,15 @@ struct ReviewSessionView: View {
                         .multilineTextAlignment(.center)
                         .padding(.horizontal)
                 }
-                audioButton(for: card.expression)
+                HStack(spacing: 8) {
+                    audioButton(for: card.expression)
+                    readAloudButton(
+                        sentence: card.expression,
+                        expectedReading: JapaneseAnalysisService.shared.localReading(for: card.expression),
+                        meaning: card.meaning ?? "",
+                        showFurigana: true
+                    )
+                }
                 sentenceBreakdown(for: card)
             }
         }
@@ -407,6 +448,31 @@ struct ReviewSessionView: View {
             return ctx
         }
         return DictionaryService.shared.examples(for: [card.expression], limit: 1).first?.japanese
+    }
+
+    private func readAloudButton(
+        sentence: String,
+        expectedReading: String,
+        meaning: String,
+        showFurigana: Bool
+    ) -> some View {
+        Button {
+            readAloudRequest = ReadAloudRequest(
+                sentence: sentence,
+                expectedReading: expectedReading,
+                meaning: meaning,
+                showFurigana: showFurigana
+            )
+        } label: {
+            Label("Read aloud", systemImage: "mic.fill")
+                .font(.system(.subheadline, design: .rounded).weight(.semibold))
+                .padding(.horizontal, 14)
+                .padding(.vertical, 8)
+                .background(Capsule().fill(Palette.sumi.opacity(0.12)))
+                .foregroundStyle(Palette.sumi)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Read aloud and check pronunciation")
     }
 
     private func audioButton(for text: String) -> some View {

@@ -131,10 +131,16 @@ enum MockDataSeeder {
     }
 
     private static func wipe(_ ctx: ModelContext) throws {
-        try ctx.delete(model: ReviewLog.self)
-        try ctx.delete(model: Flashcard.self)
-        try ctx.delete(model: Deck.self)
-        try ctx.delete(model: KnownWord.self)
+        // Fetch + delete instance-by-instance — `delete(model:)` on its own
+        // doesn't reliably purge rows that were persisted by a previous
+        // launch (they exist on disk but aren't yet faulted into this
+        // context). Save in between so the wipe lands on disk before the
+        // re-seed inserts new rows.
+        for log in try ctx.fetch(FetchDescriptor<ReviewLog>()) { ctx.delete(log) }
+        for card in try ctx.fetch(FetchDescriptor<Flashcard>()) { ctx.delete(card) }
+        for deck in try ctx.fetch(FetchDescriptor<Deck>()) { ctx.delete(deck) }
+        for kw in try ctx.fetch(FetchDescriptor<KnownWord>()) { ctx.delete(kw) }
+        try ctx.save()
     }
 
     private static func insert(
