@@ -93,6 +93,10 @@ struct SentenceSpeechCheckView: View {
         let surface: String
         let expectedReading: String
         let matched: Bool
+        /// User chose to skip rather than read this chunk. Distinct from
+        /// matched=false (which means they tried and missed) — skips get
+        /// a softer visual treatment in the summary.
+        let skipped: Bool
         let transcript: String
     }
 
@@ -264,6 +268,16 @@ struct SentenceSpeechCheckView: View {
                     surfaceColor: Palette.bamboo,
                     readingColor: Palette.bamboo.opacity(0.85),
                     opacity: 0.95
+                )
+            } else if result.skipped {
+                // Softer treatment than vermillion — skipping isn't failing.
+                return ChunkPillState(
+                    background: Palette.mist.opacity(0.15),
+                    border: Palette.mist.opacity(0.40),
+                    borderWidth: 0.75,
+                    surfaceColor: Palette.sumi.opacity(0.55),
+                    readingColor: Palette.mist,
+                    opacity: 0.85
                 )
             } else {
                 return ChunkPillState(
@@ -465,27 +479,50 @@ struct SentenceSpeechCheckView: View {
         }
     }
 
-    /// Small "I read this" capsule that lets the user force-advance the
-    /// active chunk if the recogniser dropped a word. Only shown when the
-    /// mic is live (otherwise the user can just tap mic again to retry).
+    /// Two-button row offered when the mic is live: "I read this" (validates
+    /// the transcript and only advances if the chunk actually appears) and
+    /// "Skip" (advances without marking correct — for when the recogniser is
+    /// fighting the user on a particular word and they just want to move on).
     @ViewBuilder
     private var manualOverrideRow: some View {
-        if speech.isListening, let chunk = activeChunk {
-            Button {
-                manuallyAdvance(chunk: chunk)
-            } label: {
-                HStack(spacing: 6) {
-                    Image(systemName: "hand.tap.fill")
-                        .font(.caption2)
-                    Text("I read \"\(chunk.surface)\"")
-                        .font(.system(.caption, design: .rounded).weight(.semibold))
+        if let chunk = activeChunk {
+            HStack(spacing: 8) {
+                if speech.isListening {
+                    Button {
+                        manuallyAdvance(chunk: chunk)
+                    } label: {
+                        HStack(spacing: 6) {
+                            Image(systemName: "hand.tap.fill")
+                                .font(.caption2)
+                            Text("I read \"\(chunk.surface)\"")
+                                .font(.system(.caption, design: .rounded).weight(.semibold))
+                        }
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(Capsule().fill(Palette.indigo.opacity(0.12)))
+                        .foregroundStyle(Palette.indigo)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("I read \(chunk.surface)")
                 }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 6)
-                .background(Capsule().fill(Palette.indigo.opacity(0.12)))
-                .foregroundStyle(Palette.indigo)
+
+                Button {
+                    skipCurrentChunk()
+                } label: {
+                    HStack(spacing: 6) {
+                        Image(systemName: "forward.fill")
+                            .font(.caption2)
+                        Text("Skip")
+                            .font(.system(.caption, design: .rounded).weight(.semibold))
+                    }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(Capsule().fill(Palette.mist.opacity(0.18)))
+                    .foregroundStyle(Palette.mist)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Skip this chunk")
             }
-            .buttonStyle(.plain)
         }
     }
 
@@ -895,7 +932,7 @@ struct SentenceSpeechCheckView: View {
 
     /// Marks the active chunk's outcome and bumps the index. Does NOT touch
     /// `consumedPrefix` — the caller handles that.
-    private func advanceCurrentChunk(matched: Bool, transcriptForResult: String?) {
+    private func advanceCurrentChunk(matched: Bool, transcriptForResult: String?, skipped: Bool = false) {
         guard currentIndex < chunks.count else { return }
         let chunk = chunks[currentIndex]
         results.removeAll { $0.id == chunk.id }
@@ -904,6 +941,7 @@ struct SentenceSpeechCheckView: View {
             surface: chunk.surface,
             expectedReading: chunk.reading,
             matched: matched,
+            skipped: skipped,
             transcript: transcriptForResult ?? ""
         ))
         if matched {
@@ -912,6 +950,20 @@ struct SentenceSpeechCheckView: View {
         }
         currentIndex += 1
         chunkConsumedBaseline = consumedPrefix.count
+    }
+
+    /// User-initiated skip. The chunk doesn't count as correct, but it doesn't
+    /// count as a hard failure either — it lands in the summary as a
+    /// "skipped" entry the user can still save as a flashcard. Used when the
+    /// speech recognizer is fighting them on a particular word.
+    private func skipCurrentChunk() {
+        guard currentIndex < chunks.count else { return }
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        chunkFeedback = nil
+        advanceCurrentChunk(matched: false, transcriptForResult: nil, skipped: true)
+        if currentIndex >= chunks.count {
+            finishSession()
+        }
     }
 
     /// Manual "I read this" override — checks the current live transcript
@@ -960,6 +1012,7 @@ struct SentenceSpeechCheckView: View {
                 surface: chunk.surface,
                 expectedReading: chunk.reading,
                 matched: false,
+                skipped: false,
                 transcript: speech.transcript
             ))
             return
