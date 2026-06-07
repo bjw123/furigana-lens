@@ -134,12 +134,55 @@ struct ReviewSessionView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 32)
                 .padding(.horizontal, 20)
-                .background(Palette.washi, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
+                .background(
+                    RoundedRectangle(cornerRadius: 24, style: .continuous)
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    Palette.washi,
+                                    Color(
+                                        light: UIColor(red: 0.992, green: 0.974, blue: 0.945, alpha: 1.0),
+                                        dark:  UIColor(red: 0.135, green: 0.118, blue: 0.100, alpha: 1.0)
+                                    )
+                                ],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        )
+                )
+                // Subtle sakura wash from the bottom when the answer is
+                // revealed, so the reveal-state feels distinct from front-only.
+                .overlay(
+                    Group {
+                        if showBack {
+                            LinearGradient(
+                                colors: [Color.clear, Palette.sakura.opacity(0.06)],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                            .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+                            .allowsHitTesting(false)
+                        }
+                    }
+                )
                 .overlay(
                     RoundedRectangle(cornerRadius: 24, style: .continuous)
                         .strokeBorder(Palette.hairline, lineWidth: 0.75)
                 )
-                .shadow(color: Palette.sumi.opacity(0.08), radius: 14, y: 6)
+                // Inner top highlight — gives the card a subtle "lifted" edge.
+                .overlay(
+                    RoundedRectangle(cornerRadius: 24, style: .continuous)
+                        .stroke(Color.white.opacity(0.35), lineWidth: 1)
+                        .blur(radius: 0.5)
+                        .mask(
+                            RoundedRectangle(cornerRadius: 24, style: .continuous)
+                                .stroke(lineWidth: 2)
+                                .padding(.bottom, 44)
+                        )
+                        .allowsHitTesting(false)
+                )
+                .shadow(color: Palette.sumi.opacity(0.10), radius: 18, x: 0, y: 10)
+                .shadow(color: Palette.sumi.opacity(0.04), radius: 2, x: 0, y: 1)
                 .padding(.horizontal)
             }
             .scrollIndicators(.hidden)

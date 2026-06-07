@@ -135,13 +135,18 @@ struct WashiBackground: View {
 
     var body: some View {
         ZStack {
-            // Cream → faint sakura → faint gold base for warmth.
+            // Washi → sakura-warm → cream → warm-cream base for depth.
             LinearGradient(
                 colors: [
+                    Palette.washi,
+                    Color(
+                        light: UIColor(red: 0.995, green: 0.972, blue: 0.940, alpha: 1.0),
+                        dark:  UIColor(red: 0.135, green: 0.110, blue: 0.090, alpha: 1.0)
+                    ),
                     Palette.cream,
                     Color(
-                        light: UIColor(red: 0.992, green: 0.953, blue: 0.929, alpha: 1.0),
-                        dark:  UIColor(red: 0.118, green: 0.102, blue: 0.086, alpha: 1.0)
+                        light: UIColor(red: 0.984, green: 0.940, blue: 0.918, alpha: 1.0),
+                        dark:  UIColor(red: 0.118, green: 0.098, blue: 0.085, alpha: 1.0)
                     )
                 ],
                 startPoint: .top,
@@ -149,12 +154,12 @@ struct WashiBackground: View {
             )
             .ignoresSafeArea()
 
-            // Sakura wash from the top-right — feels like light hitting paper.
+            // Sakura wash from the top-right — late-afternoon light on paper.
             RadialGradient(
-                colors: [Palette.sakura.opacity(0.22), .clear],
+                colors: [Palette.sakura.opacity(0.32), .clear],
                 center: .topTrailing,
                 startRadius: 20,
-                endRadius: 420
+                endRadius: 540
             )
             .ignoresSafeArea()
 
@@ -164,6 +169,15 @@ struct WashiBackground: View {
                 center: .bottomLeading,
                 startRadius: 20,
                 endRadius: 460
+            )
+            .ignoresSafeArea()
+
+            // Subtle gold wash from the bottom-right, sitting atop the indigo.
+            RadialGradient(
+                colors: [Palette.gold.opacity(0.10), .clear],
+                center: .init(x: 0.85, y: 0.95),
+                startRadius: 20,
+                endRadius: 380
             )
             .ignoresSafeArea()
 

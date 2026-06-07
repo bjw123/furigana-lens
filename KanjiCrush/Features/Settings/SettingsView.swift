@@ -382,14 +382,85 @@ struct SettingsView: View {
     }
 
     private func achievementTile(_ achievement: Achievement, isUnlocked: Bool) -> some View {
-        VStack(spacing: 6) {
+        Group {
+            if isUnlocked {
+                unlockedAchievementTile(achievement)
+            } else {
+                lockedAchievementTile(achievement)
+            }
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(isUnlocked ? "Unlocked: " : "Locked: ")\(achievement.title). \(achievement.summary)")
+    }
+
+    /// Bright candy-gem variant — gold gradient surface with a glossy top
+    /// highlight, mirroring the `GemTile` pattern.
+    private func unlockedAchievementTile(_ achievement: Achievement) -> some View {
+        let pair = Palette.gradientPair(for: Palette.gold)
+        let cornerRadius: CGFloat = 14
+        return VStack(spacing: 6) {
             Image(systemName: achievement.symbol)
                 .font(.system(size: 22, weight: .semibold))
-                .foregroundStyle(isUnlocked ? Palette.gold : Palette.mist.opacity(0.6))
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [.white, Palette.cream.opacity(0.85)],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
                 .padding(.top, 6)
             Text(achievement.title)
                 .font(.system(.caption, design: .rounded).weight(.semibold))
-                .foregroundStyle(isUnlocked ? Palette.sumi : Palette.mist)
+                .foregroundStyle(Palette.cream)
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
+            Text(achievement.summary)
+                .font(.system(size: 9, design: .rounded))
+                .foregroundStyle(Palette.cream.opacity(0.85))
+                .multilineTextAlignment(.center)
+                .lineLimit(3)
+                .padding(.horizontal, 4)
+                .padding(.bottom, 6)
+        }
+        .frame(maxWidth: .infinity)
+        .background(
+            ZStack {
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .fill(
+                        LinearGradient(
+                            colors: [pair.0, pair.1],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                // Glossy white highlight near the top edge — the "candy coat".
+                RoundedRectangle(cornerRadius: cornerRadius * 0.55, style: .continuous)
+                    .fill(Color.white.opacity(0.40))
+                    .blur(radius: 4)
+                    .padding(.horizontal, cornerRadius * 0.5)
+                    .padding(.top, cornerRadius * 0.35)
+                    .padding(.bottom, cornerRadius * 1.4)
+                    .blendMode(.plusLighter)
+                    .allowsHitTesting(false)
+            }
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                .strokeBorder(Color.white.opacity(0.25), lineWidth: 0.75)
+        )
+        .shadow(color: Palette.goldDeep.opacity(0.40), radius: 12, x: 0, y: 6)
+    }
+
+    /// Subtle greyed-out variant for achievements the user hasn't earned yet.
+    private func lockedAchievementTile(_ achievement: Achievement) -> some View {
+        VStack(spacing: 6) {
+            Image(systemName: achievement.symbol)
+                .font(.system(size: 22, weight: .semibold))
+                .foregroundStyle(Palette.mist.opacity(0.6))
+                .padding(.top, 6)
+            Text(achievement.title)
+                .font(.system(.caption, design: .rounded).weight(.semibold))
+                .foregroundStyle(Palette.mist)
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
             Text(achievement.summary)
@@ -403,18 +474,13 @@ struct SettingsView: View {
         .frame(maxWidth: .infinity)
         .background(
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(isUnlocked ? Palette.gold.opacity(0.10) : Palette.cream.opacity(0.55))
+                .fill(Palette.cream.opacity(0.55))
         )
         .overlay(
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .strokeBorder(
-                    isUnlocked ? Palette.gold.opacity(0.45) : Palette.hairline,
-                    lineWidth: isUnlocked ? 1 : 0.5
-                )
+                .strokeBorder(Palette.hairline, lineWidth: 0.5)
         )
-        .opacity(isUnlocked ? 1.0 : 0.65)
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(isUnlocked ? "Unlocked: " : "Locked: ")\(achievement.title). \(achievement.summary)")
+        .opacity(0.65)
     }
 
     // MARK: - Story

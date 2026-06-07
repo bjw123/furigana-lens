@@ -263,11 +263,23 @@ struct ScanView: View {
 
     private var bottomControlBar: some View {
         VStack(spacing: 14) {
-            Text("TVの日本語にカメラを向けて、撮影してください。")
-                .font(.system(.footnote, design: .rounded))
-                .foregroundStyle(.white.opacity(0.9))
-                .multilineTextAlignment(.center)
-                .padding(.horizontal)
+            VStack(spacing: 2) {
+                Text("TVの日本語にカメラを向けて、撮影してください。")
+                    .font(.system(.footnote, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.95))
+                Text("Aim at Japanese text and tap to capture")
+                    .font(.system(.caption2, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.7))
+            }
+            .multilineTextAlignment(.center)
+            .padding(.horizontal, 14)
+            .padding(.vertical, 6)
+            .background(
+                Capsule()
+                    .fill(Color.black.opacity(0.45))
+                    .blur(radius: 4)
+            )
+            .padding(.horizontal, 24)
 
             HStack(alignment: .center, spacing: 28) {
                 PhotosPicker(selection: $pickedPhoto, matching: .images) {
@@ -327,7 +339,12 @@ struct ScanView: View {
         .frame(maxWidth: .infinity)
         .background(
             LinearGradient(
-                colors: [.clear, .black.opacity(0.30), .black.opacity(0.65)],
+                colors: [
+                    Color.clear,
+                    Color.black.opacity(0.20),
+                    Palette.indigoDeep.opacity(0.35),
+                    Palette.sumi.opacity(0.75)
+                ],
                 startPoint: .top,
                 endPoint: .bottom
             )
