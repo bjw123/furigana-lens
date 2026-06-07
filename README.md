@@ -8,7 +8,7 @@ Personal iOS app for reading Japanese kanji from anything you encounter — game
   <tr>
     <td align="center" width="25%">
       <img src="docs/screenshots/01.png" width="180"><br>
-      <sub><b>Scan</b><br>camera with kanji tab-bar identity</sub>
+      <sub><b>Scan a TV</b><br>Persona 5 frozen frame · 12 chips · in-deck + known states</sub>
     </td>
     <td align="center" width="25%">
       <img src="docs/screenshots/02.png" width="180"><br>
