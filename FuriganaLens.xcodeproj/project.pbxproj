@@ -23,6 +23,7 @@
 		78C9EEC4ABC2C014C7A3BCAA /* JapaneseAnalysisService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E4FDD3BF740C8D9F837AB4 /* JapaneseAnalysisService.swift */; };
 		948B602892EFB02383FF1674 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEF9636A06DFA207733AA3 /* Theme.swift */; };
 		95EFE26EA16FEB61330F03AB /* OCRPipelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704166B92C215BBDC6145953 /* OCRPipelineTests.swift */; };
+		9E7EC109BE75BBB3B484115B /* Knownness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCE25746BA0723495415CF6 /* Knownness.swift */; };
 		ADEDCAFD9B6A62896D40A2BE /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B190921D709905D364C1599 /* CameraPreviewView.swift */; };
 		C95F59B969285ECE995F8032 /* ReadingOverrideStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156B357DDEA6AE5F64E5367B /* ReadingOverrideStore.swift */; };
 		CDC2389816D3F488E96E8C9C /* DictionaryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651CF91E2BBAD00FFE1A865E /* DictionaryService.swift */; };
@@ -62,6 +63,7 @@
 		1991CB34F4EAC83F6AAB4ACB /* ReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewView.swift; sourceTree = "<group>"; };
 		1B0A64D61A929D104E129B8C /* Deck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deck.swift; sourceTree = "<group>"; };
 		1B190921D709905D364C1599 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
+		1FCE25746BA0723495415CF6 /* Knownness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Knownness.swift; sourceTree = "<group>"; };
 		2571462D95BAA8F3EA494B04 /* ScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
 		383D124EFCE2E40014D589EA /* WordDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordDetailView.swift; sourceTree = "<group>"; };
 		391432F56D6768D408E080D5 /* MockDataSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDataSeeder.swift; sourceTree = "<group>"; };
@@ -82,7 +84,7 @@
 		B958516913FBC091A0C0E858 /* KnownWord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownWord.swift; sourceTree = "<group>"; };
 		B9C26D99C6A5EB6A0020D435 /* FuriganaLensUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = FuriganaLensUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BACAF725ED82D56E29B6CF32 /* FuriganaText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuriganaText.swift; sourceTree = "<group>"; };
-		BDAA2D08AEA353C0DE67DC55 /* FuriganaLens.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FuriganaLens.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BDAA2D08AEA353C0DE67DC55 /* FuriganaLens.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = FuriganaLens.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D21FD0F67C53B46F9444F4C8 /* FuriganaLensApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuriganaLensApp.swift; sourceTree = "<group>"; };
 		D81C61B3DBE88D82DAB62038 /* reading_overrides.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = reading_overrides.json; sourceTree = "<group>"; };
 		D9B8455F0F0384CD2AF75A40 /* FuriganaLensUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuriganaLensUITests.swift; sourceTree = "<group>"; };
@@ -239,6 +241,7 @@
 				651CF91E2BBAD00FFE1A865E /* DictionaryService.swift */,
 				F1E4FDD3BF740C8D9F837AB4 /* JapaneseAnalysisService.swift */,
 				1894C716A11F8126CD2176A1 /* JapaneseToken.swift */,
+				1FCE25746BA0723495415CF6 /* Knownness.swift */,
 				391432F56D6768D408E080D5 /* MockDataSeeder.swift */,
 				74666A3A574562FCD0BC00F5 /* OCRService.swift */,
 				156B357DDEA6AE5F64E5367B /* ReadingOverrideStore.swift */,
@@ -393,6 +396,7 @@
 				E1B9BE4CF94552F51392F2C8 /* JapaneseToken.swift in Sources */,
 				4E09875294FFE89DCD835944 /* KanjiDetailView.swift in Sources */,
 				0CDA836F51E09B06BA083DC6 /* KnownWord.swift in Sources */,
+				9E7EC109BE75BBB3B484115B /* Knownness.swift in Sources */,
 				F1DB622BE44317EF7BA23685 /* MockDataSeeder.swift in Sources */,
 				4D08A5B3C457344A2CE20C0E /* OCRService.swift in Sources */,
 				C95F59B969285ECE995F8032 /* ReadingOverrideStore.swift in Sources */,
@@ -439,7 +443,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = S78FSRTY48;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Point your camera at Japanese text on your TV or screen to read words and furigana.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -495,7 +498,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = S78FSRTY48;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Point your camera at Japanese text on your TV or screen to read words and furigana.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

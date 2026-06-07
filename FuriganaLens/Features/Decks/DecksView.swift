@@ -205,6 +205,8 @@ struct DeckDetailView: View {
     @Bindable var deck: Deck
     @Environment(\.modelContext) private var modelContext
     @Query private var reviewLogs: [ReviewLog]
+    @Query private var knownWords: [KnownWord]
+    @AppStorage("jlptLevel") private var jlptLevel: Int = 0
 
     @State private var cramQueue: [Flashcard]?
     @State private var showDeleteConfirm = false
@@ -465,7 +467,14 @@ struct DeckDetailView: View {
                         NavigationLink {
                             CardEditView(card: card)
                         } label: {
-                            CardRow(card: card)
+                            CardRow(
+                                card: card,
+                                isKnown: Knownness.isKnown(
+                                    expression: card.expression,
+                                    knownWords: knownWords,
+                                    userJLPTLevel: jlptLevel
+                                )
+                            )
                         }
                         .buttonStyle(.plain)
                     }
@@ -493,6 +502,10 @@ struct DeckDetailView: View {
 
 private struct CardRow: View {
     let card: Flashcard
+    /// True when the card's word is considered known (manual mark or JLPT
+    /// level implies it). Surfaces as a yellow "should be known" warning so
+    /// the user can see at a glance which deck entries are likely overkill.
+    var isKnown: Bool = false
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
@@ -508,6 +521,20 @@ private struct CardRow: View {
                         .font(.caption)
                         .foregroundStyle(Palette.mist)
                         .lineLimit(2)
+                }
+                if isKnown {
+                    HStack(spacing: 4) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .font(.system(size: 9, weight: .semibold))
+                        Text("Should be known")
+                            .font(.system(.caption2, design: .rounded).weight(.semibold))
+                    }
+                    .foregroundStyle(Palette.gold)
+                    .padding(.horizontal, 7)
+                    .padding(.vertical, 3)
+                    .background(Capsule().fill(Palette.gold.opacity(0.14)))
+                    .overlay(Capsule().strokeBorder(Palette.gold.opacity(0.4), lineWidth: 0.5))
+                    .padding(.top, 2)
                 }
             }
             Spacer(minLength: 8)
@@ -525,10 +552,16 @@ private struct CardRow: View {
             }
         }
         .padding(14)
-        .background(Palette.washi, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .background(
+            (isKnown ? Palette.gold.opacity(0.07) : Palette.washi),
+            in: RoundedRectangle(cornerRadius: 16, style: .continuous)
+        )
         .overlay(
             RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .strokeBorder(Palette.hairline, lineWidth: 0.75)
+                .strokeBorder(
+                    isKnown ? Palette.gold.opacity(0.45) : Palette.hairline,
+                    lineWidth: isKnown ? 1 : 0.75
+                )
         )
     }
 }

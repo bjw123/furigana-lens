@@ -87,6 +87,7 @@ struct ScanView: View {
     @State private var pickedPhoto: PhotosPickerItem?
     @AppStorage("hideKanaOnlyTokens") private var hideKanaOnlyTokens = true
     @AppStorage("hideKnownWords") private var hideKnownWords = false
+    @AppStorage("jlptLevel") private var jlptLevel: Int = 0
 
     private var displayedTokens: [JapaneseToken] {
         var result = tokens
@@ -94,14 +95,17 @@ struct ScanView: View {
             result = result.filter { $0.surface.containsKanji }
         }
         if hideKnownWords {
-            let known = knownExpressions
-            result = result.filter { !known.contains($0.surface) }
+            result = result.filter { !isKnown($0.surface) }
         }
         return result
     }
 
-    private var knownExpressions: Set<String> {
-        Set(knownWords.map { $0.expression })
+    private func isKnown(_ expression: String) -> Bool {
+        Knownness.isKnown(
+            expression: expression,
+            knownWords: knownWords,
+            userJLPTLevel: jlptLevel
+        )
     }
 
     private var inDeckExpressions: Set<String> {
@@ -363,7 +367,7 @@ struct ScanView: View {
 
                             WordChipFlow(
                                 tokens: displayedTokens,
-                                knownExpressions: knownExpressions,
+                                knownPredicate: { isKnown($0) },
                                 inDeckExpressions: inDeckExpressions,
                                 onTap: { token, revealed in
                                     highlightedToken = revealed ? token : nil
@@ -777,7 +781,9 @@ private struct SentenceCard: View {
 
 struct WordChipFlow: View {
     let tokens: [JapaneseToken]
-    var knownExpressions: Set<String> = []
+    /// Predicate so JLPT-implied known words are flagged without prebuilding
+    /// a giant Set in the caller.
+    var knownPredicate: (String) -> Bool = { _ in false }
     var inDeckExpressions: Set<String> = []
     /// Single tap: toggle inline reading. Second arg = new revealed state.
     var onTap: ((JapaneseToken, Bool) -> Void)? = nil
@@ -790,12 +796,17 @@ struct WordChipFlow: View {
         case fresh
         case inDeck
         case known
+        /// In a deck *and* considered known (explicit mark or JLPT-implied).
+        /// Surfaces as a yellow chip — "you have a card for a word you
+        /// should already know".
+        case strugglingKnown
 
         var tint: Color {
             switch self {
             case .fresh: return Palette.mist
             case .inDeck: return Palette.indigo
             case .known: return Palette.bamboo
+            case .strugglingKnown: return Palette.gold
             }
         }
 
@@ -804,20 +815,24 @@ struct WordChipFlow: View {
             case .fresh: return nil
             case .inDeck: return "bookmark.fill"
             case .known: return "checkmark.seal.fill"
+            case .strugglingKnown: return "exclamationmark.triangle.fill"
             }
         }
 
         var emphasized: Bool {
             switch self {
             case .fresh: return false
-            case .inDeck, .known: return true
+            case .inDeck, .known, .strugglingKnown: return true
             }
         }
     }
 
     private func state(for token: JapaneseToken) -> ChipState {
-        if knownExpressions.contains(token.surface) { return .known }
-        if inDeckExpressions.contains(token.surface) { return .inDeck }
+        let known = knownPredicate(token.surface)
+        let inDeck = inDeckExpressions.contains(token.surface)
+        if known && inDeck { return .strugglingKnown }
+        if known { return .known }
+        if inDeck { return .inDeck }
         return .fresh
     }
 

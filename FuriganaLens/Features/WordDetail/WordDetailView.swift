@@ -6,6 +6,7 @@ struct WordDetailView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Deck.createdAt, order: .reverse) private var decks: [Deck]
     @Query private var knownMatches: [KnownWord]
+    @AppStorage("jlptLevel") private var jlptLevel: Int = 0
 
     let token: JapaneseToken
     let contextSentence: String?
@@ -28,7 +29,21 @@ struct WordDetailView: View {
         _knownMatches = Query(filter: #Predicate<KnownWord> { $0.expression == surface })
     }
 
-    private var isKnown: Bool { !knownMatches.isEmpty }
+    private var isKnown: Bool {
+        Knownness.isKnown(
+            expression: expression,
+            knownWords: knownMatches,
+            userJLPTLevel: jlptLevel
+        )
+    }
+
+    /// True when the word is "known" only because the user's JLPT level
+    /// implies it — no explicit override row. Used to label the toggle
+    /// differently so the source of the green-check is clear.
+    private var isJLPTImplied: Bool {
+        knownMatches.isEmpty
+            && Knownness.jlptImplies(known: expression, userJLPTLevel: jlptLevel)
+    }
 
     var body: some View {
         NavigationStack {
@@ -179,14 +194,19 @@ struct WordDetailView: View {
             HStack(spacing: 10) {
                 Image(systemName: isKnown ? "checkmark.seal.fill" : "checkmark.seal")
                     .font(.system(size: 18, weight: .semibold))
-                Text(isKnown ? "Marked known" : "Mark as known")
-                    .font(.system(.subheadline, design: .rounded).weight(.semibold))
-                Spacer()
-                if isKnown {
-                    Text("Tap to undo")
-                        .font(.caption2)
-                        .foregroundStyle(Palette.mist)
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(isKnown ? "Marked known" : "Mark as known")
+                        .font(.system(.subheadline, design: .rounded).weight(.semibold))
+                    if isJLPTImplied {
+                        Text("Implied by N\(jlptLevel) level")
+                            .font(.caption2)
+                            .foregroundStyle(Palette.bamboo.opacity(0.75))
+                    }
                 }
+                Spacer()
+                Text(isKnown ? "Tap to mark unknown" : "Tap to confirm")
+                    .font(.caption2)
+                    .foregroundStyle(Palette.mist)
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 14)
@@ -207,12 +227,13 @@ struct WordDetailView: View {
 
     private func toggleKnown() {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        if let existing = knownMatches.first {
-            modelContext.delete(existing)
-        } else {
-            modelContext.insert(KnownWord(expression: expression))
-        }
-        try? modelContext.save()
+        Knownness.setKnown(
+            !isKnown,
+            expression: expression,
+            userJLPTLevel: jlptLevel,
+            existing: knownMatches,
+            modelContext: modelContext
+        )
     }
 
     @ViewBuilder

@@ -12,6 +12,9 @@ struct SettingsView: View {
     @AppStorage("liveFurigana") private var liveFurigana = true
     @AppStorage("appAccent") private var appAccentRaw: String = AppAccent.indigo.rawValue
     @AppStorage("showWavePattern") private var showWavePattern: Bool = true
+    /// JLPT level the user is at: 0 = none, 5..1 maps to N5..N1.
+    /// Words at this level or easier are auto-marked as known.
+    @AppStorage("jlptLevel") private var jlptLevel: Int = 0
 
     var body: some View {
         NavigationStack {
@@ -21,6 +24,7 @@ struct SettingsView: View {
                 ScrollView {
                     VStack(spacing: 16) {
                         headerHero
+                        jlptLevelCard
                         readingFiltersCard
                         appearanceCard
                         libraryCard
@@ -104,6 +108,52 @@ struct SettingsView: View {
             .padding(.horizontal, 18)
         }
         .padding(.horizontal)
+    }
+
+    // MARK: - JLPT level
+
+    private var jlptLevelCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            SectionHeader(
+                title: "Your JLPT level",
+                trailing: jlptLevel == 0 ? "not set" : "N\(jlptLevel)"
+            )
+            BrushDivider()
+
+            Text("Words at this level or easier are auto-marked as known. You can still mark individual words unknown to override.")
+                .font(.caption)
+                .foregroundStyle(Palette.mist)
+                .fixedSize(horizontal: false, vertical: true)
+
+            HStack(spacing: 8) {
+                jlptLevelChip(level: 0, label: "None")
+                ForEach([5, 4, 3, 2, 1], id: \.self) { level in
+                    jlptLevelChip(level: level, label: "N\(level)")
+                }
+            }
+        }
+        .washiCard()
+        .padding(.horizontal)
+    }
+
+    private func jlptLevelChip(level: Int, label: String) -> some View {
+        let selected = jlptLevel == level
+        return Button {
+            jlptLevel = level
+        } label: {
+            Text(label)
+                .font(.system(.subheadline, design: .rounded).weight(.semibold))
+                .foregroundStyle(selected ? .white : Palette.indigo)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 9)
+                .background(
+                    Capsule().fill(selected ? Palette.indigo : Palette.cream)
+                )
+                .overlay(
+                    Capsule().strokeBorder(Palette.indigo.opacity(0.4), lineWidth: 0.75)
+                )
+        }
+        .buttonStyle(.plain)
     }
 
     // MARK: - Reading filters

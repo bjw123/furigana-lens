@@ -8,6 +8,8 @@ struct KanjiDetailView: View {
     let overview: StatsService.StrugglingKanji
 
     @Environment(\.modelContext) private var modelContext
+    @Query private var knownWords: [KnownWord]
+    @AppStorage("jlptLevel") private var jlptLevel: Int = 0
     @State private var cramQueue: [Flashcard]?
     @State private var cramTitle: String = ""
 
@@ -167,7 +169,12 @@ struct KanjiDetailView: View {
     }
 
     private func wordRow(card: Flashcard) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
+        let isKnown = Knownness.isKnown(
+            expression: card.expression,
+            knownWords: knownWords,
+            userJLPTLevel: jlptLevel
+        )
+        return VStack(alignment: .leading, spacing: 6) {
             HStack(alignment: .firstTextBaseline, spacing: 10) {
                 FuriganaWordView(
                     expression: card.expression,
@@ -175,6 +182,19 @@ struct KanjiDetailView: View {
                     fontSize: 26
                 )
                 .fixedSize()
+                if isKnown {
+                    HStack(spacing: 3) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .font(.system(size: 9, weight: .semibold))
+                        Text("Known")
+                            .font(.system(.caption2, design: .rounded).weight(.semibold))
+                    }
+                    .foregroundStyle(Palette.gold)
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2)
+                    .background(Capsule().fill(Palette.gold.opacity(0.14)))
+                    .overlay(Capsule().strokeBorder(Palette.gold.opacity(0.4), lineWidth: 0.5))
+                }
                 if let deck = card.deck {
                     Text(deck.name)
                         .font(.system(.caption2, design: .rounded).weight(.semibold))
@@ -209,10 +229,16 @@ struct KanjiDetailView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(12)
-        .background(Palette.cream, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .background(
+            (isKnown ? Palette.gold.opacity(0.07) : Palette.cream),
+            in: RoundedRectangle(cornerRadius: 14, style: .continuous)
+        )
         .overlay(
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .strokeBorder(Palette.hairline, lineWidth: 0.5)
+                .strokeBorder(
+                    isKnown ? Palette.gold.opacity(0.45) : Palette.hairline,
+                    lineWidth: isKnown ? 1 : 0.5
+                )
         )
     }
 

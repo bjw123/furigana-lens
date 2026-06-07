@@ -324,6 +324,26 @@ final class DictionaryService {
         }
     }
 
+    /// JLPT level (1..5, where 5 = N5) of the given word form. Returns the
+    /// easiest level (highest number) when the word is listed at multiple,
+    /// or nil when the word isn't tagged in the JLPT vocab table.
+    func jlptLevel(forWord word: String) -> Int? {
+        let trimmed = word.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty, let db else { return nil }
+
+        return queue.sync { () -> Int? in
+            let sql = "SELECT MAX(level) FROM word_jlpt WHERE form = ?;"
+            var stmt: OpaquePointer?
+            guard sqlite3_prepare_v2(db, sql, -1, &stmt, nil) == SQLITE_OK else { return nil }
+            defer { sqlite3_finalize(stmt) }
+            sqlite3_bind_text(stmt, 1, trimmed, -1, SQLITE_TRANSIENT)
+            guard sqlite3_step(stmt) == SQLITE_ROW else { return nil }
+            if sqlite3_column_type(stmt, 0) == SQLITE_NULL { return nil }
+            let level = Int(sqlite3_column_int(stmt, 0))
+            return (1...5).contains(level) ? level : nil
+        }
+    }
+
     /// On/kun readings + meanings + JLPT level for a single kanji character.
     /// Returns nil when the DB doesn't carry Kanjidic2 data (older builds) or
     /// when the character isn't a kanji we have an entry for.
