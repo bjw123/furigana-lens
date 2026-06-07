@@ -44,6 +44,11 @@ final class Flashcard {
 
     var deck: Deck?
 
+    /// User-defined tags. Per-card, arbitrary strings (e.g. "verbs",
+    /// "particles", "tricky"). Independent of `deck.mediaTag`, which is the
+    /// per-deck broad category. Empty by default.
+    var tags: [String] = []
+
     var cardType: CardType {
         get { CardType.from(rawValue: cardTypeRaw) }
         set { cardTypeRaw = newValue.rawValue }

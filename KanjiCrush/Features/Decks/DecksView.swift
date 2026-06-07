@@ -10,6 +10,8 @@ struct DecksView: View {
     @State private var showNewDeck = false
     @State private var showArchived = false
     @State private var searchText = ""
+    @State private var showImporter = false
+    @State private var importError: String?
 
     private var activeDecks: [Deck] { decks.filter { !$0.isArchived } }
     private var archivedDecks: [Deck] { decks.filter { $0.isArchived } }
@@ -29,6 +31,7 @@ struct DecksView: View {
             if card.reading.lowercased().contains(q) { return true }
             if let m = card.meaning?.lowercased(), m.contains(q) { return true }
             if let d = card.deck?.name.lowercased(), d.contains(q) { return true }
+            if card.tags.contains(where: { $0.lowercased().contains(q) }) { return true }
             return false
         }
     }
@@ -49,8 +52,17 @@ struct DecksView: View {
             .navigationTitle("Decks")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Button {
-                        showNewDeck = true
+                    Menu {
+                        Button {
+                            showNewDeck = true
+                        } label: {
+                            Label("New deck", systemImage: "plus")
+                        }
+                        Button {
+                            showImporter = true
+                        } label: {
+                            Label("Import .kcdeck file", systemImage: "square.and.arrow.down")
+                        }
                     } label: {
                         Image(systemName: "plus.circle.fill")
                             .symbolRenderingMode(.hierarchical)
@@ -61,8 +73,42 @@ struct DecksView: View {
             .sheet(isPresented: $showNewDeck) {
                 NewDeckSheet()
             }
+            .fileImporter(
+                isPresented: $showImporter,
+                allowedContentTypes: [.kanjiCrushDeck, .json],
+                allowsMultipleSelection: false
+            ) { result in
+                handleImport(result)
+            }
+            .alert("Import failed", isPresented: .init(
+                get: { importError != nil },
+                set: { if !$0 { importError = nil } }
+            )) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(importError ?? "")
+            }
         }
         .searchable(text: $searchText, prompt: "Search cards…")
+    }
+
+    private func handleImport(_ result: Result<[URL], Error>) {
+        do {
+            let urls = try result.get()
+            guard let url = urls.first else { return }
+            // Security-scoped URL when the file is outside the app sandbox.
+            let needsScope = url.startAccessingSecurityScopedResource()
+            defer { if needsScope { url.stopAccessingSecurityScopedResource() } }
+            let data = try Data(contentsOf: url)
+            let existingNames = Set(decks.map { $0.name })
+            _ = try DeckExportService.import(
+                data: data,
+                into: modelContext,
+                existingDeckNames: existingNames
+            )
+        } catch {
+            importError = error.localizedDescription
+        }
     }
 
     private var decksList: some View {
@@ -286,6 +332,9 @@ struct DeckDetailView: View {
 
     @State private var cramQueue: [Flashcard]?
     @State private var showDeleteConfirm = false
+    @State private var exportURL: URL?
+    @State private var showShareSheet = false
+    @State private var exportError: String?
 
     private var stats: StatsService.DeckStats {
         StatsService.deckStats(deck: deck, logs: reviewLogs)
@@ -335,6 +384,34 @@ struct DeckDetailView: View {
             Button("Cancel", role: .cancel) {}
         } message: {
             Text("This will permanently remove the deck and all of its cards. Reviews you've logged stay in your history.")
+        }
+        .sheet(isPresented: $showShareSheet) {
+            if let url = exportURL {
+                ShareSheet(activityItems: [url])
+            }
+        }
+        .alert("Export failed", isPresented: .init(
+            get: { exportError != nil },
+            set: { if !$0 { exportError = nil } }
+        )) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(exportError ?? "")
+        }
+    }
+
+    /// Serialise the deck to a `.kcdeck` JSON file in tmp, then surface the
+    /// system Share sheet so the user can AirDrop / Files / Mail it.
+    private func prepareExport() {
+        do {
+            let data = try DeckExportService.export(deck: deck)
+            let filename = DeckExportService.suggestedFilename(for: deck)
+            let url = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
+            try data.write(to: url, options: .atomic)
+            exportURL = url
+            showShareSheet = true
+        } catch {
+            exportError = error.localizedDescription
         }
     }
 
@@ -439,6 +516,18 @@ struct DeckDetailView: View {
                 disabled: deck.cards.isEmpty
             ) {
                 cramQueue = deck.cards.shuffled()
+            }
+
+            Divider().overlay(Palette.hairline)
+
+            actionRow(
+                title: "Export deck",
+                subtitle: "Share as a .kcdeck file — friends with Kanji Crush can import it.",
+                icon: "square.and.arrow.up.fill",
+                tint: Palette.indigo,
+                disabled: deck.cards.isEmpty
+            ) {
+                prepareExport()
             }
 
             Divider().overlay(Palette.hairline)
@@ -697,6 +786,9 @@ struct CardEditView: View {
                         .padding(.horizontal)
                     }
 
+                    TagEditor(tags: $card.tags)
+                        .padding(.horizontal)
+
                     VStack(alignment: .leading, spacing: 12) {
                         SectionHeader(title: "Review")
                         VStack(spacing: 10) {
@@ -860,6 +952,18 @@ private struct SearchResultRow: View {
                         .foregroundStyle(Palette.mist)
                         .lineLimit(2)
                 }
+                if !card.tags.isEmpty {
+                    FlowLayout(spacing: 4) {
+                        ForEach(card.tags, id: \.self) { tag in
+                            Text(tag)
+                                .font(.system(.caption2, design: .rounded).weight(.medium))
+                                .foregroundStyle(Palette.sakura)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(Capsule().fill(Palette.sakura.opacity(0.14)))
+                        }
+                    }
+                }
             }
             Spacer(minLength: 8)
             Image(systemName: "chevron.right")
@@ -879,4 +983,96 @@ private struct SearchResultRow: View {
                 )
         )
     }
+}
+
+/// Editable chip-list of tags. Tap × on a chip to remove; tap "+ Add tag" to
+/// open an alert with a text field. Lowercase + trim on insert so tags dedupe.
+struct TagEditor: View {
+    @Binding var tags: [String]
+    @State private var showingAdd = false
+    @State private var pending = ""
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            SectionHeader(title: "Tags", trailing: tags.isEmpty ? nil : "\(tags.count)")
+            FlowLayout(spacing: 6) {
+                ForEach(tags, id: \.self) { tag in
+                    tagChip(tag)
+                }
+                Button {
+                    pending = ""
+                    showingAdd = true
+                } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "plus")
+                            .font(.caption2.weight(.semibold))
+                        Text("Add tag")
+                            .font(.system(.caption, design: .rounded).weight(.medium))
+                    }
+                    .foregroundStyle(Palette.indigo)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 5)
+                    .background(Capsule().fill(Palette.indigo.opacity(0.10)))
+                    .overlay(Capsule().strokeBorder(Palette.indigo.opacity(0.4), lineWidth: 0.75))
+                }
+                .buttonStyle(.plain)
+            }
+            if tags.isEmpty {
+                Text("Tag this card for quick search (e.g. verbs, particles, JLPT-tricky).")
+                    .font(.caption)
+                    .foregroundStyle(Palette.mist)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .washiCard()
+        .alert("New tag", isPresented: $showingAdd) {
+            TextField("Tag name", text: $pending)
+                .autocorrectionDisabled()
+                .textInputAutocapitalization(.never)
+            Button("Add") { addPending() }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Examples: verbs, particles, manga, JLPT-tricky")
+        }
+    }
+
+    private func tagChip(_ tag: String) -> some View {
+        HStack(spacing: 4) {
+            Text(tag)
+                .font(.system(.caption, design: .rounded).weight(.medium))
+            Button {
+                tags.removeAll { $0 == tag }
+            } label: {
+                Image(systemName: "xmark")
+                    .font(.system(size: 9, weight: .bold))
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Remove tag \(tag)")
+        }
+        .foregroundStyle(Palette.sakura)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 5)
+        .background(Capsule().fill(Palette.sakura.opacity(0.14)))
+        .overlay(Capsule().strokeBorder(Palette.sakura.opacity(0.4), lineWidth: 0.5))
+    }
+
+    private func addPending() {
+        let normalized = pending
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased()
+        guard !normalized.isEmpty, !tags.contains(normalized) else { return }
+        tags.append(normalized)
+    }
+}
+
+/// Thin SwiftUI wrapper around UIActivityViewController used for the
+/// .kcdeck export Share sheet (and any other ad-hoc share targets later).
+private struct ShareSheet: UIViewControllerRepresentable {
+    let activityItems: [Any]
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+    }
+
+    func updateUIViewController(_ controller: UIActivityViewController, context: Context) {}
 }

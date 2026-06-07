@@ -31,6 +31,7 @@
 		9B940DA9AF9BD960FFFD6C3D /* ReviewSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF244FA6F44A387A5A9EDB34 /* ReviewSessionView.swift */; };
 		9E2A8E495D0ECBD4B8EC5461 /* jmdict.sqlite.gz in Resources */ = {isa = PBXBuildFile; fileRef = F8960B4740139682A4D92446 /* jmdict.sqlite.gz */; };
 		AA3E3156B2D124565373C3C4 /* ReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBCEB7020E1F75F253EF2A99 /* ReviewView.swift */; };
+		AC3A19B66F6D8AB3B96A3F38 /* DeckExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EB596CEEFDA3F6371672E9 /* DeckExportService.swift */; };
 		B1FDBCF92CB85368FC0E3103 /* ReadingOverrideStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D4459A9CED977F1831952A /* ReadingOverrideStore.swift */; };
 		BF59D6A62B3A5B7A50FA4B5C /* DictionaryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2165FACC51F9B6110D4F6A /* DictionaryService.swift */; };
 		C6B1052E61C21B8D7E09AED0 /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B565DD4011B1B0CDAB9D3EBE /* CameraPreviewView.swift */; };
@@ -71,6 +72,7 @@
 		639089187F485FCC4D5DD646 /* Deck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deck.swift; sourceTree = "<group>"; };
 		69AD71B6D179002407C5E6F4 /* FuriganaText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuriganaText.swift; sourceTree = "<group>"; };
 		6AF06594A11C119C872E6A46 /* KanjiCrush.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = KanjiCrush.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		73EB596CEEFDA3F6371672E9 /* DeckExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckExportService.swift; sourceTree = "<group>"; };
 		78F81B4592A468869DE9DC3C /* KanjiCrushUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiCrushUITests.swift; sourceTree = "<group>"; };
 		7D2165FACC51F9B6110D4F6A /* DictionaryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryService.swift; sourceTree = "<group>"; };
 		81D4459A9CED977F1831952A /* ReadingOverrideStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingOverrideStore.swift; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 		486192241D0991B21073A43A /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				73EB596CEEFDA3F6371672E9 /* DeckExportService.swift */,
 				7D2165FACC51F9B6110D4F6A /* DictionaryService.swift */,
 				EE74DC8E0766DDCE99AE84A0 /* JapaneseAnalysisService.swift */,
 				2C5621C2637E6ED31061C9DB /* JapaneseToken.swift */,
@@ -382,6 +385,7 @@
 			files = (
 				C6B1052E61C21B8D7E09AED0 /* CameraPreviewView.swift in Sources */,
 				8452BC03D2BA34EEFF543C34 /* Deck.swift in Sources */,
+				AC3A19B66F6D8AB3B96A3F38 /* DeckExportService.swift in Sources */,
 				645DBAC9D540C34CD1CE55C3 /* DecksView.swift in Sources */,
 				BF59D6A62B3A5B7A50FA4B5C /* DictionaryService.swift in Sources */,
 				3FEE86BE1357065B871E5C88 /* Flashcard.swift in Sources */,
