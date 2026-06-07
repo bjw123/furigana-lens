@@ -59,57 +59,57 @@ enum MockDataSeeder {
 
         let trailsSeeds: [CardSeed] = [
             .init(expression: "中年男", reading: "ちゅうねんおとこ", meaning: "middle-aged man",
-                  context: "ハンチング帽の中年男", kind: .reading, dueOffsetDays: -1, reps: 0, ease: 2.5,
+                  context: "ハンチング帽の中年男", kind: .word, dueOffsetDays: -1, reps: 0, ease: 2.5,
                   struggled: true),
             .init(expression: "連中", reading: "れんちゅう", meaning: "those guys; the bunch",
-                  context: "連中には悟られてねえ筈だし", kind: .meaning, dueOffsetDays: -2, reps: 1, ease: 2.5),
+                  context: "連中には悟られてねえ筈だし", kind: .word, dueOffsetDays: -2, reps: 1, ease: 2.5),
             .init(expression: "悟る", reading: "さとる", meaning: "to realise; to perceive",
-                  context: "連中には悟られてねえ筈だし", kind: .reading, dueOffsetDays: 3, reps: 3, ease: 2.45,
+                  context: "連中には悟られてねえ筈だし", kind: .word, dueOffsetDays: 3, reps: 3, ease: 2.45,
                   struggled: true),
             .init(expression: "稼ぎ時", reading: "かせぎどき", meaning: "peak earning time",
                   context: "カフェバーの稼ぎ時は夜だからな。", kind: .sentence, dueOffsetDays: -1, reps: 2, ease: 2.4),
             .init(expression: "情報屋", reading: "じょうほうや", meaning: "informant",
-                  context: "情報屋ジャコモが現れるのを待とう", kind: .reading, dueOffsetDays: 14, reps: 5, ease: 2.6),
+                  context: "情報屋ジャコモが現れるのを待とう", kind: .word, dueOffsetDays: 14, reps: 5, ease: 2.6),
             .init(expression: "周囲", reading: "しゅうい", meaning: "surroundings",
-                  context: "周囲の地形や各種位置情報を", kind: .reading, dueOffsetDays: 0, reps: 4, ease: 2.5),
+                  context: "周囲の地形や各種位置情報を", kind: .word, dueOffsetDays: 0, reps: 4, ease: 2.5),
             .init(expression: "地形", reading: "ちけい", meaning: "terrain",
-                  context: "周囲の地形や各種位置情報を", kind: .meaning, dueOffsetDays: 21, reps: 6, ease: 2.7),
+                  context: "周囲の地形や各種位置情報を", kind: .word, dueOffsetDays: 21, reps: 6, ease: 2.7),
         ]
 
         // MARK: Persona — newer, mostly young cards
 
         let personaSeeds: [CardSeed] = [
             .init(expression: "改心", reading: "かいしん", meaning: "change of heart",
-                  context: "改心マジすげえな！", kind: .reading, dueOffsetDays: -1, reps: 0, ease: 2.5,
+                  context: "改心マジすげえな！", kind: .word, dueOffsetDays: -1, reps: 0, ease: 2.5,
                   struggled: true),
             .init(expression: "警察", reading: "けいさつ", meaning: "the police",
-                  context: "マジで警察来てるな…", kind: .meaning, dueOffsetDays: 0, reps: 1, ease: 2.5,
+                  context: "マジで警察来てるな…", kind: .word, dueOffsetDays: 0, reps: 1, ease: 2.5,
                   struggled: true),
             .init(expression: "玄関", reading: "げんかん", meaning: "entranceway",
-                  context: "玄関の所で見たぜ", kind: .reading, dueOffsetDays: -3, reps: 0, ease: 2.5),
+                  context: "玄関の所で見たぜ", kind: .word, dueOffsetDays: -3, reps: 0, ease: 2.5),
             .init(expression: "観察", reading: "かんさつ", meaning: "observation; surveillance",
-                  context: "観察も解ける。", kind: .reading, dueOffsetDays: 7, reps: 3, ease: 2.5,
+                  context: "観察も解ける。", kind: .word, dueOffsetDays: 7, reps: 3, ease: 2.5,
                   struggled: true),
             .init(expression: "大人しく", reading: "おとなしく", meaning: "quietly; obediently",
-                  context: "向こう1年は、大人しく暮らせ。", kind: .meaning, dueOffsetDays: 1, reps: 2, ease: 2.5),
+                  context: "向こう1年は、大人しく暮らせ。", kind: .word, dueOffsetDays: 1, reps: 2, ease: 2.5),
         ]
 
         // MARK: Manga — mostly mature
 
         let mangaSeeds: [CardSeed] = [
             .init(expression: "悪魔", reading: "あくま", meaning: "devil",
-                  context: "悪魔と契約した", kind: .reading, dueOffsetDays: 30, reps: 7, ease: 2.65),
+                  context: "悪魔と契約した", kind: .word, dueOffsetDays: 30, reps: 7, ease: 2.65),
             .init(expression: "契約", reading: "けいやく", meaning: "contract",
-                  context: "悪魔と契約した", kind: .meaning, dueOffsetDays: 45, reps: 8, ease: 2.7),
+                  context: "悪魔と契約した", kind: .word, dueOffsetDays: 45, reps: 8, ease: 2.7),
             .init(expression: "心臓", reading: "しんぞう", meaning: "heart (organ)",
-                  context: "心臓を捧げよ", kind: .reading, dueOffsetDays: -1, reps: 4, ease: 2.5),
+                  context: "心臓を捧げよ", kind: .word, dueOffsetDays: -1, reps: 4, ease: 2.5),
         ]
 
         // MARK: Archived — old, all due (but excluded from queue)
 
         let archivedSeeds: [CardSeed] = [
             .init(expression: "極道", reading: "ごくどう", meaning: "yakuza; gangster",
-                  context: "極道の道は厳しい", kind: .reading, dueOffsetDays: -90, reps: 9, ease: 2.8),
+                  context: "極道の道は厳しい", kind: .word, dueOffsetDays: -90, reps: 9, ease: 2.8),
         ]
 
         let now0 = now

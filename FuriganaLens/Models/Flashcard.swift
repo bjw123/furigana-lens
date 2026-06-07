@@ -2,17 +2,24 @@ import Foundation
 import SwiftData
 
 enum CardType: String, Codable, CaseIterable, Identifiable {
-    case reading
-    case meaning
+    case word
     case sentence
 
     var id: String { rawValue }
 
     var label: String {
         switch self {
-        case .reading: return "Reading"
-        case .meaning: return "Meaning"
+        case .word: return "Word"
         case .sentence: return "Sentence"
+        }
+    }
+
+    /// Map any stored raw value — including legacy `reading`/`meaning` from the
+    /// old three-way split — onto the current two-card model.
+    static func from(rawValue raw: String) -> CardType {
+        switch raw {
+        case "sentence": return .sentence
+        default: return .word
         }
     }
 }
@@ -38,7 +45,7 @@ final class Flashcard {
     var deck: Deck?
 
     var cardType: CardType {
-        get { CardType(rawValue: cardTypeRaw) ?? .reading }
+        get { CardType.from(rawValue: cardTypeRaw) }
         set { cardTypeRaw = newValue.rawValue }
     }
 
@@ -48,7 +55,7 @@ final class Flashcard {
         meaning: String? = nil,
         meaningSource: String? = nil,
         contextSentence: String? = nil,
-        cardType: CardType = .reading,
+        cardType: CardType = .word,
         deck: Deck? = nil
     ) {
         self.id = UUID()

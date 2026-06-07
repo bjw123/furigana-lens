@@ -15,6 +15,7 @@ struct ReviewSessionView: View {
     @State private var currentIndex = 0
     @State private var showBack = false
     @State private var seeMoreExpanded = false
+    @ObservedObject private var speech = SpeechService.shared
 
     enum SessionKind {
         case review   // applies SRS + writes a ReviewLog
@@ -124,15 +125,22 @@ struct ReviewSessionView: View {
     @ViewBuilder
     private func front(for card: Flashcard) -> some View {
         switch card.cardType {
-        case .reading:
-            Text(card.expression)
-                .font(.system(size: 56, weight: .medium, design: .serif))
-                .foregroundStyle(Palette.sumi)
-                .multilineTextAlignment(.center)
-        case .meaning:
-            FuriganaWordView(expression: card.expression, reading: card.reading, fontSize: 48)
+        case .word:
+            VStack(spacing: 14) {
+                Text(card.expression)
+                    .font(.system(size: 56, weight: .medium, design: .serif))
+                    .foregroundStyle(Palette.sumi)
+                    .multilineTextAlignment(.center)
+                if let sentence = frontExampleSentence(for: card) {
+                    Text(sentence)
+                        .font(.system(.callout, design: .serif))
+                        .foregroundStyle(Palette.sumi.opacity(0.7))
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 8)
+                }
+            }
         case .sentence:
-            Text(card.contextSentence ?? card.expression)
+            Text(card.expression)
                 .font(.system(.title2, design: .serif))
                 .foregroundStyle(Palette.sumi)
                 .multilineTextAlignment(.center)
@@ -143,16 +151,18 @@ struct ReviewSessionView: View {
     @ViewBuilder
     private func back(for card: Flashcard) -> some View {
         switch card.cardType {
-        case .reading:
-            Text(card.reading)
-                .font(.system(.title, design: .rounded))
-                .foregroundStyle(Palette.indigo)
-        case .meaning:
-            Text(card.meaning ?? "No meaning saved")
-                .font(.system(.title3, design: .rounded))
-                .foregroundStyle(Palette.sumi.opacity(0.85))
-                .multilineTextAlignment(.center)
-                .padding(.horizontal)
+        case .word:
+            VStack(spacing: 14) {
+                FuriganaWordView(expression: card.expression, reading: card.reading, fontSize: 48)
+                if let meaning = card.meaning, !meaning.isEmpty {
+                    Text(meaning)
+                        .font(.system(.title3, design: .rounded))
+                        .foregroundStyle(Palette.sumi.opacity(0.85))
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                }
+                audioButton(for: card.reading.isEmpty ? card.expression : card.reading)
+            }
         case .sentence:
             VStack(spacing: 12) {
                 FuriganaSentenceView(sentence: card.expression, fontSize: 22)
@@ -163,8 +173,106 @@ struct ReviewSessionView: View {
                         .multilineTextAlignment(.center)
                         .padding(.horizontal)
                 }
+                audioButton(for: card.expression)
+                sentenceBreakdown(for: card)
             }
         }
+    }
+
+    /// Inline per-token breakdown shown on the back of a sentence card. Each
+    /// kanji-containing token is rendered as a chip with surface, reading, and
+    /// (when JMdict has an entry) a short gloss.
+    @ViewBuilder
+    private func sentenceBreakdown(for card: Flashcard) -> some View {
+        let tokens = JapaneseAnalysisService.shared.segments(card.expression)
+            .filter { $0.hasKanji || ($0.hasKana && $0.surface.count >= 2) }
+        if !tokens.isEmpty {
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Word breakdown")
+                    .font(.system(.caption2, design: .rounded).weight(.semibold))
+                    .foregroundStyle(Palette.mist)
+                    .textCase(.uppercase)
+                    .tracking(0.6)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                VStack(spacing: 6) {
+                    ForEach(tokens) { token in
+                        sentenceBreakdownRow(token: token)
+                    }
+                }
+            }
+            .padding(.top, 6)
+        }
+    }
+
+    private func sentenceBreakdownRow(token: JapaneseToken) -> some View {
+        let gloss = DictionaryService.shared
+            .lookup(token.surface, limit: 1)
+            .first?
+            .glosses()
+            .joined(separator: "; ")
+        let showReading = token.hasKanji && !token.reading.isEmpty && token.reading != token.surface
+        return HStack(alignment: .firstTextBaseline, spacing: 10) {
+            VStack(alignment: .leading, spacing: 1) {
+                if showReading {
+                    Text(token.reading)
+                        .font(.system(size: 10, design: .rounded).weight(.medium))
+                        .foregroundStyle(Palette.indigo.opacity(0.85))
+                }
+                Text(token.surface)
+                    .font(.system(.subheadline, design: .serif))
+                    .foregroundStyle(Palette.sumi)
+            }
+            .frame(minWidth: 70, alignment: .leading)
+            if let gloss, !gloss.isEmpty {
+                Text(gloss)
+                    .font(.caption)
+                    .foregroundStyle(Palette.sumi.opacity(0.75))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            } else {
+                Spacer(minLength: 0)
+            }
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(Palette.cream.opacity(0.7), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
+                .strokeBorder(Palette.hairline, lineWidth: 0.5)
+        )
+    }
+
+    /// Front of a word card shows an example sentence under the kanji.
+    /// Prefer the OCR context the card was saved with; fall back to a JMdict
+    /// example so the front still has something to read.
+    private func frontExampleSentence(for card: Flashcard) -> String? {
+        if let ctx = card.contextSentence?.trimmingCharacters(in: .whitespacesAndNewlines),
+           !ctx.isEmpty,
+           ctx != card.expression {
+            return ctx
+        }
+        return DictionaryService.shared.examples(for: [card.expression], limit: 1).first?.japanese
+    }
+
+    private func audioButton(for text: String) -> some View {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        let isActive = speech.isSpeaking(trimmed)
+        return Button {
+            if isActive {
+                speech.stop()
+            } else {
+                speech.speak(trimmed)
+            }
+        } label: {
+            Label(isActive ? "Stop" : "Play audio", systemImage: isActive ? "stop.fill" : "speaker.wave.2.fill")
+                .font(.system(.subheadline, design: .rounded).weight(.semibold))
+                .padding(.horizontal, 14)
+                .padding(.vertical, 8)
+                .background(Capsule().fill(Palette.indigo.opacity(0.12)))
+                .foregroundStyle(Palette.indigo)
+        }
+        .buttonStyle(.plain)
+        .disabled(trimmed.isEmpty)
+        .opacity(trimmed.isEmpty ? 0.4 : 1.0)
     }
 
     private struct SeeMoreData {
@@ -177,9 +285,14 @@ struct ReviewSessionView: View {
 
     private func seeMoreData(for card: Flashcard) -> SeeMoreData {
         let entries = DictionaryService.shared.lookup(card.expression, limit: 2)
-        let extraGlosses = (card.cardType != .meaning)
-            ? (entries.first.map { $0.glosses() } ?? [])
-            : []
+        // Only surface extra glosses when they add something beyond the meaning
+        // already shown on the back. Same joined string → suppress as duplicate.
+        let candidateGlosses = entries.first.map { $0.glosses() } ?? []
+        let savedMeaning = card.meaning?
+            .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let extraGlosses = candidateGlosses.joined(separator: "; ") == savedMeaning
+            ? []
+            : candidateGlosses
         let kanjiForms = entries.flatMap { $0.kanji }
         let kanaForms = entries.flatMap { $0.kana }
         let headwords = ([card.expression] + kanjiForms + kanaForms).filter { !$0.isEmpty }
@@ -191,11 +304,15 @@ struct ReviewSessionView: View {
 
     @ViewBuilder
     private func seeMoreSection(for card: Flashcard) -> some View {
-        let data = seeMoreData(for: card)
-        if data.hasContent {
-            seeMoreToggle
-            if seeMoreExpanded {
-                seeMoreExpandedContent(data: data)
+        // Sentence cards already show the per-token breakdown inline on the
+        // back; the JMdict-driven see-more block isn't meaningful for them.
+        if card.cardType == .word {
+            let data = seeMoreData(for: card)
+            if data.hasContent {
+                seeMoreToggle
+                if seeMoreExpanded {
+                    seeMoreExpandedContent(data: data)
+                }
             }
         }
     }

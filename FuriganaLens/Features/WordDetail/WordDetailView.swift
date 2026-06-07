@@ -417,9 +417,9 @@ struct SaveFlashcardSheet: View {
     let meaningSource: String?
     let contextSentence: String?
     let decks: [Deck]
+    let cardType: CardType
 
     @State private var selectedDeck: Deck?
-    @State private var cardType: CardType
     @State private var newDeckName = ""
     @State private var newDeckTag = "Game"
     @State private var createNewDeck = false
@@ -431,7 +431,7 @@ struct SaveFlashcardSheet: View {
         meaningSource: String? = nil,
         contextSentence: String?,
         decks: [Deck],
-        initialCardType: CardType = .reading
+        cardType: CardType = .word
     ) {
         self.expression = expression
         self.reading = reading
@@ -439,7 +439,7 @@ struct SaveFlashcardSheet: View {
         self.meaningSource = meaningSource
         self.contextSentence = contextSentence
         self.decks = decks
-        _cardType = State(initialValue: initialCardType)
+        self.cardType = cardType
     }
 
     var body: some View {
@@ -449,7 +449,7 @@ struct SaveFlashcardSheet: View {
                 ScrollView {
                     VStack(spacing: 16) {
                         VStack(alignment: .leading, spacing: 12) {
-                            SectionHeader(title: "Card preview")
+                            SectionHeader(title: "Card preview", trailing: cardType.label)
                             if cardType == .sentence {
                                 Text(expression)
                                     .font(.system(.body, design: .serif))
@@ -466,27 +466,6 @@ struct SaveFlashcardSheet: View {
                                     .font(.system(.footnote, design: .rounded))
                                     .foregroundStyle(Palette.sumi.opacity(0.8))
                                     .frame(maxWidth: .infinity, alignment: .leading)
-                            }
-
-                            HStack(spacing: 8) {
-                                ForEach(CardType.allCases) { type in
-                                    Button {
-                                        cardType = type
-                                    } label: {
-                                        Text(type.label)
-                                            .font(.system(.subheadline, design: .rounded).weight(.medium))
-                                            .foregroundStyle(cardType == type ? .white : Palette.indigo)
-                                            .padding(.horizontal, 14)
-                                            .padding(.vertical, 8)
-                                            .background(
-                                                Capsule().fill(cardType == type ? Palette.indigo : Palette.cream)
-                                            )
-                                            .overlay(
-                                                Capsule().strokeBorder(Palette.indigo.opacity(0.4), lineWidth: 0.75)
-                                            )
-                                    }
-                                    .buttonStyle(.plain)
-                                }
                             }
                         }
                         .washiCard()

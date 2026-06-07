@@ -162,7 +162,7 @@ struct ScanView: View {
                     meaning: nil,
                     contextSentence: req.sentence,
                     decks: decks,
-                    initialCardType: .sentence
+                    cardType: .sentence
                 )
             }
             .task {
@@ -557,7 +557,7 @@ private struct SentenceCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            SectionHeader(title: "Sentence", trailing: "2× to save")
+            SectionHeader(title: "Sentence")
             BrushDivider()
 
             FlowLayout(spacing: 1) {
@@ -605,6 +605,7 @@ private struct SentenceCard: View {
                 if translation == nil && !isTranslating && translationError == nil {
                     translateButton
                 }
+                saveButton
                 Spacer()
             }
             .padding(.top, 6)
@@ -688,6 +689,22 @@ private struct SentenceCard: View {
                 .foregroundStyle(Palette.indigo)
         }
         .buttonStyle(.plain)
+    }
+
+    private var saveButton: some View {
+        Button {
+            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            onDoubleTap()
+        } label: {
+            Label("Save flashcard", systemImage: "bookmark.fill")
+                .font(.system(.caption, design: .rounded).weight(.semibold))
+                .padding(.horizontal, 12)
+                .padding(.vertical, 7)
+                .background(Capsule().fill(Palette.sakura.opacity(0.18)))
+                .foregroundStyle(Palette.sakura)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Save sentence as flashcard")
     }
 
     private func startTranslation() {
