@@ -36,12 +36,23 @@ final class Flashcard {
     var cardTypeRaw: String
     var createdAt: Date
 
-    // SM-2 fields
+    // Legacy SM-2 fields. Kept on the schema so SwiftData lightweight
+    // migration doesn't drop existing user data, but no longer consulted by
+    // the scheduler (now FSRS-4.5). `interval`, `repetitions`, `dueDate`,
+    // `lastReviewed` continue to be written for back-compat with views/services
+    // that read them (e.g. maturity heuristic in ReviewSessionView, StatsService).
     var interval: Double
     var easeFactor: Double
     var repetitions: Int
     var dueDate: Date
     var lastReviewed: Date?
+
+    // FSRS-4.5 state. `stability` (S) is the memory half-life in days at
+    // R=0.9; `difficulty` (D) is the per-card challenge, on a 1..10 scale.
+    // Both default to 0 for new cards — SRSService detects "first review" by
+    // `stability == 0`.
+    var stability: Double = 0
+    var difficulty: Double = 0
 
     var deck: Deck?
 
@@ -77,6 +88,8 @@ final class Flashcard {
         self.repetitions = 0
         self.dueDate = Date()
         self.lastReviewed = nil
+        self.stability = 0
+        self.difficulty = 0
         self.deck = deck
     }
 }
