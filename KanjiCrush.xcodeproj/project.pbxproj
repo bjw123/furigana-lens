@@ -87,7 +87,7 @@
 		639089187F485FCC4D5DD646 /* Deck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deck.swift; sourceTree = "<group>"; };
 		6401B2D2B89948F6523A4989 /* DailyChallengeLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyChallengeLog.swift; sourceTree = "<group>"; };
 		69AD71B6D179002407C5E6F4 /* FuriganaText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuriganaText.swift; sourceTree = "<group>"; };
-		6AF06594A11C119C872E6A46 /* KanjiCrush.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = KanjiCrush.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6AF06594A11C119C872E6A46 /* KanjiCrush.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KanjiCrush.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		73EB596CEEFDA3F6371672E9 /* DeckExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckExportService.swift; sourceTree = "<group>"; };
 		7643DDD50575A5E940E3B785 /* UnlockedAchievement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockedAchievement.swift; sourceTree = "<group>"; };
 		78F81B4592A468869DE9DC3C /* KanjiCrushUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiCrushUITests.swift; sourceTree = "<group>"; };
@@ -690,6 +690,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = S78FSRTY48;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Kanji Crush";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Point your camera at Japanese text on your TV or screen to read words and furigana.";
@@ -731,6 +732,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = S78FSRTY48;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Kanji Crush";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Point your camera at Japanese text on your TV or screen to read words and furigana.";

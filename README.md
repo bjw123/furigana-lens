@@ -2,6 +2,24 @@
 
 Personal iOS app for reading Japanese kanji from anything you encounter — games on a TV, manga panels, signs, screenshots. Point the camera, capture, tap a word for furigana, save it as a flashcard, drill it later. Fully offline dictionary (JMdict + Tanaka + Kanjidic2 + JLPT vocab lists are baked in), no ads, no subscription, no telemetry.
 
+## Why this exists
+
+The problem this app solves, in one sentence: **reading native Japanese content as a learner is a constant pacing problem, and the existing tools all break the flow they're meant to support**.
+
+As a non-native speaker who's lived in Japan, I know the struggle of figuring out obscure kanji on the fly. I bought Elden Ring when it was only available in Japanese — couldn't read a lot of the readings at the time, but I powered through with grit and Google Lens. The workflow was: see kanji, tab out, frame the screen with another app, wait for OCR, copy, paste into a dictionary, switch back, try to remember the sentence I was reading. By the time I'd looked up the word, the cutscene had moved on and the word never actually stuck.
+
+There are a number of alternative apps in this space and they each break the flow somewhere different:
+
+- **OCR-only camera apps** (Furigana Lens, Furigana Camera, Whats Kanji, generic translate tools) — fast on the lookup, but the moment you close the camera the word is gone. Nothing carries forward into study.
+- **Dictionary-first apps** (Yomiwa, Mazii, Nihongo) — saved lists exist, but they're paywalled behind freemium tiers and the SRS, when present, is bolted on rather than the spine of the app.
+- **SRS-first apps** (WaniKani, Anki, Kanji Study, Renshuu) — excellent for studying *somebody else's* curated curriculum, but adding a card from a kanji you just hit in a game is multi-step friction; there's no integrated capture.
+- **Everyone charges money** — every comparable full-stack app is either subscription, freemium, or a one-time fee.
+
+Kanji Crush is built for the exact loop I kept wanting and not finding: **point the camera at native content → tap the kanji you don't know → save it the way you encountered it (with the context sentence) → drill it later in a quiz that's actually fast**. Offline so it works on the couch with WiFi off, no ads or subscriptions because it's built for me to use, free for anyone else who falls into the same niche.
+
+> *広告なし、課金なし。自分のために作った。*
+> <sub>no ads, no paywall — made for myself</sub>
+
 ## Screenshots
 
 <table>
