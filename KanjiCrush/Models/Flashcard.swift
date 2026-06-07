@@ -26,7 +26,13 @@ enum CardType: String, Codable, CaseIterable, Identifiable {
 
 @Model
 final class Flashcard {
-    var id: UUID
+    /// Stable, value-typed identifier used for cross-record references — most
+    /// importantly `ReviewLog.flashcardId`. We keep this alongside SwiftData's
+    /// built-in `persistentModelID` because `persistentModelID` is awkward to
+    /// serialise and can change before a model's first save, which would break
+    /// logs written during an unsaved review session. Marked `.unique` so
+    /// SwiftData indexes it and rejects collisions at the store level.
+    @Attribute(.unique) var id: UUID
     var expression: String
     var reading: String
     var meaning: String?
