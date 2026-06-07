@@ -426,19 +426,17 @@ struct SettingsView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 8) {
-                    storyParagraph("I made this because I like playing games in Japanese — and looking up the kanji on the fly is tedious.")
-                    storyParagraph("You can point Google Lens at the screen, copy the word, paste it into a dictionary… by the time you've finished, you've forgotten the sentence and the word never really sticks.")
-                    storyParagraph("On top of that, games are full of vocab that isn't your daily-Japanese textbook stuff — half the time you have no clue how to even read the kanji.")
-                    storyParagraph("Kanji Crush scans the text, gives you the reading instantly, and lets you save it so it actually lands. It's built for me, but it's here if you fall into the same niche.")
+                    storyParagraph("While there are a few alternative apps out there, I wanted to build my own. I use this specifically for gaming, when I come across kanji I find difficult to read.")
+                    storyParagraph("Unlike other apps in the space, this one will never have ads or subscriptions — it's built by me, for me. Feel free to use it.")
 
                     VStack(alignment: .leading, spacing: 2) {
                         HStack(spacing: 6) {
                             MapleGlyph(size: 10)
-                            Text("まじでめんどくさい。だからこのアプリを作った。")
+                            Text("広告なし、課金なし。自分のために作った。")
                                 .font(.system(.subheadline, design: .serif))
                                 .foregroundStyle(Palette.indigo)
                         }
-                        Text("seriously a pain — so I built this app")
+                        Text("no ads, no paywall — made for myself")
                             .font(.caption2)
                             .foregroundStyle(Palette.mist)
                             .italic()
