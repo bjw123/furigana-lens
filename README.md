@@ -28,7 +28,7 @@ Personal iOS app for reading Japanese from your TV while gaming. Point the camer
     </td>
     <td align="center" width="20%">
       <img src="docs/screenshots/04.png" width="180"><br>
-      <sub><b>Save flashcard</b><br>reading / meaning / sentence</sub>
+      <sub><b>Save flashcard</b><br>word card or sentence card</sub>
     </td>
     <td align="center" width="20%">
       <img src="docs/screenshots/05.png" width="180"><br>
@@ -63,15 +63,20 @@ Personal iOS app for reading Japanese from your TV while gaming. Point the camer
 
 - **Freeze-frame camera** + on-device Vision OCR (Japanese)
 - **Tap a word** — furigana for that word only, not the full sentence
-- **Show meaning** — Jisho lookup (free); edit before saving
-- **Optional flashcards** — decks by game/anime/manga; reading / meaning / sentence card types
+- **Offline JMdict + Tanaka + Kanjidic2** — readings, meanings, JLPT levels, and example sentences resolve locally, no network roundtrip
+- **Two flashcard types** — word cards (kanji + example on front; furigana + meaning + audio + further examples on back) and sentence cards (full sentence + furigana breakdown + per-token glosses + audio on back)
 - **SRS review** — SM-2 scheduling (Again / Hard / Good / Easy)
-- **$0 runtime** — no paid APIs; readings use on-device tokenization + Jisho when needed
+- **Typed kanji review** — drill a kanji's on/kun readings and JLPT example words by typing the answer (accepts hiragana, katakana, or romaji); wrong answers requeue until you get them right
+- **JLPT level integration** — pick your level in Settings; words at or below the level are auto-marked as known, and any flashcard for a "should-be-known" word gets a yellow warning
+- **Struggling-kanji tiles, by reading** — Review home highlights kanji whose specific on/kun reading you keep missing (not just the kanji aggregate), with one-tap drill-in
+- **Audio playback** — `AVSpeechSynthesizer` reads card backs and sentences aloud
+- **Sentence translation** — Apple's on-device `Translation` framework wires up an inline ja→en option on captured sentences
+- **$0 runtime** — fully offline; no paid APIs, no network calls for the main flow
 
 ## Requirements
 
-- iPhone with iOS 17+
-- Xcode 15+ (full Xcode, not Command Line Tools only)
+- iPhone with iOS 18+
+- Xcode 16+ (full Xcode, not Command Line Tools only)
 - Apple Developer account to install on device
 
 ## Open in Xcode
@@ -92,23 +97,63 @@ If `xcodegen` is unavailable, create a new **App** project in Xcode named `Kanji
 
 ```
 KanjiCrush/
-├── KanjiCrushApp.swift
-├── Features/Scan/          Camera + OCR + word chips
-├── Features/WordDetail/    Furigana sheet, Jisho, save card
-├── Features/Decks/
-├── Features/Review/
-├── Services/               OCR, Japanese analysis, Jisho, SRS
-├── Models/                 SwiftData Deck + Flashcard
-└── Resources/              reading_overrides.json
+├── KanjiCrushApp.swift        @main, ModelContainer, global appearance
+├── Features/
+│   ├── Scan/                  Camera + OCR + sentence/word chip surface
+│   ├── WordDetail/            Word sheet + SaveFlashcardSheet
+│   ├── Decks/                 Deck list, deck detail, card edit
+│   ├── Review/                Review home + ReviewSessionView (SRS)
+│   ├── Kanji/                 KanjiDetailView + KanjiTypedReviewView
+│   ├── Settings/              JLPT level, reading filters, appearance
+│   └── RootTabView.swift
+├── Services/
+│   ├── OCRService              Vision text recognition
+│   ├── JapaneseAnalysisService CFStringTokenizer + Latin→Hiragana
+│   ├── DictionaryService       Offline JMdict + Tanaka + Kanjidic2 (SQLite)
+│   ├── SRSService              SM-2 scheduling
+│   ├── StatsService            Forecast, streak, struggling kanji-by-reading
+│   ├── Knownness               Combines KnownWord + JLPT-implied known
+│   ├── SpeechService           AVSpeechSynthesizer wrapper
+│   ├── ReadingOverrideStore    User-editable per-word reading overrides
+│   └── MockDataSeeder          Dev mode: -seedMockData reset|append
+├── Models/                     SwiftData @Model: Deck, Flashcard, ReviewLog, KnownWord
+├── Theme/Theme.swift           Palette + WashiBackground + GemTile primitives
+├── Utilities/FuriganaText.swift CTRubyAnnotation-backed views
+└── Resources/
+    ├── Assets.xcassets         AppIcon, color sets
+    ├── jmdict.sqlite.gz        Bundled offline dictionary (~50 MB)
+    └── reading_overrides.json
+tools/
+├── build_jmdict.py             Builds jmdict.sqlite.gz from source data
+└── generate_icon.swift         Renders AppIcon-1024.png via SwiftUI ImageRenderer
 ```
 
 ## Data sources
 
-- OCR: Apple Vision (`VNRecognizeTextRequest`)
-- Tokenization: `NaturalLanguage` (`NLTokenizer`) on device
-- Readings/meanings: [Jisho API](https://jisho.org/api/v1/search/words) (unofficial; use respectfully)
-- Dictionary data attribution: JMdict (via Jisho)
+- **OCR**: Apple Vision (`VNRecognizeTextRequest`)
+- **Tokenization & readings**: `CFStringTokenizer` with `kCFStringTokenizerAttributeLatinTranscription`, then `CFStringTransform(kCFStringTransformLatinHiragana)`
+- **Dictionary, examples, JLPT, kanji metadata** — all baked into the bundled `jmdict.sqlite.gz`. Built locally via `tools/build_jmdict.py` from:
+    - [JMdict-simplified](https://github.com/scriptin/jmdict-simplified) (`jmdict-eng-*.json`) — words + glosses
+    - [Tanaka Corpus](https://ftp.edrdg.org/pub/Nihongo/examples.utf.gz) — example sentences
+    - [davidluzgouveia/kanji-data](https://github.com/davidluzgouveia/kanji-data) — Kanjidic2 JSON for per-kanji on/kun readings, meanings, JLPT levels
+    - [jamsinclair/open-anki-jlpt-decks](https://github.com/jamsinclair/open-anki-jlpt-decks) — JLPT N5–N1 word lists
+- **Translation**: Apple `Translation` framework (on-device)
+- **Text-to-speech**: `AVSpeechSynthesizer` (`ja-JP`)
+
+## Rebuilding the bundled dictionary
+
+```bash
+python3 tools/build_jmdict.py \
+  /path/to/jmdict-eng.json \
+  KanjiCrush/Resources/jmdict.sqlite \
+  --examples /path/to/examples.utf \
+  --kanjidic /path/to/kanji.json \
+  --jlpt /path/to/jlpt-words.json
+gzip -9 -f KanjiCrush/Resources/jmdict.sqlite
+```
+
+The `DictionaryService` keys cache invalidation off the gzip file size, so a fresh build automatically re-unpacks on next launch.
 
 ## License
 
-Personal project. JMdict/Jisho data subject to their respective licenses.
+Personal project. JMdict, Kanjidic2, Tanaka Corpus, and the JLPT word lists are subject to their respective licenses; see each source repo for terms.
