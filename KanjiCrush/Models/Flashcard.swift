@@ -32,6 +32,7 @@ final class Flashcard {
     var meaning: String?
     var meaningSource: String?
     var contextSentence: String?
+    var hint: String?
     var cardTypeRaw: String
     var createdAt: Date
 

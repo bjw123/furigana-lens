@@ -209,25 +209,57 @@ struct ReviewSessionView: View {
 
     @ViewBuilder
     private func front(for card: Flashcard) -> some View {
-        switch card.cardType {
-        case .word:
-            VStack(spacing: 14) {
+        VStack(spacing: 14) {
+            if let hint = card.hint, !hint.isEmpty {
+                hintBanner(hint: hint)
+            }
+            switch card.cardType {
+            case .word:
+                VStack(spacing: 14) {
+                    Text(card.expression)
+                        .font(.system(size: 56, weight: .medium, design: .serif))
+                        .foregroundStyle(Palette.sumi)
+                        .multilineTextAlignment(.center)
+                    if let sentence = frontExampleSentence(for: card) {
+                        WordCardExampleSentence(sentence: sentence, highlightSurface: card.expression)
+                            .padding(.horizontal, 8)
+                    }
+                }
+            case .sentence:
                 Text(card.expression)
-                    .font(.system(size: 56, weight: .medium, design: .serif))
+                    .font(.system(.title3, design: .serif))
                     .foregroundStyle(Palette.sumi)
                     .multilineTextAlignment(.center)
-                if let sentence = frontExampleSentence(for: card) {
-                    WordCardExampleSentence(sentence: sentence, highlightSurface: card.expression)
-                        .padding(.horizontal, 8)
-                }
+                    .frame(maxWidth: .infinity)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.horizontal)
             }
-        case .sentence:
-            Text(card.expression)
-                .font(.system(.title2, design: .serif))
-                .foregroundStyle(Palette.sumi)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal)
         }
+    }
+
+    private func hintBanner(hint: String) -> some View {
+        HStack(alignment: .top, spacing: 8) {
+            Image(systemName: "lightbulb.fill")
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(Palette.gold)
+            Text(hint)
+                .font(.system(.subheadline, design: .rounded).weight(.medium))
+                .foregroundStyle(Palette.gold)
+                .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 10)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            Capsule(style: .continuous)
+                .fill(Palette.gold.opacity(0.15))
+        )
+        .overlay(
+            Capsule(style: .continuous)
+                .strokeBorder(Palette.gold.opacity(0.35), lineWidth: 0.75)
+        )
+        .padding(.horizontal, 16)
     }
 
     @ViewBuilder

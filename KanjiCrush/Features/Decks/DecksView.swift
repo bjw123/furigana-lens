@@ -815,6 +815,23 @@ struct CardEditView: View {
                     }
                     .padding(.horizontal)
 
+                    VStack(alignment: .leading, spacing: 12) {
+                        SectionHeader(title: "Hint")
+                        TextField("Hint", text: Binding(
+                            get: { card.hint ?? "" },
+                            set: { card.hint = $0.isEmpty ? nil : $0 }
+                        ), axis: .vertical)
+                            .font(.system(.body, design: .rounded))
+                            .foregroundStyle(Palette.sumi)
+                            .padding(12)
+                            .background(Palette.washi, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                    .strokeBorder(Palette.hairline, lineWidth: 0.75)
+                            )
+                    }
+                    .padding(.horizontal)
+
                     if let sentence = card.contextSentence {
                         VStack(alignment: .leading, spacing: 12) {
                             SectionHeader(title: "Context")

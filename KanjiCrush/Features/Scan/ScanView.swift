@@ -70,6 +70,7 @@ private func groupOCRLines(_ lines: [OCRLine]) -> [SentenceGroup] {
 struct ScanView: View {
     @Query private var flashcards: [Flashcard]
     @Query private var knownWords: [KnownWord]
+    @Query private var reviewLogs: [ReviewLog]
     @Query(sort: \Deck.createdAt, order: .reverse) private var decks: [Deck]
     @StateObject private var camera = CameraController()
     @State private var frozenImage: UIImage?
@@ -110,6 +111,17 @@ struct ScanView: View {
 
     private var inDeckExpressions: Set<String> {
         Set(flashcards.map { $0.expression })
+    }
+
+    private var strugglingKanjiChars: Set<Character> {
+        Set(
+            StatsService.strugglingKanjiReadings(
+                logs: reviewLogs,
+                cards: flashcards,
+                days: 30,
+                limit: 24
+            ).map(\.kanji)
+        )
     }
 
     /// Sentences ready to render as individual cards: first cluster OCR lines by
@@ -386,6 +398,7 @@ struct ScanView: View {
                                 tokens: displayedTokens,
                                 knownPredicate: { isKnown($0) },
                                 inDeckExpressions: inDeckExpressions,
+                                strugglingKanji: strugglingKanjiChars,
                                 onTap: { token, revealed in
                                     highlightedToken = revealed ? token : nil
                                 },
@@ -399,6 +412,7 @@ struct ScanView: View {
                         ForEach(detectedSentences(), id: \.self) { sentence in
                             SentenceCard(
                                 sentence: sentence,
+                                strugglingKanji: strugglingKanjiChars,
                                 onDoubleTap: {
                                     sentenceSaveRequest = SentenceSaveRequest(sentence: sentence)
                                 },
@@ -554,6 +568,7 @@ struct ScanView: View {
 
 private struct SentenceCard: View {
     let sentence: String
+    var strugglingKanji: Set<Character> = []
     let onDoubleTap: () -> Void
     var onTapKanaWord: ((JapaneseToken) -> Void)? = nil
 
@@ -567,10 +582,12 @@ private struct SentenceCard: View {
 
     init(
         sentence: String,
+        strugglingKanji: Set<Character> = [],
         onDoubleTap: @escaping () -> Void,
         onTapKanaWord: ((JapaneseToken) -> Void)? = nil
     ) {
         self.sentence = sentence
+        self.strugglingKanji = strugglingKanji
         self.onDoubleTap = onDoubleTap
         self.onTapKanaWord = onTapKanaWord
         _segments = State(initialValue: JapaneseAnalysisService.shared.segments(sentence))
@@ -742,6 +759,7 @@ private struct SentenceCard: View {
     private func tokenView(for token: JapaneseToken) -> some View {
         if token.hasKanji {
             let revealed = revealedTokenIds.contains(token.id)
+            let isStruggling = token.surface.contains(where: { strugglingKanji.contains($0) })
             Button {
                 toggle(token.id)
             } label: {
@@ -749,16 +767,16 @@ private struct SentenceCard: View {
                     VStack(spacing: 0) {
                         Text(token.reading)
                             .font(.system(size: 10, design: .rounded).weight(.medium))
-                            .foregroundStyle(Palette.indigo.opacity(0.85))
+                            .foregroundStyle(isStruggling ? Palette.vermillion : Palette.indigo.opacity(0.85))
                         Text(token.surface)
                             .font(.system(.title3, design: .serif))
-                            .foregroundStyle(Palette.sumi)
+                            .foregroundStyle(isStruggling ? Palette.vermillion : Palette.sumi)
                     }
                     .fixedSize()
                 } else {
                     Text(token.surface)
                         .font(.system(.title3, design: .serif))
-                        .foregroundStyle(Palette.indigo)
+                        .foregroundStyle(isStruggling ? Palette.vermillion : Palette.indigo)
                         .underline(true, pattern: .dot)
                 }
             }
@@ -802,6 +820,7 @@ struct WordChipFlow: View {
     /// a giant Set in the caller.
     var knownPredicate: (String) -> Bool = { _ in false }
     var inDeckExpressions: Set<String> = []
+    var strugglingKanji: Set<Character> = []
     /// Single tap: toggle inline reading. Second arg = new revealed state.
     var onTap: ((JapaneseToken, Bool) -> Void)? = nil
     /// Double tap: open the full word detail sheet.
@@ -860,6 +879,7 @@ struct WordChipFlow: View {
                     token: token,
                     chip: state(for: token),
                     revealed: revealedTokenIds.contains(token.id),
+                    isStruggling: token.surface.contains(where: { strugglingKanji.contains($0) }),
                     onSingleTap: { toggle(token) },
                     onDoubleTap: { onLongPress(token) }
                 )
@@ -884,6 +904,7 @@ private struct WordChip: View {
     let token: JapaneseToken
     let chip: WordChipFlow.ChipState
     let revealed: Bool
+    var isStruggling: Bool = false
     let onSingleTap: () -> Void
     let onDoubleTap: () -> Void
 
@@ -900,7 +921,7 @@ private struct WordChip: View {
             HStack(spacing: 5) {
                 Text(token.surface)
                     .font(.system(.title3, design: .serif))
-                    .foregroundStyle(Palette.sumi)
+                    .foregroundStyle(isStruggling ? Palette.vermillion : Palette.sumi)
                 if let icon = chip.icon {
                     Image(systemName: icon)
                         .font(.caption2)

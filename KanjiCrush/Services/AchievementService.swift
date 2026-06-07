@@ -78,9 +78,9 @@ enum AchievementCatalog {
         ),
         Achievement(
             key: "streak_30",
-            title: "Sakura streak",
+            title: "Month of kanji",
             summary: "Review for thirty days in a row.",
-            symbol: "leaf.fill",
+            symbol: "calendar.circle.fill",
             isMet: { $0.streak >= 30 }
         ),
         Achievement(

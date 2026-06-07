@@ -437,6 +437,7 @@ struct SaveFlashcardSheet: View {
     let meaning: String?
     let meaningSource: String?
     let contextSentence: String?
+    let hint: String?
     let decks: [Deck]
     let cardType: CardType
 
@@ -444,6 +445,7 @@ struct SaveFlashcardSheet: View {
     @State private var newDeckName = ""
     @State private var newDeckTag = "Game"
     @State private var createNewDeck = false
+    @State private var hintText: String = ""
 
     init(
         expression: String,
@@ -451,6 +453,7 @@ struct SaveFlashcardSheet: View {
         meaning: String?,
         meaningSource: String? = nil,
         contextSentence: String?,
+        hint: String? = nil,
         decks: [Deck],
         cardType: CardType = .word
     ) {
@@ -459,8 +462,10 @@ struct SaveFlashcardSheet: View {
         self.meaning = meaning
         self.meaningSource = meaningSource
         self.contextSentence = contextSentence
+        self.hint = hint
         self.decks = decks
         self.cardType = cardType
+        _hintText = State(initialValue: hint ?? "")
     }
 
     var body: some View {
@@ -488,6 +493,21 @@ struct SaveFlashcardSheet: View {
                                     .foregroundStyle(Palette.sumi.opacity(0.8))
                                     .frame(maxWidth: .infinity, alignment: .leading)
                             }
+                        }
+                        .washiCard()
+                        .padding(.horizontal)
+
+                        VStack(alignment: .leading, spacing: 12) {
+                            SectionHeader(title: "Hint")
+                            TextField("Hint", text: $hintText, axis: .vertical)
+                                .font(.system(.body, design: .rounded))
+                                .foregroundStyle(Palette.sumi)
+                                .padding(12)
+                                .background(Palette.washi, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                        .strokeBorder(Palette.hairline, lineWidth: 0.75)
+                                )
                         }
                         .washiCard()
                         .padding(.horizontal)
@@ -583,6 +603,8 @@ struct SaveFlashcardSheet: View {
             cardType: cardType,
             deck: deck
         )
+        let trimmedHint = hintText.trimmingCharacters(in: .whitespacesAndNewlines)
+        card.hint = trimmedHint.isEmpty ? nil : trimmedHint
         deck.cards.append(card)
         modelContext.insert(card)
         try? modelContext.save()

@@ -327,6 +327,14 @@ final class DictionaryService {
     /// JLPT level (1..5, where 5 = N5) of the given word form. Returns the
     /// easiest level (highest number) when the word is listed at multiple,
     /// or nil when the word isn't tagged in the JLPT vocab table.
+    ///
+    /// Falls back to per-kanji JLPT classification when the exact surface form
+    /// isn't in the bundled per-word JLPT list — this handles conjugated forms
+    /// (見て), compounds (見かけ), and any other surface that shares its kanji
+    /// with a JLPT-rated character. The fallback returns the MINIMUM (hardest)
+    /// JLPT level across every kanji in the word, but only when every kanji has
+    /// a JLPT classification (so technical / archaic kanji don't get
+    /// silently treated as known just because their neighbours are easy).
     func jlptLevel(forWord word: String) -> Int? {
         let trimmed = word.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty, let db else { return nil }
@@ -337,11 +345,53 @@ final class DictionaryService {
             guard sqlite3_prepare_v2(db, sql, -1, &stmt, nil) == SQLITE_OK else { return nil }
             defer { sqlite3_finalize(stmt) }
             sqlite3_bind_text(stmt, 1, trimmed, -1, SQLITE_TRANSIENT)
+            if sqlite3_step(stmt) == SQLITE_ROW, sqlite3_column_type(stmt, 0) != SQLITE_NULL {
+                let level = Int(sqlite3_column_int(stmt, 0))
+                if (1...5).contains(level) { return level }
+            }
+            return kanjiFallbackJLPTLevel(forWord: trimmed)
+        }
+    }
+
+    /// Per-kanji JLPT fallback for `jlptLevel(forWord:)`. MUST be called from
+    /// inside `queue.sync` — it issues SQLite queries directly on `db` without
+    /// re-entering the queue.
+    ///
+    /// Returns the minimum (numerically smallest = hardest) JLPT level across
+    /// every kanji in `word`, but only when every kanji has a non-NULL `jlpt`
+    /// column in the `kanji` table. Returns nil for kana-only input and for
+    /// any word that contains a kanji we don't have a JLPT rating for.
+    private func kanjiFallbackJLPTLevel(forWord word: String) -> Int? {
+        guard let db else { return nil }
+
+        let kanji = word.filter { ch in
+            ch.unicodeScalars.contains { scalar in
+                (0x4E00...0x9FFF).contains(scalar.value) ||  // CJK Unified Ideographs
+                (0x3400...0x4DBF).contains(scalar.value) ||  // Extension A
+                (0xF900...0xFAFF).contains(scalar.value) ||  // Compatibility
+                (0x20000...0x2A6DF).contains(scalar.value)   // Extension B
+            }
+        }
+        guard !kanji.isEmpty else { return nil }
+
+        let sql = "SELECT jlpt FROM kanji WHERE char = ? LIMIT 1;"
+        var stmt: OpaquePointer?
+        guard sqlite3_prepare_v2(db, sql, -1, &stmt, nil) == SQLITE_OK else { return nil }
+        defer { sqlite3_finalize(stmt) }
+
+        var hardest: Int?
+        for ch in kanji {
+            sqlite3_reset(stmt)
+            sqlite3_clear_bindings(stmt)
+            sqlite3_bind_text(stmt, 1, String(ch), -1, SQLITE_TRANSIENT)
+
             guard sqlite3_step(stmt) == SQLITE_ROW else { return nil }
             if sqlite3_column_type(stmt, 0) == SQLITE_NULL { return nil }
             let level = Int(sqlite3_column_int(stmt, 0))
-            return (1...5).contains(level) ? level : nil
+            guard (1...5).contains(level) else { return nil }
+            hardest = min(hardest ?? level, level)
         }
+        return hardest
     }
 
     /// On/kun readings + meanings + JLPT level for a single kanji character.

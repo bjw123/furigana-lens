@@ -161,6 +161,9 @@
         }
       }
     },
+    "Aim at Japanese text and tap to capture" : {
+
+    },
     "Appearance" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -313,7 +316,6 @@
     },
     "Decks" : {
       "comment" : "Tab label / nav title",
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -432,6 +434,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "覚えた単語を非表示"
+          }
+        }
+      }
+    },
+    "Hint" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ヒント"
           }
         }
       }
@@ -756,9 +769,6 @@
         }
       }
     },
-    "One kanji at a time." : {
-
-    },
     "Other entries" : {
 
     },
@@ -845,7 +855,6 @@
     },
     "Review" : {
       "comment" : "Tab label / nav title",
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -885,7 +894,6 @@
     },
     "Scan" : {
       "comment" : "Tab label / nav title",
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -936,7 +944,6 @@
     },
     "Settings" : {
       "comment" : "Tab label / nav title",
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -1083,9 +1090,6 @@
       }
     },
     "Tap to reveal translation" : {
-
-    },
-    "This week" : {
 
     },
     "This will permanently remove the deck and all of its cards. Reviews you've logged stay in your history." : {
@@ -1310,9 +1314,6 @@
 
     },
     "広告なし、課金なし。自分のために作った。" : {
-
-    },
-    "漢字を一つずつ。" : {
 
     }
   },
