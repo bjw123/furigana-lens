@@ -36,10 +36,13 @@ final class KanjiCrushUITests: XCTestCase {
     // MARK: - Manual lookup (no camera/photos required)
 
     func test_manualLookup_opensWordDetail() {
-        // Open the "⋯" menu from the Scan toolbar.
-        let menuButton = app.navigationBars["Scan"].buttons.element(boundBy: 0)
+        // Open the "⋯" menu from the Scan toolbar. Coordinate-tap bypasses
+        // XCUITest's default scroll-to-visible call, which errors out on
+        // top-bar trailing toolbar buttons in the simulator even when the
+        // element is already on screen (kAXErrorCannotComplete).
+        let menuButton = app.buttons["scan.menu"]
         XCTAssertTrue(menuButton.waitForExistence(timeout: 5))
-        menuButton.tap()
+        menuButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
 
         // Tap "Type word" in the menu.
         let typeWord = app.buttons["Type word"]

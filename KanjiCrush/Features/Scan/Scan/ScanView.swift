@@ -214,6 +214,7 @@ struct ScanView: View {
                     .symbolRenderingMode(.hierarchical)
                     .foregroundStyle(Palette.indigo)
             }
+            .accessibilityIdentifier("scan.menu")
         }
         if frozenImage != nil {
             ToolbarItem(placement: .topBarLeading) {
