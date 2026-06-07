@@ -320,20 +320,30 @@ struct ReviewSessionView: View {
         switch card.cardType {
         case .word:
             let displayReading = backReading(for: card)
-            VStack(spacing: 14) {
-                FuriganaWordView(expression: card.expression, reading: displayReading, fontSize: 48)
-                if !displayReading.isEmpty && displayReading != card.expression {
-                    Text(displayReading)
-                        .font(.system(.title2, design: .rounded).weight(.medium))
-                        .foregroundStyle(Palette.indigo)
-                        .multilineTextAlignment(.center)
+            VStack(spacing: 18) {
+                VStack(alignment: .leading, spacing: 8) {
+                    SectionHeader(title: "Reading")
+                    VStack(spacing: 8) {
+                        FuriganaWordView(expression: card.expression, reading: displayReading, fontSize: 48)
+                        if !displayReading.isEmpty && displayReading != card.expression {
+                            Text(displayReading)
+                                .font(.system(.title2, design: .rounded).weight(.medium))
+                                .foregroundStyle(Palette.indigo)
+                                .multilineTextAlignment(.center)
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
                 }
                 if let meaning = card.meaning, !meaning.isEmpty {
-                    Text(meaning)
-                        .font(.system(.title3, design: .rounded))
-                        .foregroundStyle(Palette.sumi.opacity(0.85))
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal)
+                    VStack(alignment: .leading, spacing: 8) {
+                        SectionHeader(title: "Meaning")
+                        Text(meaning)
+                            .font(.system(.title3, design: .rounded))
+                            .foregroundStyle(Palette.sumi.opacity(0.85))
+                            .multilineTextAlignment(.center)
+                            .frame(maxWidth: .infinity)
+                            .padding(.horizontal)
+                    }
                 }
                 HStack(spacing: 8) {
                     audioButton(for: displayReading.isEmpty ? card.expression : displayReading)
