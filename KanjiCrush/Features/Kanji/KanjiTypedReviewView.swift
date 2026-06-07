@@ -584,29 +584,16 @@ private struct SessionRunner: View {
     }
 
     private func computeDiff(item: TypedReviewItem, transcript: String) -> [TokenDiff] {
-        let normalisedTranscript = AnswerNormalizer.normalizeReading(transcript)
+        let normalisedTranscript = JapaneseMatching.normalize(transcript)
         let segments = JapaneseAnalysisService.shared.segments(item.prompt)
         var diff: [TokenDiff] = []
         for token in segments where token.hasKanji || (token.hasKana && token.surface.count >= 1) {
-            // Candidate readings:
-            //   1. Tokenizer's reading — fast but unreliable on compounds
-            //      (e.g. 人間 often returns "じんかん", not "にんげん").
-            //   2. The token surface itself — for transcripts that came back
-            //      as kanji rather than kana.
-            //   3. JMdict's canonical kana forms — fixes the compound case
-            //      so "ningen" typed for 人間 matches "にんげん".
-            var rawCandidates: [String] = [token.reading, token.surface]
             let dictEntries = DictionaryService.shared.lookup(token.surface, limit: 3)
-            // JMdict groups every accepted spelling of a word under a single
-            // entry (kanji + kana arrays). Including BOTH arrays here means
-            // the speech recogniser's context-driven kanji choice (which can
-            // disagree with our chunk's surface — e.g. 判る instead of 分かる)
-            // still matches.
-            rawCandidates.append(contentsOf: dictEntries.flatMap { $0.kana })
-            rawCandidates.append(contentsOf: dictEntries.flatMap { $0.kanji })
-            let candidates = rawCandidates
-                .map(AnswerNormalizer.normalizeReading)
-                .filter { !$0.isEmpty }
+            let candidates = JapaneseMatching.candidates(
+                forExpression: token.surface,
+                tokenReading: token.reading,
+                jmdictEntries: dictEntries
+            )
             guard !candidates.isEmpty else { continue }
             // Bidirectional containment so the transcript matches whether it's
             // narrower or wider than the candidate.
@@ -615,7 +602,7 @@ private struct SessionRunner: View {
                     || normalisedTranscript.contains(cand)
                     || cand.contains(normalisedTranscript)
             }
-            let displayReading = AnswerNormalizer.normalizeReading(token.reading)
+            let displayReading = JapaneseMatching.normalize(token.reading)
             diff.append(TokenDiff(prompt: token.surface, expectedReading: displayReading, matched: matched))
         }
         return diff
@@ -697,7 +684,7 @@ private struct TypedReviewItem: Identifiable {
         // One item per distinct on/kun reading — lets the learner be drilled
         // on each reading independently.
         for raw in (info?.on ?? []) + (info?.kun ?? []) {
-            let normalized = AnswerNormalizer.normalizeReading(raw)
+            let normalized = JapaneseMatching.normalize(raw)
             if normalized.isEmpty { continue }
             items.append(TypedReviewItem(
                 prompt: String(kanji),
@@ -710,7 +697,7 @@ private struct TypedReviewItem: Identifiable {
 
         // Then JLPT-tagged words containing the kanji.
         for ex in examples {
-            let readingNormalized = AnswerNormalizer.normalizeReading(ex.reading)
+            let readingNormalized = JapaneseMatching.normalize(ex.reading)
             let glossParts = ex.gloss
                 .split(whereSeparator: { ";,".contains($0) })
                 .map { String($0).trimmingCharacters(in: .whitespaces) }
@@ -736,40 +723,9 @@ private struct TypedReviewItem: Identifiable {
 private enum AnswerNormalizer {
     static func normalize(_ raw: String, mode: KanjiTypedReviewView.Mode) -> String {
         switch mode {
-        case .reading, .speech: return normalizeReading(raw)
+        case .reading, .speech: return JapaneseMatching.normalize(raw)
         case .meaning:          return normalizeMeaning(raw)
         }
-    }
-
-    /// Strip okurigana markers (`.`, `-`), then convert any Latin runs to
-    /// hiragana (CFStringTransform) and any katakana to hiragana so a single
-    /// hiragana string matches typing "hito", "ヒト", or "ひと".
-    static func normalizeReading(_ raw: String) -> String {
-        var s = raw.trimmingCharacters(in: .whitespacesAndNewlines)
-        s = s.filter { $0 != "." && $0 != "-" }
-        if s.isEmpty { return "" }
-
-        // Romaji → hiragana via Apple's transliteration.
-        if s.unicodeScalars.contains(where: { $0.isASCII && $0.value > 32 }) {
-            let lowered = s.lowercased() as NSString
-            let mutable = NSMutableString(string: lowered)
-            CFStringTransform(mutable, nil, kCFStringTransformLatinHiragana, false)
-            s = mutable as String
-        }
-
-        // Katakana → hiragana.
-        var folded = ""
-        for scalar in s.unicodeScalars {
-            if (0x30A1...0x30F6).contains(scalar.value),
-               let mapped = Unicode.Scalar(scalar.value - 0x60) {
-                folded.unicodeScalars.append(mapped)
-            } else {
-                folded.unicodeScalars.append(scalar)
-            }
-        }
-        s = folded
-
-        return s.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     static func normalizeMeaning(_ raw: String) -> String {
@@ -777,7 +733,6 @@ private enum AnswerNormalizer {
         for prefix in ["a ", "an ", "the ", "to "] {
             if s.hasPrefix(prefix) { s = String(s.dropFirst(prefix.count)); break }
         }
-        // Strip surrounding punctuation/quotes; keep internal spaces.
         s = s.trimmingCharacters(in: CharacterSet.punctuationCharacters)
         return s
     }

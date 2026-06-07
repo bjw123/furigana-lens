@@ -235,7 +235,7 @@ struct DailyChallengeView: View {
         guard !answer.isEmpty else { return }
 
         attemptCount += 1
-        let normalized = DailyChallengePool.normalizeReading(answer)
+        let normalized = JapaneseMatching.normalize(answer)
         let accepted = item.acceptedReadings
         let isMatch = accepted.contains { normalized == $0 || normalized.contains($0) || $0.contains(normalized) }
 
@@ -309,7 +309,7 @@ enum DailyChallengePool {
         var out: [DailyQuestion] = []
 
         func add(prompt: String, reading: String, meaning: String) {
-            let normalized = normalizeReading(reading)
+            let normalized = JapaneseMatching.normalize(reading)
             guard !normalized.isEmpty, !seenPrompts.contains(prompt) else { return }
             seenPrompts.insert(prompt)
             out.append(DailyQuestion(
@@ -345,29 +345,5 @@ enum DailyChallengePool {
         }
 
         return out
-    }
-
-    /// Mirror of AnswerNormalizer in KanjiTypedReviewView so both quizzes
-    /// accept hiragana / katakana / romaji equivalently.
-    static func normalizeReading(_ raw: String) -> String {
-        var s = raw.trimmingCharacters(in: .whitespacesAndNewlines)
-        s = s.filter { $0 != "." && $0 != "-" }
-        if s.isEmpty { return "" }
-        if s.unicodeScalars.contains(where: { $0.isASCII && $0.value > 32 }) {
-            let lowered = s.lowercased() as NSString
-            let mutable = NSMutableString(string: lowered)
-            CFStringTransform(mutable, nil, kCFStringTransformLatinHiragana, false)
-            s = mutable as String
-        }
-        var folded = ""
-        for scalar in s.unicodeScalars {
-            if (0x30A1...0x30F6).contains(scalar.value),
-               let mapped = Unicode.Scalar(scalar.value - 0x60) {
-                folded.unicodeScalars.append(mapped)
-            } else {
-                folded.unicodeScalars.append(scalar)
-            }
-        }
-        return folded.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }

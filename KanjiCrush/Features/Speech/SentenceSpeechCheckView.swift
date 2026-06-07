@@ -859,34 +859,13 @@ struct SentenceSpeechCheckView: View {
 
     // MARK: - Continuous auto-advance
 
-    /// Candidate normalised readings the live transcript suffix must contain
-    /// for `chunk` to count as spoken. Mirrors the per-chunk Submit logic the
-    /// view used to do on demand, but built up-front because the transcript
-    /// stream may match the same chunk many times during a single utterance.
-    ///
-    /// Sources:
-    ///   1. Tokenizer reading (fast, occasionally wrong on compounds).
-    ///   2. Surface form (covers transcripts that came back as kanji).
-    ///   3. Every JMdict kana form for the surface — the canonical compound
-    ///      reading lives here.
-    /// All candidates are folded through `AnswerNormalizer` so kana/katakana/
-    /// romaji + long-vowel marks reduce to the same hiragana stem.
     private func candidates(for chunk: Chunk) -> [String] {
-        var raw: [String] = [chunk.reading, chunk.surface]
         let dictEntries = DictionaryService.shared.lookup(chunk.surface, limit: 3)
-        // Apple's Japanese recogniser picks a kanji form based on context and
-        // can land on a DIFFERENT kanji that shares the same reading as the
-        // chunk's surface (e.g. it might write 判る where the chunk wrote
-        // 分かる). Both are valid spellings of わかる per JMdict — and JMdict's
-        // `kanji` array on a single entry contains every accepted spelling.
-        // Including them all as candidates makes the matching tolerant of the
-        // recogniser's kanji-disambiguation choice. Adding `kana` covers the
-        // case where the recogniser falls back to hiragana / katakana.
-        raw.append(contentsOf: dictEntries.flatMap { $0.kana })
-        raw.append(contentsOf: dictEntries.flatMap { $0.kanji })
-        return raw
-            .map(AnswerNormalizer.normalizeReading)
-            .filter { !$0.isEmpty }
+        return JapaneseMatching.candidates(
+            forExpression: chunk.surface,
+            tokenReading: chunk.reading,
+            jmdictEntries: dictEntries
+        )
     }
 
     /// Drives the auto-advance loop. Folds the live transcript, slices off
@@ -897,7 +876,7 @@ struct SentenceSpeechCheckView: View {
     private func processTranscript(_ raw: String) {
         guard speech.isListening || !raw.isEmpty else { return }
         guard !sessionComplete else { return }
-        let normalised = AnswerNormalizer.normalizeReading(raw)
+        let normalised = JapaneseMatching.normalize(raw)
 
         // If the recogniser truncated the transcript (rare — happens when a
         // cycle restarts and the new partial is shorter than the prefix), pull
@@ -961,14 +940,17 @@ struct SentenceSpeechCheckView: View {
             }
 
             // Strict substring failed — try fuzzy matching anchored at the
-            // start of `suffix`. This catches the case where words running
-            // together without a pause make the recognizer mangle a chunk
-            // boundary (e.g. reading "ストレスでしょ" continuously gets
-            // transcribed as "ストレッスでしょ" with a stray small-tsu, so
-            // "すとれす" doesn't appear as a clean substring). Allowed edit
-            // distance scales with candidate length: ≈ 1 edit per 4 chars.
+            // start of `suffix`. Catches running-together cases like
+            // "ストレスでしょ" → "ストレッスでしょ" where a candidate doesn't
+            // appear as a clean substring but is within edit distance.
             if bestEnd == nil {
-                bestEnd = fuzzyMatchEnd(in: suffix, against: cands)
+                for cand in cands {
+                    guard let range = JapaneseMatching.fuzzyMatchEnd(in: suffix, against: cand) else { continue }
+                    let endOffset = suffix.distance(from: suffix.startIndex, to: range.upperBound)
+                    if bestEnd == nil || endOffset < bestEnd! {
+                        bestEnd = endOffset
+                    }
+                }
             }
             guard let endOffset = bestEnd else { break }
 
@@ -1037,7 +1019,7 @@ struct SentenceSpeechCheckView: View {
     private func manuallyAdvance(chunk: Chunk) {
         guard let idx = chunks.firstIndex(where: { $0.id == chunk.id }), idx == currentIndex else { return }
 
-        let normalised = AnswerNormalizer.normalizeReading(speech.transcript)
+        let normalised = JapaneseMatching.normalize(speech.transcript)
         let suffix = String(normalised.dropFirst(consumedPrefix.count))
         let cands = candidates(for: chunk)
 
@@ -1119,7 +1101,7 @@ struct SentenceSpeechCheckView: View {
         let merged = Chunk(
             id: UUID(),
             surface: first.surface + second.surface,
-            reading: AnswerNormalizer.normalizeReading(first.reading + second.reading),
+            reading: JapaneseMatching.normalize(first.reading + second.reading),
             segmentIndices: first.segmentIndices + second.segmentIndices
         )
         chunks.replaceSubrange(index...(index + 1), with: [merged])
@@ -1137,7 +1119,7 @@ struct SentenceSpeechCheckView: View {
             return Chunk(
                 id: UUID(),
                 surface: surface,
-                reading: AnswerNormalizer.normalizeReading(reading),
+                reading: JapaneseMatching.normalize(reading),
                 segmentIndices: [segIdx]
             )
         }.filter { !$0.surface.isEmpty }
@@ -1193,7 +1175,7 @@ struct SentenceSpeechCheckView: View {
             return [Chunk(
                 id: UUID(),
                 surface: sentence,
-                reading: AnswerNormalizer.normalizeReading(reading),
+                reading: JapaneseMatching.normalize(reading),
                 segmentIndices: []
             )]
         }
@@ -1205,14 +1187,14 @@ struct SentenceSpeechCheckView: View {
                 chunks.append(Chunk(
                     id: UUID(),
                     surface: seg.surface,
-                    reading: AnswerNormalizer.normalizeReading(seg.reading),
+                    reading: JapaneseMatching.normalize(seg.reading),
                     segmentIndices: [idx]
                 ))
             } else {
                 // Glue onto the previous chunk.
                 var last = chunks.removeLast()
                 last.surface += seg.surface
-                last.reading = AnswerNormalizer.normalizeReading(last.reading + seg.reading)
+                last.reading = JapaneseMatching.normalize(last.reading + seg.reading)
                 last.segmentIndices.append(idx)
                 chunks.append(last)
             }
@@ -1244,7 +1226,7 @@ struct SentenceSpeechCheckView: View {
             return [Chunk(
                 id: UUID(),
                 surface: sentence,
-                reading: AnswerNormalizer.normalizeReading(reading),
+                reading: JapaneseMatching.normalize(reading),
                 segmentIndices: Array(segments.indices)
             )]
         }
@@ -1252,117 +1234,3 @@ struct SentenceSpeechCheckView: View {
     }
 }
 
-// MARK: - Fuzzy matching
-
-/// Find the earliest end-offset in `suffix` where any of `candidates` matches
-/// with an edit distance below ≈ candidate.count / 4. Anchored at the start
-/// of the suffix so we don't jump across chunks. Returns nil when no
-/// candidate matches within the tolerance.
-fileprivate func fuzzyMatchEnd(in suffix: String, against candidates: [String]) -> Int? {
-    let suffixArr = Array(suffix)
-    var bestEnd: Int?
-    for cand in candidates where cand.count >= 2 {
-        let candArr = Array(cand)
-        // 1 edit per 4 chars, minimum 1. Cap at 3 so we don't accept wildly
-        // different strings — for very long candidates that's still ≈ 25%
-        // fuzziness which is plenty for transcription drift.
-        let tolerance = min(3, max(1, candArr.count / 4))
-        let minLen = max(1, candArr.count - tolerance)
-        let maxLen = min(candArr.count + tolerance, suffixArr.count)
-        guard minLen <= maxLen else { continue }
-        for windowLen in minLen...maxLen {
-            let window = Array(suffixArr.prefix(windowLen))
-            if levenshtein(candArr, window) <= tolerance {
-                if bestEnd == nil || windowLen < bestEnd! {
-                    bestEnd = windowLen
-                }
-                break  // accept the shortest matching window for this candidate
-            }
-        }
-    }
-    return bestEnd
-}
-
-fileprivate func levenshtein(_ a: [Character], _ b: [Character]) -> Int {
-    let m = a.count
-    let n = b.count
-    if m == 0 { return n }
-    if n == 0 { return m }
-    var prev = Array(0...n)
-    var curr = Array(repeating: 0, count: n + 1)
-    for i in 1...m {
-        curr[0] = i
-        for j in 1...n {
-            let cost = a[i - 1] == b[j - 1] ? 0 : 1
-            curr[j] = min(prev[j] + 1, curr[j - 1] + 1, prev[j - 1] + cost)
-        }
-        swap(&prev, &curr)
-    }
-    return prev[n]
-}
-
-// MARK: - Normalization
-
-private enum AnswerNormalizer {
-    /// Fold a raw recognizer / user string into a comparable kana stem:
-    ///   - strip okurigana markers (`.`, `-`), whitespace, common JP punctuation
-    ///   - romaji → hiragana via CFStringTransform
-    ///   - katakana → hiragana
-    ///   - drop the long-vowel mark `ー` AND its trailing vowel-extension forms
-    ///     (small tsu / long vowels) so `コーヒー` and `こうひい` both reduce to
-    ///     `こひ` and match each other.
-    ///
-    /// The fold is intentionally loose so that the Japanese speech recognizer
-    /// (which emits mixed kanji + katakana, often with long-vowel marks) and
-    /// the local reading (which is pure hiragana from CFStringTransform) end
-    /// up at the same canonical string.
-    static func normalizeReading(_ raw: String) -> String {
-        var s = raw.trimmingCharacters(in: .whitespacesAndNewlines)
-        s = s.filter { ch in
-            ch != "." && ch != "-" && ch != "・"
-                && ch != "、" && ch != "。" && ch != "「" && ch != "」"
-                && ch != "?" && ch != "!" && ch != "?" && ch != "!"
-        }
-        if s.isEmpty { return "" }
-
-        // Romaji → hiragana
-        if s.unicodeScalars.contains(where: { $0.isASCII && $0.value > 32 }) {
-            let lowered = s.lowercased() as NSString
-            let mutable = NSMutableString(string: lowered)
-            CFStringTransform(mutable, nil, kCFStringTransformLatinHiragana, false)
-            s = mutable as String
-        }
-
-        // Katakana → hiragana (skip long-vowel mark and small punctuation —
-        // those are handled below).
-        var folded = ""
-        for scalar in s.unicodeScalars {
-            if (0x30A1...0x30F6).contains(scalar.value),
-               let mapped = Unicode.Scalar(scalar.value - 0x60) {
-                folded.unicodeScalars.append(mapped)
-            } else {
-                folded.unicodeScalars.append(scalar)
-            }
-        }
-        s = folded
-
-        // Strip the long-vowel mark `ー` (0x30FC) entirely. Also strip any
-        // small kana that the recognizer occasionally emits but the local
-        // reading omits (e.g. small ぁぃぅぇぉっゃゅょ). This is lossy but the
-        // direction is consistent for both sides of the comparison.
-        var compact = ""
-        for scalar in s.unicodeScalars {
-            switch scalar.value {
-            case 0x30FC: continue                      // ー long-vowel mark
-            case 0x3041, 0x3043, 0x3045, 0x3047, 0x3049: continue  // ぁぃぅぇぉ
-            case 0x3063: continue                      // っ small tsu
-            case 0x3083, 0x3085, 0x3087: continue      // ゃゅょ
-            case 0x309B, 0x309C: continue              // ゛ ゜ standalone marks
-            default:
-                compact.unicodeScalars.append(scalar)
-            }
-        }
-
-        return compact.trimmingCharacters(in: .whitespacesAndNewlines)
-    }
-}
