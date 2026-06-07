@@ -843,16 +843,28 @@ struct SentenceSpeechCheckView: View {
                 continue
             }
 
-            // Short-reading guard: if the chunk's shortest candidate is only
-            // 1-2 mora, require enough new suffix since this chunk became
-            // active to avoid premature matches against the previous chunk's
-            // trailing kana (e.g. "ningen wo" wouldn't pre-match "wo" before
-            // 人間 is consumed).
-            let shortestCandidate = cands.map(\.count).min() ?? 0
-            let suffixGrowthSinceActive = consumedPrefix.count - chunkConsumedBaseline
-            if shortestCandidate <= 2, suffixGrowthSinceActive < max(shortestCandidate - 1, 0) {
-                // Don't try to match this chunk yet — wait for more audio.
-                break
+            // Short-reading guard: only applied AFTER the user has already
+            // consumed at least one chunk. For short kana readings (1-2 mora),
+            // require enough new suffix growth since this chunk became active
+            // so a stray particle at the end of the previous chunk doesn't
+            // pre-match the next one. For the FIRST chunk (consumedPrefix
+            // empty), no guard — the suffix IS the entire transcript and we
+            // want auto-advance to fire immediately on the very first match.
+            // We also restrict the "short" heuristic to kana-only candidates,
+            // because a kanji surface like 人間 happens to be 2 characters
+            // but represents 4 mora of speech — guarding it would be wrong.
+            if !consumedPrefix.isEmpty {
+                let kanaShortest = cands
+                    .filter { cand in
+                        cand.unicodeScalars.allSatisfy { (0x3040...0x309F).contains($0.value) }
+                    }
+                    .map(\.count)
+                    .min() ?? Int.max
+                let suffixGrowthSinceActive = consumedPrefix.count - chunkConsumedBaseline
+                if kanaShortest <= 2, suffixGrowthSinceActive < max(kanaShortest - 1, 0) {
+                    // Don't try to match this chunk yet — wait for more audio.
+                    break
+                }
             }
 
             // Look for the earliest position in `suffix` that contains any
@@ -902,12 +914,56 @@ struct SentenceSpeechCheckView: View {
         chunkConsumedBaseline = consumedPrefix.count
     }
 
-    /// Manual "I read this" override — same effect as an auto-match without
-    /// changing `consumedPrefix` (the recogniser may still be lagging behind).
+    /// Manual "I read this" override — checks the current live transcript
+    /// against the chunk's candidate readings before advancing. If the user
+    /// hasn't actually said the chunk yet, marks it WRONG and shows what was
+    /// heard vs. what was expected, so the button can't be abused to skip
+    /// past a chunk by saying the wrong word.
     private func manuallyAdvance(chunk: Chunk) {
         guard let idx = chunks.firstIndex(where: { $0.id == chunk.id }), idx == currentIndex else { return }
-        UINotificationFeedbackGenerator().notificationOccurred(.success)
-        advanceCurrentChunk(matched: true, transcriptForResult: chunk.surface)
+
+        let normalised = AnswerNormalizer.normalizeReading(speech.transcript)
+        let suffix = String(normalised.dropFirst(consumedPrefix.count))
+        let cands = candidates(for: chunk)
+
+        // Match logic mirrors the auto-advance pass — any candidate appearing
+        // in the un-consumed suffix counts. Empty transcript (user pressed the
+        // button without saying anything) is treated as wrong.
+        var matchedEnd: Int?
+        for cand in cands where !cand.isEmpty {
+            if let range = suffix.range(of: cand) {
+                let endOffset = suffix.distance(from: suffix.startIndex, to: range.upperBound)
+                if matchedEnd == nil || endOffset < matchedEnd! {
+                    matchedEnd = endOffset
+                }
+            }
+        }
+
+        if let endOffset = matchedEnd {
+            // Snap consumedPrefix forward through the matched span so further
+            // auto-advance from the same transcript update keeps working.
+            let newPrefixCount = consumedPrefix.count + endOffset
+            consumedPrefix = String(normalised.prefix(newPrefixCount))
+            UINotificationFeedbackGenerator().notificationOccurred(.success)
+            advanceCurrentChunk(matched: true, transcriptForResult: chunk.surface)
+        } else {
+            UINotificationFeedbackGenerator().notificationOccurred(.error)
+            chunkFeedback = .wrong(
+                expected: chunk.reading,
+                heard: speech.transcript.isEmpty ? "(nothing yet)" : speech.transcript
+            )
+            // Record the failure as a chunk result but DON'T advance — the
+            // user gets a try-again chance.
+            results.removeAll { $0.id == chunk.id }
+            results.append(ChunkResult(
+                id: chunk.id,
+                surface: chunk.surface,
+                expectedReading: chunk.reading,
+                matched: false,
+                transcript: speech.transcript
+            ))
+            return
+        }
         if currentIndex >= chunks.count {
             finishSession()
         }

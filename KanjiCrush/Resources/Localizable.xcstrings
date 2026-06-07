@@ -432,6 +432,9 @@
         }
       }
     },
+    "Finish session" : {
+
+    },
     "Group, split or remove chunks" : {
 
     },
@@ -459,6 +462,9 @@
           }
         }
       }
+    },
+    "I read \"%@\"" : {
+
     },
     "Implied by N%@ level" : {
 
@@ -927,6 +933,9 @@
     "Save some flashcards from a scan or set your JLPT level in Settings to seed today's challenge." : {
 
     },
+    "Save these as flashcards" : {
+
+    },
     "Scan" : {
       "comment" : "Tab label / nav title",
       "localizations" : {
@@ -1031,9 +1040,6 @@
         }
       }
     },
-    "Some chunks were missed" : {
-
-    },
     "Some words were missed" : {
 
     },
@@ -1112,9 +1118,6 @@
 
     },
     "Tap save to add to a deck" : {
-
-    },
-    "Tap the mic, read the highlighted part, then Submit. Edit the transcript if needed." : {
 
     },
     "Tap to confirm" : {
