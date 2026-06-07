@@ -7,7 +7,13 @@ struct KanjiCrushApp: App {
     private let container: ModelContainer
 
     init() {
-        let schema = Schema([Deck.self, Flashcard.self, ReviewLog.self, KnownWord.self])
+        let schema = Schema([
+            Deck.self,
+            Flashcard.self,
+            ReviewLog.self,
+            KnownWord.self,
+            UnlockedAchievement.self
+        ])
         self.container = try! ModelContainer(for: schema)
         configureGlobalAppearance()
         MockDataSeeder.seedIfRequested(container: container)

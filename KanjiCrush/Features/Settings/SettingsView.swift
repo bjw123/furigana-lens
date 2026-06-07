@@ -6,6 +6,7 @@ struct SettingsView: View {
     @Query private var decks: [Deck]
     @Query private var reviewLogs: [ReviewLog]
     @Query private var knownWords: [KnownWord]
+    @Query private var unlockedAchievements: [UnlockedAchievement]
 
     @AppStorage("hideKanaOnlyTokens") private var hideKanaOnlyTokens = true
     @AppStorage("hideKnownWords") private var hideKnownWords = false
@@ -27,6 +28,7 @@ struct SettingsView: View {
                         readingFiltersCard
                         appearanceCard
                         libraryCard
+                        achievementsCard
                         storyCard
                         aboutCard
                         Spacer(minLength: 24)
@@ -298,6 +300,66 @@ struct SettingsView: View {
             RoundedRectangle(cornerRadius: 14, style: .continuous)
                 .strokeBorder(tint.opacity(0.25), lineWidth: 0.5)
         )
+    }
+
+    // MARK: - Achievements
+
+    private var achievementsCard: some View {
+        let unlockedKeys = Set(unlockedAchievements.map { $0.key })
+        let unlockedCount = unlockedKeys.count
+        let total = AchievementCatalog.all.count
+        return VStack(alignment: .leading, spacing: 12) {
+            SectionHeader(
+                title: "Achievements",
+                trailing: "\(unlockedCount) / \(total)"
+            )
+            BrushDivider()
+
+            let columns = [GridItem(.adaptive(minimum: 88, maximum: 130), spacing: 10)]
+            LazyVGrid(columns: columns, spacing: 10) {
+                ForEach(AchievementCatalog.all) { achievement in
+                    achievementTile(achievement, isUnlocked: unlockedKeys.contains(achievement.key))
+                }
+            }
+        }
+        .washiCard()
+        .padding(.horizontal)
+    }
+
+    private func achievementTile(_ achievement: Achievement, isUnlocked: Bool) -> some View {
+        VStack(spacing: 6) {
+            Image(systemName: achievement.symbol)
+                .font(.system(size: 22, weight: .semibold))
+                .foregroundStyle(isUnlocked ? Palette.gold : Palette.mist.opacity(0.6))
+                .padding(.top, 6)
+            Text(achievement.title)
+                .font(.system(.caption, design: .rounded).weight(.semibold))
+                .foregroundStyle(isUnlocked ? Palette.sumi : Palette.mist)
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
+            Text(achievement.summary)
+                .font(.system(size: 9, design: .rounded))
+                .foregroundStyle(Palette.mist.opacity(0.85))
+                .multilineTextAlignment(.center)
+                .lineLimit(3)
+                .padding(.horizontal, 4)
+                .padding(.bottom, 6)
+        }
+        .frame(maxWidth: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .fill(isUnlocked ? Palette.gold.opacity(0.10) : Palette.cream.opacity(0.55))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .strokeBorder(
+                    isUnlocked ? Palette.gold.opacity(0.45) : Palette.hairline,
+                    lineWidth: isUnlocked ? 1 : 0.5
+                )
+        )
+        .opacity(isUnlocked ? 1.0 : 0.65)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(isUnlocked ? "Unlocked: " : "Locked: ")\(achievement.title). \(achievement.summary)")
     }
 
     // MARK: - Story

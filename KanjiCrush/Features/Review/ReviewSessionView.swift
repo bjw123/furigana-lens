@@ -11,6 +11,9 @@ struct ReviewSessionView: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @Query private var allCards: [Flashcard]
+    @Query private var allLogs: [ReviewLog]
+    @Query private var unlockedAchievements: [UnlockedAchievement]
 
     @State private var currentIndex = 0
     @State private var showBack = false
@@ -19,6 +22,7 @@ struct ReviewSessionView: View {
     @State private var comboCount: Int = 0
     @State private var comboBurstId: UUID?      // changes to trigger animation
     @State private var crushKanji: String?      // non-nil while crush animation runs
+    @State private var achievementBanner: Achievement?
     @ObservedObject private var speech = SpeechService.shared
 
     enum SessionKind {
@@ -41,6 +45,11 @@ struct ReviewSessionView: View {
                     CrushOverlay(kanji: kanji)
                         .allowsHitTesting(false)
                         .transition(.opacity)
+                }
+                if let achievement = achievementBanner {
+                    AchievementBanner(achievement: achievement)
+                        .allowsHitTesting(false)
+                        .transition(.move(edge: .top).combined(with: .opacity))
                 }
             }
             .navigationTitle(title)
@@ -528,6 +537,7 @@ struct ReviewSessionView: View {
         // Hard reset it. Only fire the burst on extensions of length ≥ 2.
         if grade.rawValue >= 3 {
             comboCount += 1
+            AchievementService.recordCombo(comboCount)
             if comboCount >= 2 {
                 comboBurstId = UUID()
             }
@@ -540,6 +550,27 @@ struct ReviewSessionView: View {
             UINotificationFeedbackGenerator().notificationOccurred(.success)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) {
                 crushKanji = nil
+            }
+        }
+
+        // Check for newly-unlocked achievements after this grade has been
+        // logged. Show the first one as a banner; subsequent unlocks in the
+        // same tick still get stored, just not bannered.
+        let streak = StatsService.currentStreak(logs: allLogs)
+        let newlyUnlocked = AchievementService.evaluate(
+            modelContext: modelContext,
+            cards: allCards,
+            reviewLogs: allLogs,
+            unlocked: unlockedAchievements,
+            streak: streak
+        )
+        if let first = newlyUnlocked.first {
+            achievementBanner = first
+            UINotificationFeedbackGenerator().notificationOccurred(.success)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                withAnimation(.easeOut(duration: 0.3)) {
+                    achievementBanner = nil
+                }
             }
         }
 
@@ -764,6 +795,49 @@ private struct CrushOverlay: View {
             withAnimation(.easeOut(duration: 0.8).delay(0.05)) {
                 burst = true
             }
+        }
+    }
+}
+
+/// Banner shown when a new achievement is unlocked during a review.
+/// Appears at the top, lingers for ~2s, then dismisses itself.
+private struct AchievementBanner: View {
+    let achievement: Achievement
+
+    var body: some View {
+        VStack {
+            HStack(spacing: 12) {
+                ZStack {
+                    Circle()
+                        .fill(Palette.gold.opacity(0.20))
+                        .frame(width: 44, height: 44)
+                    Image(systemName: achievement.symbol)
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundStyle(Palette.gold)
+                }
+                VStack(alignment: .leading, spacing: 1) {
+                    Text("Achievement unlocked")
+                        .font(.system(.caption2, design: .rounded).weight(.bold))
+                        .foregroundStyle(Palette.mist)
+                        .textCase(.uppercase)
+                        .tracking(0.8)
+                    Text(achievement.title)
+                        .font(.system(.subheadline, design: .rounded).weight(.semibold))
+                        .foregroundStyle(Palette.sumi)
+                }
+                Spacer()
+            }
+            .padding(.horizontal, 14)
+            .padding(.vertical, 10)
+            .background(Palette.washi, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .strokeBorder(Palette.gold.opacity(0.45), lineWidth: 1)
+            )
+            .shadow(color: Palette.sumi.opacity(0.20), radius: 16, y: 8)
+            .padding(.horizontal, 20)
+            .padding(.top, 8)
+            Spacer()
         }
     }
 }
