@@ -39,6 +39,11 @@ struct FuriganaSentenceView: UIViewRepresentable {
         label.numberOfLines = 0
         label.textAlignment = textAlignment
         label.lineBreakMode = .byWordWrapping
+        // Allow horizontal compression so the label honours its parent's
+        // proposed width and word-wraps the attributed string instead of
+        // laying it all out in a single overflowing line.
+        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        label.setContentHuggingPriority(.defaultLow, for: .horizontal)
         label.setContentHuggingPriority(.required, for: .vertical)
         return label
     }
@@ -46,6 +51,21 @@ struct FuriganaSentenceView: UIViewRepresentable {
     func updateUIView(_ label: UILabel, context: Context) {
         label.textAlignment = textAlignment
         label.attributedText = FuriganaRenderer.attributedSentence(sentence, fontSize: fontSize)
+    }
+
+    /// SwiftUI calls this with the proposed container width. Setting
+    /// `preferredMaxLayoutWidth` is the documented way to make a UILabel
+    /// wrap to a known width, and returning the resulting fitting size
+    /// lets SwiftUI lay out the surrounding stack with the correct height.
+    func sizeThatFits(_ proposal: ProposedViewSize, uiView: UILabel, context: Context) -> CGSize? {
+        guard let width = proposal.width, width.isFinite, width > 0 else { return nil }
+        uiView.preferredMaxLayoutWidth = width
+        let fitting = uiView.systemLayoutSizeFitting(
+            CGSize(width: width, height: UIView.layoutFittingCompressedSize.height),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        )
+        return CGSize(width: width, height: fitting.height)
     }
 }
 
