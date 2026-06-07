@@ -1065,14 +1065,3 @@ struct TagEditor: View {
     }
 }
 
-/// Thin SwiftUI wrapper around UIActivityViewController used for the
-/// .kcdeck export Share sheet (and any other ad-hoc share targets later).
-private struct ShareSheet: UIViewControllerRepresentable {
-    let activityItems: [Any]
-
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
-    }
-
-    func updateUIViewController(_ controller: UIActivityViewController, context: Context) {}
-}

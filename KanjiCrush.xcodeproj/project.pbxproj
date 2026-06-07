@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		018309967D9123C5791139E8 /* FuriganaText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AD71B6D179002407C5E6F4 /* FuriganaText.swift */; };
 		03AB8D5F4ABFD4DCCD583AF1 /* DailyChallengeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E29D376BBABE16AF1FB6E55A /* DailyChallengeView.swift */; };
+		0B28383EBC05773F06DC9796 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A203BA7EE1851C1789C4A1A9 /* ShareSheet.swift */; };
 		1F592127D2217B5B05EB7827 /* SRSService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9DA80B47F978748982EE4C /* SRSService.swift */; };
 		24E2ED4BE13B4C2E680B0976 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD372E4A3B23128F9B2FA6A2 /* SettingsView.swift */; };
 		2AC0B88E0F0DAE407402F00E /* OCRPipelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891FD33B3970E032500E6843 /* OCRPipelineTests.swift */; };
@@ -33,6 +34,7 @@
 		9B940DA9AF9BD960FFFD6C3D /* ReviewSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF244FA6F44A387A5A9EDB34 /* ReviewSessionView.swift */; };
 		9E2A8E495D0ECBD4B8EC5461 /* jmdict.sqlite.gz in Resources */ = {isa = PBXBuildFile; fileRef = F8960B4740139682A4D92446 /* jmdict.sqlite.gz */; };
 		AA3E3156B2D124565373C3C4 /* ReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBCEB7020E1F75F253EF2A99 /* ReviewView.swift */; };
+		ABB028F5EA55516456693F4A /* ProgressShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D16285477D81516C3DECFE4 /* ProgressShareView.swift */; };
 		AC3A19B66F6D8AB3B96A3F38 /* DeckExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EB596CEEFDA3F6371672E9 /* DeckExportService.swift */; };
 		B1FDBCF92CB85368FC0E3103 /* ReadingOverrideStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D4459A9CED977F1831952A /* ReadingOverrideStore.swift */; };
 		BA9C55549FA8826EE990EB41 /* AchievementService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23877ACFD64791E83419B56C /* AchievementService.swift */; };
@@ -81,6 +83,7 @@
 		73EB596CEEFDA3F6371672E9 /* DeckExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckExportService.swift; sourceTree = "<group>"; };
 		7643DDD50575A5E940E3B785 /* UnlockedAchievement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockedAchievement.swift; sourceTree = "<group>"; };
 		78F81B4592A468869DE9DC3C /* KanjiCrushUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiCrushUITests.swift; sourceTree = "<group>"; };
+		7D16285477D81516C3DECFE4 /* ProgressShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressShareView.swift; sourceTree = "<group>"; };
 		7D2165FACC51F9B6110D4F6A /* DictionaryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryService.swift; sourceTree = "<group>"; };
 		81D4459A9CED977F1831952A /* ReadingOverrideStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingOverrideStore.swift; sourceTree = "<group>"; };
 		823A7BE537B3727C787980FE /* Flashcard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flashcard.swift; sourceTree = "<group>"; };
@@ -91,6 +94,7 @@
 		9AEE441BC1A1FC2D014BA884 /* SpeechService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechService.swift; sourceTree = "<group>"; };
 		9BC81C73CBABAE4B1F865E69 /* KanjiCrushUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = KanjiCrushUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FBDF3600DFD26E6C1EBF305 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A203BA7EE1851C1789C4A1A9 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		AD372E4A3B23128F9B2FA6A2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		AF9A4D7694D52435FB445E95 /* OCRService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRService.swift; sourceTree = "<group>"; };
 		B565DD4011B1B0CDAB9D3EBE /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
@@ -115,6 +119,7 @@
 				FB1C094DD7F37EC6EAB079CB /* Review */,
 				CB8D9A1ED88DA634813E139B /* Scan */,
 				BAD4F83500A0113EE13185BA /* Settings */,
+				5DD3DC2C346C17EAA2448043 /* Share */,
 				B43F974BCB3DC1CA5B03EF8E /* WordDetail */,
 			);
 			path = Features;
@@ -173,6 +178,14 @@
 			path = KanjiCrushTests;
 			sourceTree = "<group>";
 		};
+		5DD3DC2C346C17EAA2448043 /* Share */ = {
+			isa = PBXGroup;
+			children = (
+				7D16285477D81516C3DECFE4 /* ProgressShareView.swift */,
+			);
+			path = Share;
+			sourceTree = "<group>";
+		};
 		7C6F5569B47B2C3F3DDABEBC /* Theme */ = {
 			isa = PBXGroup;
 			children = (
@@ -214,6 +227,7 @@
 			isa = PBXGroup;
 			children = (
 				69AD71B6D179002407C5E6F4 /* FuriganaText.swift */,
+				A203BA7EE1851C1789C4A1A9 /* ShareSheet.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -422,6 +436,7 @@
 				7803BBF04D20B19EDFD575EA /* Knownness.swift in Sources */,
 				90A8F6E72EA66EA2E75C028E /* MockDataSeeder.swift in Sources */,
 				3D593FCDBA041E0B78A2FC51 /* OCRService.swift in Sources */,
+				ABB028F5EA55516456693F4A /* ProgressShareView.swift in Sources */,
 				B1FDBCF92CB85368FC0E3103 /* ReadingOverrideStore.swift in Sources */,
 				9B940DA9AF9BD960FFFD6C3D /* ReviewSessionView.swift in Sources */,
 				AA3E3156B2D124565373C3C4 /* ReviewView.swift in Sources */,
@@ -429,6 +444,7 @@
 				1F592127D2217B5B05EB7827 /* SRSService.swift in Sources */,
 				CBC22BFE600F52A751C25745 /* ScanView.swift in Sources */,
 				24E2ED4BE13B4C2E680B0976 /* SettingsView.swift in Sources */,
+				0B28383EBC05773F06DC9796 /* ShareSheet.swift in Sources */,
 				F94226BF0A11AF288D8BB752 /* SpeechService.swift in Sources */,
 				73396257EEF5D432942E5C4C /* StatsService.swift in Sources */,
 				7B2E6E365771F20DC4C08C7C /* Theme.swift in Sources */,

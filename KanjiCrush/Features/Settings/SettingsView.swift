@@ -16,6 +16,9 @@ struct SettingsView: View {
     /// Words at this level or easier are auto-marked as known.
     @AppStorage("jlptLevel") private var jlptLevel: Int = 0
 
+    @State private var showProgressShare = false
+    @State private var shareImage: UIImage?
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -275,9 +278,42 @@ struct SettingsView: View {
                 Spacer()
             }
             .padding(.top, 2)
+
+            Button {
+                shareProgress()
+            } label: {
+                Label("Share progress", systemImage: "square.and.arrow.up.fill")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(WashiButtonStyle())
+            .padding(.top, 6)
+            .accessibilityLabel("Share weekly progress as image")
         }
         .washiCard()
         .padding(.horizontal)
+        .sheet(isPresented: $showProgressShare) {
+            if let image = shareImage {
+                ShareSheet(activityItems: [image])
+            }
+        }
+    }
+
+    /// Render the branded share image off the main view tree, then surface
+    /// the system Share sheet via a one-off `ShareSheet` controller.
+    private func shareProgress() {
+        let now = Date()
+        let weekStart = Calendar.current.date(byAdding: .day, value: -7, to: now) ?? now
+        let weeklyReviews = reviewLogs.filter { $0.reviewedAt >= weekStart }.count
+        let mature = allCards.filter { $0.repetitions >= 3 && $0.interval >= 21 }.count
+        let success = StatsService.successRate(logs: reviewLogs, days: 7)
+        let streak = StatsService.currentStreak(logs: reviewLogs)
+        shareImage = ProgressShareRenderer.render(
+            reviewsThisWeek: weeklyReviews,
+            successRate: success,
+            streak: streak,
+            matureCount: mature
+        )
+        if shareImage != nil { showProgressShare = true }
     }
 
     private func libraryTile(value: String, label: String, tint: Color, icon: String) -> some View {
