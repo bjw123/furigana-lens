@@ -48,6 +48,11 @@ struct SentenceSpeechCheckView: View {
     /// previous chunk's trailing kana from bleeding into a one-syllable
     /// match for the new chunk.
     @State private var chunkConsumedBaseline: Int = 0
+    /// Tap-to-set endpoint. When non-nil, the user has chosen to read only up
+    /// to (and including) `chunks[targetIndex]` — chunks past it are rendered
+    /// as out-of-scope and the session auto-finishes when this chunk is
+    /// matched. Default nil = read the whole sentence.
+    @State private var targetIndex: Int? = nil
     @FocusState private var inputFocused: Bool
 
     init(sentence: String, expectedReading: String, meaning: String, showFurigana: Bool) {
@@ -224,27 +229,56 @@ struct SentenceSpeechCheckView: View {
     @ViewBuilder
     private func chunkPill(chunk: Chunk, index: Int) -> some View {
         let state = chunkPillState(for: index)
+        let outOfScope = isOutOfScope(index)
         VStack(spacing: 0) {
             if showFuriganaState && chunk.hasKanji && !chunk.reading.isEmpty && chunk.reading != chunk.surface {
                 Text(chunk.reading)
                     .font(.system(size: 10, design: .rounded).weight(.medium))
-                    .foregroundStyle(state.readingColor)
+                    .foregroundStyle(outOfScope ? Palette.mist.opacity(0.4) : state.readingColor)
             }
             Text(chunk.surface)
                 .font(.system(.title3, design: .serif))
-                .foregroundStyle(state.surfaceColor)
+                .foregroundStyle(outOfScope ? Palette.sumi.opacity(0.25) : state.surfaceColor)
         }
         .padding(.horizontal, 6)
         .padding(.vertical, 3)
         .background(
             RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(state.background)
+                .fill(outOfScope ? Color.clear : state.background)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .strokeBorder(state.border, lineWidth: state.borderWidth)
+                .strokeBorder(outOfScope ? Color.clear : state.border, lineWidth: state.borderWidth)
         )
-        .opacity(state.opacity)
+        .opacity(outOfScope ? 0.4 : state.opacity)
+        .contentShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+        .onTapGesture {
+            handleChunkTap(index: index)
+        }
+        .accessibilityAddTraits(.isButton)
+        .accessibilityLabel("Read up to \(chunk.surface)")
+    }
+
+    /// Index past which chunks are styled as out-of-scope (greyed out, no
+    /// pill). When `targetIndex` is nil the user is reading the whole
+    /// sentence — nothing is out of scope.
+    private func isOutOfScope(_ index: Int) -> Bool {
+        guard let target = targetIndex else { return false }
+        return index > target
+    }
+
+    /// Tap on a chunk → set it as the new endpoint. Tapping the SAME chunk
+    /// twice clears the endpoint (back to "read the whole sentence"). Tapping
+    /// a chunk EARLIER than the current index is a no-op (you can't un-read
+    /// chunks you already finished).
+    private func handleChunkTap(index: Int) {
+        guard index >= currentIndex else { return }
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        if targetIndex == index {
+            targetIndex = nil
+        } else {
+            targetIndex = index
+        }
     }
 
     private struct ChunkPillState {
@@ -925,6 +959,17 @@ struct SentenceSpeechCheckView: View {
                     }
                 }
             }
+
+            // Strict substring failed — try fuzzy matching anchored at the
+            // start of `suffix`. This catches the case where words running
+            // together without a pause make the recognizer mangle a chunk
+            // boundary (e.g. reading "ストレスでしょ" continuously gets
+            // transcribed as "ストレッスでしょ" with a stray small-tsu, so
+            // "すとれす" doesn't appear as a clean substring). Allowed edit
+            // distance scales with candidate length: ≈ 1 edit per 4 chars.
+            if bestEnd == nil {
+                bestEnd = fuzzyMatchEnd(in: suffix, against: cands)
+            }
             guard let endOffset = bestEnd else { break }
 
             // Snap consumedPrefix forward through the matched span.
@@ -934,9 +979,18 @@ struct SentenceSpeechCheckView: View {
             progressed = true
         }
 
-        if currentIndex >= chunks.count {
+        if shouldFinishAfterAdvance() {
             finishSession()
         }
+    }
+
+    /// True when the user has either reached the natural end of the sentence
+    /// (`currentIndex >= chunks.count`) OR has matched their tap-chosen
+    /// endpoint (`currentIndex > targetIndex`).
+    private func shouldFinishAfterAdvance() -> Bool {
+        if currentIndex >= chunks.count { return true }
+        if let target = targetIndex, currentIndex > target { return true }
+        return false
     }
 
     /// Marks the active chunk's outcome and bumps the index. Does NOT touch
@@ -970,7 +1024,7 @@ struct SentenceSpeechCheckView: View {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         chunkFeedback = nil
         advanceCurrentChunk(matched: false, transcriptForResult: nil, skipped: true)
-        if currentIndex >= chunks.count {
+        if shouldFinishAfterAdvance() {
             finishSession()
         }
     }
@@ -1026,7 +1080,7 @@ struct SentenceSpeechCheckView: View {
             ))
             return
         }
-        if currentIndex >= chunks.count {
+        if shouldFinishAfterAdvance() {
             finishSession()
         }
     }
@@ -1196,6 +1250,55 @@ struct SentenceSpeechCheckView: View {
         }
         return chunks
     }
+}
+
+// MARK: - Fuzzy matching
+
+/// Find the earliest end-offset in `suffix` where any of `candidates` matches
+/// with an edit distance below ≈ candidate.count / 4. Anchored at the start
+/// of the suffix so we don't jump across chunks. Returns nil when no
+/// candidate matches within the tolerance.
+fileprivate func fuzzyMatchEnd(in suffix: String, against candidates: [String]) -> Int? {
+    let suffixArr = Array(suffix)
+    var bestEnd: Int?
+    for cand in candidates where cand.count >= 2 {
+        let candArr = Array(cand)
+        // 1 edit per 4 chars, minimum 1. Cap at 3 so we don't accept wildly
+        // different strings — for very long candidates that's still ≈ 25%
+        // fuzziness which is plenty for transcription drift.
+        let tolerance = min(3, max(1, candArr.count / 4))
+        let minLen = max(1, candArr.count - tolerance)
+        let maxLen = min(candArr.count + tolerance, suffixArr.count)
+        guard minLen <= maxLen else { continue }
+        for windowLen in minLen...maxLen {
+            let window = Array(suffixArr.prefix(windowLen))
+            if levenshtein(candArr, window) <= tolerance {
+                if bestEnd == nil || windowLen < bestEnd! {
+                    bestEnd = windowLen
+                }
+                break  // accept the shortest matching window for this candidate
+            }
+        }
+    }
+    return bestEnd
+}
+
+fileprivate func levenshtein(_ a: [Character], _ b: [Character]) -> Int {
+    let m = a.count
+    let n = b.count
+    if m == 0 { return n }
+    if n == 0 { return m }
+    var prev = Array(0...n)
+    var curr = Array(repeating: 0, count: n + 1)
+    for i in 1...m {
+        curr[0] = i
+        for j in 1...n {
+            let cost = a[i - 1] == b[j - 1] ? 0 : 1
+            curr[j] = min(prev[j] + 1, curr[j - 1] + 1, prev[j - 1] + cost)
+        }
+        swap(&prev, &curr)
+    }
+    return prev[n]
 }
 
 // MARK: - Normalization
