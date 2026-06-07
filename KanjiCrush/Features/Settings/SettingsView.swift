@@ -158,6 +158,8 @@ struct SettingsView: View {
                 )
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(label == "None" ? "No JLPT level selected" : "JLPT level \(label)")
+        .accessibilityAddTraits(selected ? [.isSelected, .isButton] : .isButton)
     }
 
     // MARK: - Reading filters
@@ -206,6 +208,8 @@ struct SettingsView: View {
                             accentSwatch(option: option, selected: option == accent)
                         }
                         .buttonStyle(.plain)
+                        .accessibilityLabel("Accent colour: \(option.label)")
+                        .accessibilityAddTraits(option == accent ? [.isSelected, .isButton] : .isButton)
                     }
                 }
                 Text(accent.label)

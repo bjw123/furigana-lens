@@ -909,6 +909,27 @@ private struct WordChip: View {
         .onTapGesture(count: 1) {
             onSingleTap()
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(accessibilityDescription)
+        .accessibilityHint("Double-tap for word details")
+        .accessibilityAddTraits(.isButton)
+    }
+
+    /// Composite label for VoiceOver — reads the word, its reading when
+    /// revealed, and its known / in-deck status so the listener gets the
+    /// same information sighted users do at a glance.
+    private var accessibilityDescription: String {
+        var parts: [String] = [token.surface]
+        if !token.reading.isEmpty, token.reading != token.surface {
+            parts.append("reading \(token.reading)")
+        }
+        switch chip {
+        case .fresh: break
+        case .inDeck: parts.append("in your deck")
+        case .known: parts.append("marked as known")
+        case .strugglingKnown: parts.append("known word, but in your deck")
+        }
+        return parts.joined(separator: ", ")
     }
 }
 

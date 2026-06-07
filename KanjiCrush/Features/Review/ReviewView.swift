@@ -367,6 +367,8 @@ struct ReviewView: View {
             RoundedRectangle(cornerRadius: 18, style: .continuous)
                 .strokeBorder(Palette.hairline, lineWidth: 0.75)
         )
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(label): \(value), \(subtitle)")
     }
 
     private var forecastCard: some View {
@@ -401,6 +403,8 @@ struct ReviewView: View {
                             .font(.system(.caption2, design: .rounded).weight(day.isToday ? .bold : .regular))
                             .foregroundStyle(day.isToday ? Palette.indigo : Palette.mist)
                     }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("\(day.isToday ? "Today" : dayLabel(for: day.date)): \(day.count) card\(day.count == 1 ? "" : "s") due")
                     .frame(maxWidth: .infinity)
                 }
             }
@@ -477,6 +481,12 @@ struct ReviewView: View {
             RoundedRectangle(cornerRadius: 14, style: .continuous)
                 .strokeBorder(Palette.vermillion.opacity(0.25 + 0.35 * intensity), lineWidth: 0.75)
         )
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel({
+            let readingPart = item.reading.map { ", reading \($0)" } ?? ""
+            return "Struggling kanji \(item.kanji)\(readingPart). \(item.againCount) wrong, in \(item.cards.count) word\(item.cards.count == 1 ? "" : "s")."
+        }())
+        .accessibilityAddTraits(.isButton)
     }
 
     private var strugglingCard: some View {
