@@ -1,77 +1,83 @@
 # Kanji Crush
 
-Personal iOS app for reading Japanese from your TV while gaming. Point the camera, capture text, tap a word for furigana, optionally reveal meaning via opensourced data and libraries + internal iphone translation/language kit and save flashcards with SM-2 spaced repetition.
-
-## Demo
-
-[![Demo walkthrough — 81 seconds](docs/screenshots/01.png)](https://github.com/bjw123/kanji-crush/releases/download/v0.1.0/demo.mp4)
-
-▶ [**Download the 81-second walkthrough**](https://github.com/bjw123/kanji-crush/releases/download/v0.1.0/demo.mp4) (released as a [v0.1.0](https://github.com/bjw123/kanji-crush/releases/tag/v0.1.0) asset). Point the camera at a TV running Persona 5, capture, tap a chip, reveal a reading, save it to a deck, then review it.
-
-> Why not inline-embedded? GitHub's README sanitizer only allows `<video>` tags pointing at the `user-attachments` CDN, and repo paths (raw + release assets) are served with a sandbox CSP that forces download. To inline-embed: open `README.md` on github.com → Edit → drag the mp4 into the editor → GitHub uploads it to `user-attachments/assets/<uuid>` → replace the link above with the resulting markdown. The screenshot gallery below covers the same ground without that step.
+Personal iOS app for reading Japanese kanji from anything you encounter — games on a TV, manga panels, signs, screenshots. Point the camera, capture, tap a word for furigana, save it as a flashcard, drill it later. Fully offline dictionary (JMdict + Tanaka + Kanjidic2 + JLPT vocab lists are baked in), no ads, no subscription, no telemetry.
 
 ## Screenshots
 
 <table>
   <tr>
-    <td align="center" width="20%">
+    <td align="center" width="25%">
       <img src="docs/screenshots/01.png" width="180"><br>
-      <sub><b>Scan a TV</b><br>frozen frame + word chips</sub>
+      <sub><b>Scan</b><br>camera with kanji tab-bar identity</sub>
     </td>
-    <td align="center" width="20%">
+    <td align="center" width="25%">
       <img src="docs/screenshots/02.png" width="180"><br>
-      <sub><b>Tap for reading</b><br>furigana over the kanji</sub>
+      <sub><b>Decks</b><br>gem-tile avatars + search</sub>
     </td>
-    <td align="center" width="20%">
+    <td align="center" width="25%">
       <img src="docs/screenshots/03.png" width="180"><br>
-      <sub><b>Word detail</b><br>mark known or look up meaning</sub>
+      <sub><b>Deck detail</b><br>mature/learning/new + cram + export</sub>
     </td>
-    <td align="center" width="20%">
+    <td align="center" width="25%">
       <img src="docs/screenshots/04.png" width="180"><br>
-      <sub><b>Save flashcard</b><br>word card or sentence card</sub>
-    </td>
-    <td align="center" width="20%">
-      <img src="docs/screenshots/05.png" width="180"><br>
-      <sub><b>Decks</b><br>tagged by game / anime</sub>
+      <sub><b>Review home</b><br>kanji-tile board with due count</sub>
     </td>
   </tr>
   <tr>
-    <td align="center" width="20%">
+    <td align="center" width="25%">
+      <img src="docs/screenshots/05.png" width="180"><br>
+      <sub><b>Stats + 7-day forecast</b><br>gradient stat boxes</sub>
+    </td>
+    <td align="center" width="25%">
       <img src="docs/screenshots/06.png" width="180"><br>
-      <sub><b>Deck overview</b><br>new · learning · mature</sub>
+      <sub><b>Struggling kanji</b><br>per-reading tiles, not aggregate</sub>
     </td>
-    <td align="center" width="20%">
+    <td align="center" width="25%">
       <img src="docs/screenshots/07.png" width="180"><br>
-      <sub><b>Edit a card</b><br>expression · meaning · interval</sub>
+      <sub><b>Settings</b><br>JLPT level + scan filters</sub>
     </td>
-    <td align="center" width="20%">
+    <td align="center" width="25%">
       <img src="docs/screenshots/08.png" width="180"><br>
-      <sub><b>Review home</b><br>review all, or pick a deck</sub>
-    </td>
-    <td align="center" width="20%">
-      <img src="docs/screenshots/09.png" width="180"><br>
-      <sub><b>Front of card</b><br>show answer when ready</sub>
-    </td>
-    <td align="center" width="20%">
-      <img src="docs/screenshots/10.png" width="180"><br>
-      <sub><b>Grade the answer</b><br>SM-2: Again · Hard · Good · Easy</sub>
+      <sub><b>Achievements</b><br>8-tile catalogue, gold when unlocked</sub>
     </td>
   </tr>
 </table>
 
 ## Features
 
-- **Freeze-frame camera** + on-device Vision OCR (Japanese)
-- **Tap a word** — furigana for that word only, not the full sentence
-- **Offline JMdict + Tanaka + Kanjidic2** — readings, meanings, JLPT levels, and example sentences resolve locally, no network roundtrip
-- **Two flashcard types** — word cards (kanji + example on front; furigana + meaning + audio + further examples on back) and sentence cards (full sentence + furigana breakdown + per-token glosses + audio on back)
-- **SRS review** — SM-2 scheduling (Again / Hard / Good / Easy)
-- **Typed kanji review** — drill a kanji's on/kun readings and JLPT example words by typing the answer (accepts hiragana, katakana, or romaji); wrong answers requeue until you get them right
-- **JLPT level integration** — pick your level in Settings; words at or below the level are auto-marked as known, and any flashcard for a "should-be-known" word gets a yellow warning
-- **Struggling-kanji tiles, by reading** — Review home highlights kanji whose specific on/kun reading you keep missing (not just the kanji aggregate), with one-tap drill-in
-- **Audio playback** — `AVSpeechSynthesizer` reads card backs and sentences aloud
-- **Sentence translation** — Apple's on-device `Translation` framework wires up an inline ja→en option on captured sentences
-- **$0 runtime** — fully offline; no paid APIs, no network calls for the main flow
+### Capture & lookup
+- **Freeze-frame camera** + on-device Apple Vision OCR for Japanese.
+- **Tap a word chip** for an inline furigana reveal, double-tap for the full word-detail sheet.
+- **Offline dictionary** — JMdict + Tanaka Corpus example sentences + Kanjidic2 (on/kun readings, meanings, JLPT) + per-word JLPT vocab list, all bundled in a single SQLite (~50 MB gzipped). Zero network for the main flow.
+- **Sentence translation** via Apple's on-device `Translation` framework on captured sentences.
+
+### Flashcards
+- **Two card types**: word (kanji + scanned context on front; furigana + meaning + audio + JMdict examples + in-context sentence on back) and sentence (sentence on front; full furigana breakdown + per-token glosses + audio on back).
+- **Optional hint** field on the front of any card — small gold lightbulb capsule above the prompt.
+- **Per-card tags** with a chip editor in the card edit view, searchable.
+- **Cross-deck search** at the top of the Decks tab matches expression / reading / meaning / deck name / tags.
+- **Native `.kcdeck` export / import** for sharing decks between Kanji Crush users via the system Share sheet / Files.
+- **Anki TSV export** with the importer preamble pre-populated — drop it into Anki → File → Import, no field-mapping needed.
+- **Edit a card mid-review** without leaving the SRS session.
+
+### Spaced repetition + drills
+- **SM-2 scheduling** (Again / Hard / Good / Easy) with per-deck pause, archive, and cram-study.
+- **Typed kanji quiz** — Reading / Meaning / **Speak** modes. Drill a kanji's on'yomi, kun'yomi, and JLPT-tagged example words by typing the answer (hiragana / katakana / romaji all accepted) — wrong answers requeue until they're correct.
+- **Read-aloud (speech-to-text grading)** — tap mic once, read a sentence at natural speed. Apple's Japanese `SFSpeechRecognizer` auto-advances chunks as each reading appears in the live transcript. Tap any chunk to set an earlier endpoint. Skip / "I read this" overrides for tricky chunks. Misses surface as save-as-flashcard sheets.
+- **Daily challenge** — 5-question typed quiz pulled from your weakest words + struggling kanji. Streak tracked.
+
+### Stats + motivation
+- **Per-reading struggling-kanji tiles** — distinguishes 一/いち from 一/ひと so you can target the specific reading you keep missing.
+- **Success rate, day streak, 7-day forecast** with gradient stat tiles.
+- **8 achievements** ranging from "First card" to "Bookworm" (1000 reviews). Gold when unlocked, dimmed when not.
+- **Combo + tile-crush animations** during review — consecutive Good/Easy fires a sakura combo pill; cards graduating learning → mature bloom outward with a particle burst.
+
+### Settings & polish
+- **Self-classify by JLPT level** (None / N5–N1). Any word at or below your level auto-marks as known (override per word still works); flashcards for "should-be-known" words show a yellow warning.
+- **Japanese UI** — `Localizable.xcstrings` covers ~100 of the most-visible strings; toggle iOS Language to Japanese to see it.
+- **Brand identity** — kanji-tile app icon (3×3 match-3 board), custom tab bar (写 / 札 / 復 / 設 — Scan / Decks / Review / Settings), gem-tile gradient surfaces throughout.
+- **Accessibility** — VoiceOver labels on chips, stat boxes, struggling-kanji tiles, JLPT chips, achievement tiles.
+- **$0 runtime** — fully offline; no ads, no subscriptions, no telemetry, no API keys.
 
 ## Requirements
 
