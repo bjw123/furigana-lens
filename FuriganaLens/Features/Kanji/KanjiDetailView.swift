@@ -310,13 +310,19 @@ struct KanjiDetailView: View {
     }
 
     private func jlptExampleRow(item: JLPTWordExample) -> some View {
-        HStack(alignment: .firstTextBaseline, spacing: 10) {
-            FuriganaWordView(
-                expression: item.form,
-                reading: item.reading,
-                fontSize: 18
-            )
-            .fixedSize()
+        let showReading = !item.reading.isEmpty && item.reading != item.form
+        return HStack(alignment: .firstTextBaseline, spacing: 10) {
+            VStack(alignment: .leading, spacing: 1) {
+                if showReading {
+                    Text(item.reading)
+                        .font(.system(size: 11, design: .rounded).weight(.medium))
+                        .foregroundStyle(Palette.indigo.opacity(0.85))
+                }
+                Text(item.form)
+                    .font(.system(.body, design: .serif))
+                    .foregroundStyle(Palette.sumi)
+            }
+            .fixedSize(horizontal: true, vertical: false)
             if !item.gloss.isEmpty {
                 Text(item.gloss)
                     .font(.caption)

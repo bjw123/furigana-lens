@@ -127,6 +127,21 @@ enum StatsService {
         var id: String { String(kanji) }
     }
 
+    /// Like `StrugglingKanji`, but split per reading of the kanji as it actually
+    /// appears in each card. Lets the UI surface that a learner trips on 一/いち
+    /// but is solid on 一/ひと, instead of merging both into one tile.
+    struct StrugglingKanjiReading: Identifiable {
+        let kanji: Character
+        /// Hiragana-normalised reading (on'yomi katakana converted to hiragana,
+        /// okurigana markers stripped). `nil` when Kanjidic2 had no entry, or
+        /// none of its readings matched the card's saved reading.
+        let reading: String?
+        let againCount: Int
+        let cards: [Flashcard]
+        let strugglingCards: [Flashcard]
+        var id: String { "\(kanji)-\(reading ?? "?")" }
+    }
+
     static func strugglingKanji(
         logs: [ReviewLog],
         cards: [Flashcard],
@@ -175,6 +190,107 @@ enum StatsService {
             }
             .prefix(limit)
             .map { $0 }
+    }
+
+    /// Same as `strugglingKanji`, but the (kanji × reading) tuple is the key so
+    /// each reading variant of a kanji becomes its own row. The reading for a
+    /// kanji inside a card is inferred from Kanjidic2's on/kun list (longest
+    /// match wins). Card-level `cards` / `strugglingCards` are filtered to
+    /// only those whose reading covers the same kanji reading — so when the
+    /// user drills in, the words shown all share that reading.
+    static func strugglingKanjiReadings(
+        logs: [ReviewLog],
+        cards: [Flashcard],
+        days: Int = 30,
+        limit: Int = 8,
+        now: Date = Date()
+    ) -> [StrugglingKanjiReading] {
+        struct Key: Hashable {
+            let kanji: Character
+            let reading: String?
+        }
+
+        let cardById = Dictionary(uniqueKeysWithValues: cards.map { ($0.id, $0) })
+        let scoped = logs.filter {
+            $0.quality < 3 && isWithin(days: days, of: $0.reviewedAt, now: now)
+        }
+
+        var againByKey: [Key: Int] = [:]
+        var strugglingCardsByKey: [Key: Set<UUID>] = [:]
+        for log in scoped {
+            guard let card = cardById[log.flashcardId] else { continue }
+            for ch in Set(kanjiCharacters(in: card.expression)) {
+                let key = Key(kanji: ch, reading: readingForKanji(ch, inCardReading: card.reading))
+                againByKey[key, default: 0] += 1
+                strugglingCardsByKey[key, default: []].insert(card.id)
+            }
+        }
+
+        var allCardsByKey: [Key: [Flashcard]] = [:]
+        for card in cards {
+            for ch in Set(kanjiCharacters(in: card.expression)) {
+                let key = Key(kanji: ch, reading: readingForKanji(ch, inCardReading: card.reading))
+                allCardsByKey[key, default: []].append(card)
+            }
+        }
+
+        return againByKey
+            .map { key, count in
+                let allCards = allCardsByKey[key] ?? []
+                let strugglingIds = strugglingCardsByKey[key] ?? []
+                return StrugglingKanjiReading(
+                    kanji: key.kanji,
+                    reading: key.reading,
+                    againCount: count,
+                    cards: allCards,
+                    strugglingCards: allCards.filter { strugglingIds.contains($0.id) }
+                )
+            }
+            .sorted { lhs, rhs in
+                if lhs.againCount != rhs.againCount { return lhs.againCount > rhs.againCount }
+                if lhs.kanji != rhs.kanji { return String(lhs.kanji) < String(rhs.kanji) }
+                return (lhs.reading ?? "") < (rhs.reading ?? "")
+            }
+            .prefix(limit)
+            .map { $0 }
+    }
+
+    /// Best guess of which reading of `kanji` the user is practicing inside a
+    /// card whose full reading is `cardReading`. Looks up Kanjidic2 on/kun
+    /// readings, normalises them, and returns the longest one that appears
+    /// as a substring of the card's reading.
+    static func readingForKanji(_ kanji: Character, inCardReading cardReading: String) -> String? {
+        let trimmed = cardReading.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty,
+              let info = DictionaryService.shared.kanjiInfo(kanji)
+        else { return nil }
+
+        let candidates = (info.on + info.kun)
+            .map { normalizeKanjiReading($0) }
+            .filter { !$0.isEmpty }
+            .sorted { $0.count > $1.count }
+
+        for candidate in candidates {
+            if trimmed.contains(candidate) { return candidate }
+        }
+        return nil
+    }
+
+    /// Kanjidic2 uses `.` to mark okurigana and `-` for affix readings, and
+    /// puts on'yomi in katakana. Strip the markers and lowercase-equivalent
+    /// (kana-fold to hiragana) so substring matching against a typical
+    /// hiragana card reading works.
+    private static func normalizeKanjiReading(_ raw: String) -> String {
+        let stripped = String(raw.unicodeScalars.compactMap { scalar -> Unicode.Scalar? in
+            if scalar == "." || scalar == "-" { return nil }
+            // Katakana → hiragana: U+30A1..U+30F6 maps to U+3041..U+3096.
+            if (0x30A1...0x30F6).contains(scalar.value),
+               let mapped = Unicode.Scalar(scalar.value - 0x60) {
+                return mapped
+            }
+            return scalar
+        })
+        return stripped
     }
 
     /// Build a `StrugglingKanji`-shaped view of an arbitrary kanji — used when navigating from

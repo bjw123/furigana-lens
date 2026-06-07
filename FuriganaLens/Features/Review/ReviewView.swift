@@ -223,8 +223,8 @@ struct ReviewView: View {
         StatsService.strugglingCards(logs: reviewLogs, cards: allCards, days: 30, limit: 5)
     }
 
-    private var strugglingKanji: [StatsService.StrugglingKanji] {
-        StatsService.strugglingKanji(logs: reviewLogs, cards: allCards, days: 30, limit: 6)
+    private var strugglingKanji: [StatsService.StrugglingKanjiReading] {
+        StatsService.strugglingKanjiReadings(logs: reviewLogs, cards: allCards, days: 30, limit: 8)
     }
 
     private var statsGrid: some View {
@@ -318,14 +318,19 @@ struct ReviewView: View {
     private var strugglingKanjiCard: some View {
         let maxAgain = strugglingKanji.map(\.againCount).max() ?? 1
         return VStack(alignment: .leading, spacing: 10) {
-            SectionHeader(title: "Struggling kanji", trailing: "last 30 days")
+            SectionHeader(title: "Struggling kanji", trailing: "last 30 days · by reading")
             BrushDivider()
 
-            let columns = [GridItem(.adaptive(minimum: 86, maximum: 120), spacing: 10)]
+            let columns = [GridItem(.adaptive(minimum: 92, maximum: 130), spacing: 10)]
             LazyVGrid(columns: columns, spacing: 10) {
                 ForEach(strugglingKanji) { item in
                     NavigationLink {
-                        KanjiDetailView(overview: item)
+                        KanjiDetailView(overview: StatsService.StrugglingKanji(
+                            kanji: item.kanji,
+                            againCount: item.againCount,
+                            cards: item.cards,
+                            strugglingCards: item.strugglingCards
+                        ))
                     } label: {
                         kanjiTile(item: item, maxAgain: maxAgain)
                     }
@@ -337,13 +342,17 @@ struct ReviewView: View {
         .padding(.horizontal)
     }
 
-    private func kanjiTile(item: StatsService.StrugglingKanji, maxAgain: Int) -> some View {
+    private func kanjiTile(item: StatsService.StrugglingKanjiReading, maxAgain: Int) -> some View {
         let intensity = max(0.25, min(1.0, Double(item.againCount) / Double(max(maxAgain, 1))))
-        return VStack(spacing: 4) {
-            Text(String(item.kanji))
-                .font(.system(size: 40, weight: .semibold, design: .serif))
-                .foregroundStyle(Palette.sumi)
+        return VStack(spacing: 2) {
+            Text(item.reading ?? "—")
+                .font(.system(size: 11, design: .rounded).weight(.medium))
+                .foregroundStyle(item.reading == nil ? Palette.mist : Palette.indigo.opacity(0.85))
                 .padding(.top, 6)
+
+            Text(String(item.kanji))
+                .font(.system(size: 36, weight: .semibold, design: .serif))
+                .foregroundStyle(Palette.sumi)
 
             HStack(spacing: 3) {
                 Image(systemName: "arrow.counterclockwise")
