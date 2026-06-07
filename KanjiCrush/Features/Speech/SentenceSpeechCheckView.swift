@@ -840,7 +840,16 @@ struct SentenceSpeechCheckView: View {
     private func candidates(for chunk: Chunk) -> [String] {
         var raw: [String] = [chunk.reading, chunk.surface]
         let dictEntries = DictionaryService.shared.lookup(chunk.surface, limit: 3)
+        // Apple's Japanese recogniser picks a kanji form based on context and
+        // can land on a DIFFERENT kanji that shares the same reading as the
+        // chunk's surface (e.g. it might write 判る where the chunk wrote
+        // 分かる). Both are valid spellings of わかる per JMdict — and JMdict's
+        // `kanji` array on a single entry contains every accepted spelling.
+        // Including them all as candidates makes the matching tolerant of the
+        // recogniser's kanji-disambiguation choice. Adding `kana` covers the
+        // case where the recogniser falls back to hiragana / katakana.
         raw.append(contentsOf: dictEntries.flatMap { $0.kana })
+        raw.append(contentsOf: dictEntries.flatMap { $0.kanji })
         return raw
             .map(AnswerNormalizer.normalizeReading)
             .filter { !$0.isEmpty }

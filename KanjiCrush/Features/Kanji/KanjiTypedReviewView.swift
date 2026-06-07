@@ -597,7 +597,13 @@ private struct SessionRunner: View {
             //      so "ningen" typed for 人間 matches "にんげん".
             var rawCandidates: [String] = [token.reading, token.surface]
             let dictEntries = DictionaryService.shared.lookup(token.surface, limit: 3)
+            // JMdict groups every accepted spelling of a word under a single
+            // entry (kanji + kana arrays). Including BOTH arrays here means
+            // the speech recogniser's context-driven kanji choice (which can
+            // disagree with our chunk's surface — e.g. 判る instead of 分かる)
+            // still matches.
             rawCandidates.append(contentsOf: dictEntries.flatMap { $0.kana })
+            rawCandidates.append(contentsOf: dictEntries.flatMap { $0.kanji })
             let candidates = rawCandidates
                 .map(AnswerNormalizer.normalizeReading)
                 .filter { !$0.isEmpty }
