@@ -347,26 +347,39 @@ struct ReviewView: View {
     }
 
     private func statBox(value: String, label: String, subtitle: String, tint: Color) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
+        let pair = Palette.gradientPair(for: tint)
+        return VStack(alignment: .leading, spacing: 4) {
             Text(value)
-                .font(.system(size: 32, weight: .bold, design: .rounded))
-                .foregroundStyle(tint)
+                .font(.system(size: 36, weight: .heavy, design: .rounded))
+                .foregroundStyle(
+                    LinearGradient(colors: [pair.0, pair.1], startPoint: .top, endPoint: .bottom)
+                )
             Text(label)
-                .font(.system(.caption, design: .rounded).weight(.semibold))
+                .font(.system(.caption, design: .rounded).weight(.bold))
                 .foregroundStyle(Palette.sumi)
                 .textCase(.uppercase)
-                .tracking(0.6)
+                .tracking(0.8)
             Text(subtitle)
                 .font(.caption2)
                 .foregroundStyle(Palette.mist)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(14)
-        .background(Palette.washi, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .strokeBorder(Palette.hairline, lineWidth: 0.75)
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                .fill(
+                    LinearGradient(
+                        colors: [pair.0.opacity(0.16), pair.1.opacity(0.08)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
         )
+        .overlay(
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                .strokeBorder(pair.0.opacity(0.35), lineWidth: 1)
+        )
+        .shadow(color: pair.1.opacity(0.18), radius: 10, y: 4)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(label): \(value), \(subtitle)")
     }
@@ -388,15 +401,23 @@ struct ReviewView: View {
                             .font(.system(.caption2, design: .rounded).weight(.semibold))
                             .foregroundStyle(day.count > 0 ? Palette.sumi : Palette.mist)
                         ZStack(alignment: .bottom) {
-                            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                            RoundedRectangle(cornerRadius: 7, style: .continuous)
                                 .fill(Palette.hairline)
-                                .frame(width: 22, height: 70)
-                            RoundedRectangle(cornerRadius: 6, style: .continuous)
-                                .fill(day.isToday ? Palette.sakura : Palette.indigo)
-                                .frame(
-                                    width: 22,
-                                    height: max(4, CGFloat(day.count) / CGFloat(maxCount) * 70)
+                                .frame(width: 24, height: 76)
+                            let barPair = Palette.gradientPair(for: day.isToday ? Palette.sakura : Palette.indigo)
+                            RoundedRectangle(cornerRadius: 7, style: .continuous)
+                                .fill(
+                                    LinearGradient(
+                                        colors: [barPair.0, barPair.1],
+                                        startPoint: .top,
+                                        endPoint: .bottom
+                                    )
                                 )
+                                .frame(
+                                    width: 24,
+                                    height: max(5, CGFloat(day.count) / CGFloat(maxCount) * 76)
+                                )
+                                .shadow(color: barPair.1.opacity(0.4), radius: 4, y: 2)
                                 .opacity(day.count == 0 ? 0.0 : 1.0)
                         }
                         Text(dayLabel(for: day.date))

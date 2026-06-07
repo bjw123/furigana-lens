@@ -246,14 +246,19 @@ private struct DeckRowCard: View {
     let deck: Deck
 
     var body: some View {
+        let pair = Palette.gradientPair(for: gemTint)
         HStack(spacing: 14) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(Palette.indigo.opacity(0.12))
-                    .frame(width: 50, height: 50)
+            // Candy-gem avatar carrying the deck's first character — adopts
+            // a brand colour cycled per mediaTag so the list reads colourful.
+            GemTile(
+                tint: pair.0,
+                deeperTint: pair.1,
+                cornerRadius: 14,
+                size: 52
+            ) {
                 Text(initials)
-                    .font(.system(.headline, design: .serif).weight(.medium))
-                    .foregroundStyle(Palette.indigo)
+                    .font(.system(.title3, design: .serif).weight(.semibold))
+                    .foregroundStyle(Palette.cream)
             }
 
             VStack(alignment: .leading, spacing: 4) {
@@ -263,11 +268,11 @@ private struct DeckRowCard: View {
                 HStack(spacing: 8) {
                     Text(deck.mediaTag)
                         .font(.system(.caption2, design: .rounded).weight(.semibold))
-                        .foregroundStyle(Palette.sakura)
+                        .foregroundStyle(pair.0)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 3)
-                        .background(Capsule().fill(Palette.sakura.opacity(0.14)))
-                        .overlay(Capsule().strokeBorder(Palette.sakura.opacity(0.4), lineWidth: 0.5))
+                        .background(Capsule().fill(pair.0.opacity(0.14)))
+                        .overlay(Capsule().strokeBorder(pair.0.opacity(0.4), lineWidth: 0.5))
                     Text("\(deck.cards.count) cards")
                         .font(.caption)
                         .foregroundStyle(Palette.mist)
@@ -295,12 +300,20 @@ private struct DeckRowCard: View {
                 .foregroundStyle(Palette.mist.opacity(0.7))
         }
         .padding(14)
-        .background(Palette.washi, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .strokeBorder(Palette.hairline, lineWidth: 0.75)
-        )
-        .shadow(color: Palette.sumi.opacity(0.05), radius: 6, y: 3)
+        .washiCard(padding: 0, cornerRadius: 20)
+    }
+
+    /// Brand colour cycled off the mediaTag so each deck row reads as a
+    /// distinct gem in the list. Falls back to sakura for unknown tags.
+    private var gemTint: Color {
+        switch deck.mediaTag.lowercased() {
+        case "game", "ゲーム": return Palette.indigo
+        case "manga", "漫画": return Palette.sakura
+        case "anime", "アニメ": return Palette.vermillion
+        case "book", "novel", "小説": return Palette.bamboo
+        case "music", "音楽": return Palette.gold
+        default: return Palette.sakura
+        }
     }
 
     private var initials: String {

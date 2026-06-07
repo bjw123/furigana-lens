@@ -317,29 +317,44 @@ struct SettingsView: View {
     }
 
     private func libraryTile(value: String, label: String, tint: Color, icon: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
+        let pair = Palette.gradientPair(for: tint)
+        return VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 6) {
                 Image(systemName: icon)
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(tint)
+                    .font(.system(size: 13, weight: .bold))
+                    .foregroundStyle(
+                        LinearGradient(colors: [pair.0, pair.1], startPoint: .top, endPoint: .bottom)
+                    )
                 Spacer()
             }
             Text(value)
-                .font(.system(size: 24, weight: .bold, design: .rounded))
-                .foregroundStyle(tint)
+                .font(.system(size: 28, weight: .heavy, design: .rounded))
+                .foregroundStyle(
+                    LinearGradient(colors: [pair.0, pair.1], startPoint: .top, endPoint: .bottom)
+                )
             Text(label)
-                .font(.caption.weight(.medium))
-                .foregroundStyle(Palette.mist)
+                .font(.caption.weight(.bold))
+                .foregroundStyle(Palette.sumi)
                 .textCase(.uppercase)
-                .tracking(0.5)
+                .tracking(0.6)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(12)
-        .background(tint.opacity(0.08), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .strokeBorder(tint.opacity(0.25), lineWidth: 0.5)
+        .padding(14)
+        .background(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(
+                    LinearGradient(
+                        colors: [pair.0.opacity(0.16), pair.1.opacity(0.06)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
         )
+        .overlay(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .strokeBorder(pair.0.opacity(0.35), lineWidth: 1)
+        )
+        .shadow(color: pair.1.opacity(0.18), radius: 8, y: 4)
     }
 
     // MARK: - Achievements

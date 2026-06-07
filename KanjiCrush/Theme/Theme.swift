@@ -65,6 +65,50 @@ enum Palette {
         light: UIColor(red: 0.157, green: 0.137, blue: 0.118, alpha: 0.12),
         dark:  UIColor(red: 0.918, green: 0.890, blue: 0.847, alpha: 0.18)
     )
+
+    // MARK: - Gradient companions
+    //
+    // Each brand colour ships a darker companion meant for the bottom of a
+    // vertical gradient — the pair gives every tinted surface a candy-jelly
+    // sheen instead of reading as a flat colour wash. Hand-picked rather than
+    // computed so dark-mode variants stay on-palette.
+
+    static let sakuraDeep = Color(
+        light: UIColor(red: 0.870, green: 0.486, blue: 0.580, alpha: 1.0),
+        dark:  UIColor(red: 0.890, green: 0.560, blue: 0.660, alpha: 1.0)
+    )
+
+    static let indigoDeep = Color(
+        light: UIColor(red: 0.118, green: 0.157, blue: 0.330, alpha: 1.0),
+        dark:  UIColor(red: 0.380, green: 0.470, blue: 0.760, alpha: 1.0)
+    )
+
+    static let goldDeep = Color(
+        light: UIColor(red: 0.580, green: 0.450, blue: 0.235, alpha: 1.0),
+        dark:  UIColor(red: 0.720, green: 0.580, blue: 0.350, alpha: 1.0)
+    )
+
+    static let bambooDeep = Color(
+        light: UIColor(red: 0.310, green: 0.450, blue: 0.255, alpha: 1.0),
+        dark:  UIColor(red: 0.435, green: 0.575, blue: 0.355, alpha: 1.0)
+    )
+
+    static let vermillionDeep = Color(
+        light: UIColor(red: 0.625, green: 0.180, blue: 0.180, alpha: 1.0),
+        dark:  UIColor(red: 0.780, green: 0.330, blue: 0.330, alpha: 1.0)
+    )
+
+    /// Pair (top, bottom) for a brand colour — handy when building a gradient.
+    static func gradientPair(for tint: Color) -> (Color, Color) {
+        switch tint {
+        case sakura: return (sakura, sakuraDeep)
+        case indigo: return (indigo, indigoDeep)
+        case gold: return (gold, goldDeep)
+        case bamboo: return (bamboo, bambooDeep)
+        case vermillion: return (vermillion, vermillionDeep)
+        default: return (tint, tint)
+        }
+    }
 }
 
 extension Color {
@@ -142,21 +186,51 @@ struct WashiBackground: View {
 
 // MARK: - Surfaces
 
-/// Rounded card with a faint ink border and gentle shadow.
+/// Rounded card with a soft top-to-bottom washi gradient, a thin inner
+/// highlight, and a layered shadow. The gradient picks the surface off the
+/// page just enough to feel polished without losing the paper aesthetic.
 struct WashiCard<Content: View>: View {
     var padding: CGFloat = 16
-    var cornerRadius: CGFloat = 20
+    var cornerRadius: CGFloat = 22
     @ViewBuilder let content: () -> Content
 
     var body: some View {
         content()
             .padding(padding)
-            .background(Palette.washi, in: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+            .background(
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Palette.washi,
+                                Color(
+                                    light: UIColor(red: 0.992, green: 0.974, blue: 0.945, alpha: 1.0),
+                                    dark:  UIColor(red: 0.135, green: 0.118, blue: 0.100, alpha: 1.0)
+                                )
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+            )
             .overlay(
                 RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                     .strokeBorder(Palette.hairline, lineWidth: 0.75)
             )
-            .shadow(color: Palette.sumi.opacity(0.06), radius: 12, x: 0, y: 6)
+            // Inner top highlight — gives the card a subtle "lifted" edge.
+            .overlay(
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .stroke(Color.white.opacity(0.35), lineWidth: 1)
+                    .blur(radius: 0.5)
+                    .mask(
+                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                            .stroke(lineWidth: 2)
+                            .padding(.bottom, padding * 1.4)
+                    )
+                    .allowsHitTesting(false)
+            )
+            .shadow(color: Palette.sumi.opacity(0.10), radius: 18, x: 0, y: 10)
+            .shadow(color: Palette.sumi.opacity(0.04), radius: 2, x: 0, y: 1)
     }
 }
 
@@ -564,29 +638,53 @@ struct MapleGlyph: View {
 
 // MARK: - Button styles
 
-/// Primary action — filled indigo with a soft pressed state.
+/// Primary action — candy-gradient fill matched to the brand palette, with a
+/// glossy white highlight on the top edge and a soft pressed state.
 struct SumiButtonStyle: ButtonStyle {
     var tint: Color = Palette.indigo
-    var cornerRadius: CGFloat = 14
+    var cornerRadius: CGFloat = 16
 
     func makeBody(configuration: Configuration) -> some View {
-        configuration.label
+        let pair = Palette.gradientPair(for: tint)
+        return configuration.label
             .font(.system(.headline, design: .rounded).weight(.semibold))
             .padding(.horizontal, 18)
-            .padding(.vertical, 12)
+            .padding(.vertical, 14)
             .foregroundStyle(.white)
             .background(
+                ZStack {
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .fill(
+                            LinearGradient(
+                                colors: [pair.0, pair.1],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        )
+                    // Glossy highlight near the top edge.
+                    RoundedRectangle(cornerRadius: cornerRadius * 0.65, style: .continuous)
+                        .fill(Color.white.opacity(0.30))
+                        .blur(radius: 3)
+                        .padding(.horizontal, 8)
+                        .padding(.top, 5)
+                        .padding(.bottom, cornerRadius * 1.7)
+                        .blendMode(.plusLighter)
+                        .allowsHitTesting(false)
+                }
+            )
+            .overlay(
                 RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                    .fill(tint.opacity(configuration.isPressed ? 0.78 : 1.0))
+                    .strokeBorder(Color.white.opacity(0.25), lineWidth: 0.75)
             )
+            .opacity(configuration.isPressed ? 0.92 : 1.0)
             .shadow(
-                color: tint.opacity(configuration.isPressed ? 0.10 : 0.25),
-                radius: configuration.isPressed ? 4 : 10,
+                color: pair.1.opacity(configuration.isPressed ? 0.18 : 0.40),
+                radius: configuration.isPressed ? 6 : 14,
                 x: 0,
-                y: configuration.isPressed ? 1 : 4
+                y: configuration.isPressed ? 2 : 6
             )
-            .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
-            .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
+            .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
+            .animation(.easeOut(duration: 0.14), value: configuration.isPressed)
     }
 }
 
