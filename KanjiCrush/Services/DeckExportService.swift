@@ -75,12 +75,62 @@ enum DeckExportService {
     /// File name suggestion for sharing — sanitises the deck name so the
     /// resulting filename is safe across iOS / macOS / Android share targets.
     static func suggestedFilename(for deck: Deck) -> String {
+        let safe = sanitisedBaseName(for: deck)
+        return "\(safe).kcdeck"
+    }
+
+    /// Filename for the Anki-importable TSV variant.
+    static func suggestedAnkiFilename(for deck: Deck) -> String {
+        let safe = sanitisedBaseName(for: deck)
+        return "\(safe)-anki.txt"
+    }
+
+    private static func sanitisedBaseName(for deck: Deck) -> String {
         let cleaned = deck.name
             .components(separatedBy: CharacterSet.alphanumerics.union(.whitespaces).inverted)
             .joined()
             .trimmingCharacters(in: .whitespaces)
-        let safe = cleaned.isEmpty ? "deck" : cleaned
-        return "\(safe).kcdeck"
+        return cleaned.isEmpty ? "deck" : cleaned
+    }
+
+    /// Tab-separated export targeting Anki's File → Import flow. Each row is
+    /// one note with five columns: Expression, Reading, Meaning, Context,
+    /// Tags. A leading metadata block tells Anki the separator, column
+    /// roles, and that it should treat HTML as plain text — so the user can
+    /// import without manually fiddling with the importer dialog.
+    ///
+    /// Documented format: https://docs.ankiweb.net/importing/text-files.html
+    static func exportAnkiTSV(deck: Deck) -> Data {
+        var out = ""
+        // Anki "preamble" lines all start with "#" and are read literally by
+        // the importer to skip the field-mapping dialog.
+        out += "#separator:tab\n"
+        out += "#html:false\n"
+        out += "#tags column:5\n"
+        out += "#columns:Expression\tReading\tMeaning\tContext\tTags\n"
+
+        for card in deck.cards.sorted(by: { $0.createdAt < $1.createdAt }) {
+            let fields: [String] = [
+                escape(card.expression),
+                escape(card.reading),
+                escape(card.meaning ?? ""),
+                escape(card.contextSentence ?? ""),
+                escape(card.tags.joined(separator: " "))
+            ]
+            out += fields.joined(separator: "\t")
+            out += "\n"
+        }
+        return Data(out.utf8)
+    }
+
+    /// Strip characters that would break TSV (tabs / newlines) from a field.
+    /// We deliberately keep this simple — Anki's importer tolerates most
+    /// punctuation as long as the tab/newline structure is intact.
+    private static func escape(_ raw: String) -> String {
+        raw
+            .replacingOccurrences(of: "\t", with: " ")
+            .replacingOccurrences(of: "\n", with: " ")
+            .replacingOccurrences(of: "\r", with: " ")
     }
 
     /// Decode a `.kcdeck` blob and insert a new `Deck` + its cards into the

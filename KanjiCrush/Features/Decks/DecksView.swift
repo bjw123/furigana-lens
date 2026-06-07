@@ -415,6 +415,22 @@ struct DeckDetailView: View {
         }
     }
 
+    /// Anki TSV variant. Anki's docs say `.txt` is the canonical extension
+    /// for the importer, so we use that and let the Share sheet stash it
+    /// wherever the user wants.
+    private func prepareAnkiExport() {
+        do {
+            let data = DeckExportService.exportAnkiTSV(deck: deck)
+            let filename = DeckExportService.suggestedAnkiFilename(for: deck)
+            let url = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
+            try data.write(to: url, options: .atomic)
+            exportURL = url
+            showShareSheet = true
+        } catch {
+            exportError = error.localizedDescription
+        }
+    }
+
     // MARK: - Cards
 
     private var statsCard: some View {
@@ -528,6 +544,18 @@ struct DeckDetailView: View {
                 disabled: deck.cards.isEmpty
             ) {
                 prepareExport()
+            }
+
+            Divider().overlay(Palette.hairline)
+
+            actionRow(
+                title: "Export for Anki",
+                subtitle: "Tab-separated text file you import via Anki → File → Import.",
+                icon: "arrow.up.doc.fill",
+                tint: Palette.bamboo,
+                disabled: deck.cards.isEmpty
+            ) {
+                prepareAnkiExport()
             }
 
             Divider().overlay(Palette.hairline)
