@@ -38,6 +38,26 @@ struct ExampleSentence: Equatable, Hashable {
     let english: String
 }
 
+/// Per-kanji metadata sourced from Kanjidic2 at build time.
+/// `jlpt` is the new JLPT level (1..5; 5 == N5) when known.
+struct KanjiInfo: Equatable {
+    let character: String
+    let on: [String]
+    let kun: [String]
+    let meanings: [String]
+    let jlpt: Int?
+}
+
+/// A word containing a target kanji, tagged with its JLPT level (5..1).
+/// Used to populate the JLPT examples list on the kanji detail screen.
+struct JLPTWordExample: Equatable, Hashable, Identifiable {
+    let form: String
+    let reading: String
+    let gloss: String
+    let level: Int
+    var id: String { "\(level)-\(form)" }
+}
+
 enum DictionaryServiceError: LocalizedError {
     case bundleMissing
     case openFailed(Int32)
@@ -300,6 +320,108 @@ final class DictionaryService {
                     english: String(cString: enCStr)
                 ))
             }
+            return out
+        }
+    }
+
+    /// On/kun readings + meanings + JLPT level for a single kanji character.
+    /// Returns nil when the DB doesn't carry Kanjidic2 data (older builds) or
+    /// when the character isn't a kanji we have an entry for.
+    func kanjiInfo(_ character: Character) -> KanjiInfo? {
+        let key = String(character)
+        guard let db else { return nil }
+
+        return queue.sync { () -> KanjiInfo? in
+            let sql = "SELECT on_json, kun_json, meanings_json, jlpt FROM kanji WHERE char = ? LIMIT 1;"
+            var stmt: OpaquePointer?
+            guard sqlite3_prepare_v2(db, sql, -1, &stmt, nil) == SQLITE_OK else { return nil }
+            defer { sqlite3_finalize(stmt) }
+            sqlite3_bind_text(stmt, 1, key, -1, SQLITE_TRANSIENT)
+
+            guard sqlite3_step(stmt) == SQLITE_ROW,
+                  let onCStr = sqlite3_column_text(stmt, 0),
+                  let kunCStr = sqlite3_column_text(stmt, 1),
+                  let meaningsCStr = sqlite3_column_text(stmt, 2)
+            else { return nil }
+
+            let jlptColType = sqlite3_column_type(stmt, 3)
+            let jlpt: Int? = jlptColType == SQLITE_NULL
+                ? nil
+                : Int(sqlite3_column_int(stmt, 3))
+
+            return KanjiInfo(
+                character: key,
+                on: decodeStringArray(String(cString: onCStr)),
+                kun: decodeStringArray(String(cString: kunCStr)),
+                meanings: decodeStringArray(String(cString: meaningsCStr)),
+                jlpt: jlpt
+            )
+        }
+    }
+
+    /// JLPT-tagged example words containing the given kanji, ordered easiest
+    /// first (N5 → N1) then by common-ness then alphabetically. Capped per
+    /// level via `perLevel` to keep the UI bounded.
+    ///
+    /// Only returns entries that have a JMdict sense (so we can show a gloss)
+    /// AND a JLPT classification (from the word list ingested at build time).
+    func jlptExamples(forKanji character: Character, perLevel: Int = 4) -> [JLPTWordExample] {
+        let key = String(character)
+        guard let db else { return [] }
+
+        return queue.sync { () -> [JLPTWordExample] in
+            let sql = """
+                SELECT e.kanji_json, e.kana_json, e.senses_json, wj.level, kw.is_common
+                FROM kanji_words kw
+                JOIN entries e ON e.id = kw.entry_id
+                JOIN word_jlpt wj ON wj.form IN (
+                    SELECT value FROM json_each(e.kanji_json)
+                    UNION ALL
+                    SELECT value FROM json_each(e.kana_json)
+                )
+                WHERE kw.char = ?
+                ORDER BY wj.level DESC, kw.is_common DESC, e.id ASC;
+                """
+
+            var stmt: OpaquePointer?
+            guard sqlite3_prepare_v2(db, sql, -1, &stmt, nil) == SQLITE_OK else { return [] }
+            defer { sqlite3_finalize(stmt) }
+            sqlite3_bind_text(stmt, 1, key, -1, SQLITE_TRANSIENT)
+
+            var perLevelCount: [Int: Int] = [:]
+            var seenForms = Set<String>()
+            var out: [JLPTWordExample] = []
+
+            while sqlite3_step(stmt) == SQLITE_ROW {
+                guard
+                    let kanjiCStr = sqlite3_column_text(stmt, 0),
+                    let kanaCStr = sqlite3_column_text(stmt, 1),
+                    let sensesCStr = sqlite3_column_text(stmt, 2)
+                else { continue }
+
+                let level = Int(sqlite3_column_int(stmt, 3))
+                let kanjiList = decodeStringArray(String(cString: kanjiCStr))
+                let kanaList = decodeStringArray(String(cString: kanaCStr))
+                guard let form = kanjiList.first(where: { $0.contains(character) }) ?? kanjiList.first
+                else { continue }
+                if seenForms.contains(form) { continue }
+
+                let count = perLevelCount[level, default: 0]
+                if count >= perLevel { continue }
+
+                let senses = decodeSenses(String(cString: sensesCStr))
+                let gloss = senses.first?.gloss.prefix(2).joined(separator: "; ") ?? ""
+
+                out.append(JLPTWordExample(
+                    form: form,
+                    reading: kanaList.first ?? form,
+                    gloss: gloss,
+                    level: level
+                ))
+                seenForms.insert(form)
+                perLevelCount[level] = count + 1
+            }
+
             return out
         }
     }

@@ -11,6 +11,14 @@ struct KanjiDetailView: View {
     @State private var cramQueue: [Flashcard]?
     @State private var cramTitle: String = ""
 
+    private var kanjiInfo: KanjiInfo? {
+        DictionaryService.shared.kanjiInfo(overview.kanji)
+    }
+
+    private var jlptExamples: [JLPTWordExample] {
+        DictionaryService.shared.jlptExamples(forKanji: overview.kanji, perLevel: 4)
+    }
+
     var body: some View {
         ZStack {
             WashiBackground()
@@ -19,10 +27,18 @@ struct KanjiDetailView: View {
                 VStack(spacing: 16) {
                     heroCard
 
+                    if let info = kanjiInfo {
+                        readingsCard(info: info)
+                    }
+
+                    if !jlptExamples.isEmpty {
+                        jlptExamplesCard(examples: jlptExamples)
+                    }
+
                     if !overview.cards.isEmpty {
                         cramActions
                         wordsCard
-                    } else {
+                    } else if kanjiInfo == nil && jlptExamples.isEmpty {
                         emptyHint
                     }
 
@@ -196,6 +212,126 @@ struct KanjiDetailView: View {
         .background(Palette.cream, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
         .overlay(
             RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .strokeBorder(Palette.hairline, lineWidth: 0.5)
+        )
+    }
+
+    // MARK: - Readings + JLPT (Kanjidic2-backed)
+
+    private func readingsCard(info: KanjiInfo) -> some View {
+        VStack(alignment: .leading, spacing: 14) {
+            SectionHeader(
+                title: "Readings",
+                trailing: info.jlpt.map { "N\($0)" }
+            )
+            BrushDivider()
+
+            if !info.on.isEmpty {
+                readingRow(label: "On'yomi", readings: info.on, tint: Palette.vermillion)
+            }
+            if !info.kun.isEmpty {
+                readingRow(label: "Kun'yomi", readings: info.kun, tint: Palette.indigo)
+            }
+            if !info.meanings.isEmpty {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Meaning")
+                        .font(.system(.caption2, design: .rounded).weight(.semibold))
+                        .foregroundStyle(Palette.mist)
+                        .textCase(.uppercase)
+                        .tracking(0.6)
+                    Text(info.meanings.prefix(6).joined(separator: "; "))
+                        .font(.system(.subheadline, design: .rounded))
+                        .foregroundStyle(Palette.sumi.opacity(0.88))
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+        }
+        .washiCard()
+        .padding(.horizontal)
+    }
+
+    private func readingRow(label: String, readings: [String], tint: Color) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(label)
+                .font(.system(.caption2, design: .rounded).weight(.semibold))
+                .foregroundStyle(Palette.mist)
+                .textCase(.uppercase)
+                .tracking(0.6)
+            FlowLayout(spacing: 6) {
+                ForEach(Array(readings.enumerated()), id: \.offset) { _, reading in
+                    Text(reading)
+                        .font(.system(.subheadline, design: .serif))
+                        .foregroundStyle(tint)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 4)
+                        .background(Capsule().fill(tint.opacity(0.12)))
+                        .overlay(Capsule().strokeBorder(tint.opacity(0.35), lineWidth: 0.5))
+                }
+            }
+        }
+    }
+
+    private func jlptExamplesCard(examples: [JLPTWordExample]) -> some View {
+        let grouped = Dictionary(grouping: examples, by: \.level)
+        // Display N5 → N1 so easier examples come first.
+        let levels = grouped.keys.sorted(by: >)
+        return VStack(alignment: .leading, spacing: 12) {
+            SectionHeader(title: "JLPT examples", trailing: "N5 → N1")
+            BrushDivider()
+
+            VStack(alignment: .leading, spacing: 12) {
+                ForEach(levels, id: \.self) { level in
+                    jlptLevelBlock(level: level, items: grouped[level] ?? [])
+                }
+            }
+        }
+        .washiCard()
+        .padding(.horizontal)
+    }
+
+    private func jlptLevelBlock(level: Int, items: [JLPTWordExample]) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 6) {
+                Text("N\(level)")
+                    .font(.system(.caption, design: .rounded).weight(.bold))
+                    .foregroundStyle(Palette.sakura)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 2)
+                    .background(Capsule().fill(Palette.sakura.opacity(0.14)))
+                    .overlay(Capsule().strokeBorder(Palette.sakura.opacity(0.4), lineWidth: 0.5))
+                Spacer()
+            }
+            VStack(spacing: 6) {
+                ForEach(items) { item in
+                    jlptExampleRow(item: item)
+                }
+            }
+        }
+    }
+
+    private func jlptExampleRow(item: JLPTWordExample) -> some View {
+        HStack(alignment: .firstTextBaseline, spacing: 10) {
+            FuriganaWordView(
+                expression: item.form,
+                reading: item.reading,
+                fontSize: 18
+            )
+            .fixedSize()
+            if !item.gloss.isEmpty {
+                Text(item.gloss)
+                    .font(.caption)
+                    .foregroundStyle(Palette.sumi.opacity(0.75))
+                    .lineLimit(2)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            } else {
+                Spacer(minLength: 0)
+            }
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(Palette.cream.opacity(0.7), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .strokeBorder(Palette.hairline, lineWidth: 0.5)
         )
     }

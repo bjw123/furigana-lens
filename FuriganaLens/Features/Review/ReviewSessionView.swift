@@ -132,10 +132,7 @@ struct ReviewSessionView: View {
                     .foregroundStyle(Palette.sumi)
                     .multilineTextAlignment(.center)
                 if let sentence = frontExampleSentence(for: card) {
-                    Text(sentence)
-                        .font(.system(.callout, design: .serif))
-                        .foregroundStyle(Palette.sumi.opacity(0.7))
-                        .multilineTextAlignment(.center)
+                    WordCardExampleSentence(sentence: sentence, highlightSurface: card.expression)
                         .padding(.horizontal, 8)
                 }
             }
@@ -152,8 +149,15 @@ struct ReviewSessionView: View {
     private func back(for card: Flashcard) -> some View {
         switch card.cardType {
         case .word:
+            let displayReading = backReading(for: card)
             VStack(spacing: 14) {
-                FuriganaWordView(expression: card.expression, reading: card.reading, fontSize: 48)
+                FuriganaWordView(expression: card.expression, reading: displayReading, fontSize: 48)
+                if !displayReading.isEmpty && displayReading != card.expression {
+                    Text(displayReading)
+                        .font(.system(.title2, design: .rounded).weight(.medium))
+                        .foregroundStyle(Palette.indigo)
+                        .multilineTextAlignment(.center)
+                }
                 if let meaning = card.meaning, !meaning.isEmpty {
                     Text(meaning)
                         .font(.system(.title3, design: .rounded))
@@ -161,7 +165,7 @@ struct ReviewSessionView: View {
                         .multilineTextAlignment(.center)
                         .padding(.horizontal)
                 }
-                audioButton(for: card.reading.isEmpty ? card.expression : card.reading)
+                audioButton(for: displayReading.isEmpty ? card.expression : displayReading)
             }
         case .sentence:
             VStack(spacing: 12) {
@@ -239,6 +243,19 @@ struct ReviewSessionView: View {
             RoundedRectangle(cornerRadius: 8, style: .continuous)
                 .strokeBorder(Palette.hairline, lineWidth: 0.5)
         )
+    }
+
+    /// Reading to render as furigana on the back of a word card.
+    /// `card.reading` is preferred, but legacy or hand-saved cards sometimes
+    /// have an empty reading or one that mirrors the expression — in those
+    /// cases fall back to a locally synthesized reading so the back still
+    /// teaches the kana.
+    private func backReading(for card: Flashcard) -> String {
+        let trimmed = card.reading.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !trimmed.isEmpty && trimmed != card.expression {
+            return trimmed
+        }
+        return JapaneseAnalysisService.shared.localReading(for: card.expression)
     }
 
     /// Front of a word card shows an example sentence under the kanji.
@@ -448,6 +465,85 @@ struct ReviewSessionView: View {
             showBack = false
             seeMoreExpanded = false
             currentIndex += 1
+        }
+    }
+}
+
+/// Example sentence shown on the front of a Word card. Every kanji-containing
+/// token can be tapped to toggle inline furigana, and the token matching the
+/// card's target word is highlighted so the learner sees it in context.
+private struct WordCardExampleSentence: View {
+    let sentence: String
+    let highlightSurface: String
+
+    @State private var revealedTokenIds: Set<UUID> = []
+    @State private var segments: [JapaneseToken]
+
+    init(sentence: String, highlightSurface: String) {
+        self.sentence = sentence
+        self.highlightSurface = highlightSurface
+        _segments = State(initialValue: JapaneseAnalysisService.shared.segments(sentence))
+    }
+
+    var body: some View {
+        FlowLayout(spacing: 1) {
+            ForEach(segments) { token in
+                tokenView(for: token)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func tokenView(for token: JapaneseToken) -> some View {
+        let isTarget = token.surface == highlightSurface
+        if token.hasKanji {
+            // The target word's reading is the thing the learner is trying to
+            // recall — never reveal it on the front, even via tap.
+            let revealed = !isTarget && revealedTokenIds.contains(token.id)
+            Button {
+                guard !isTarget else { return }
+                toggle(token.id)
+            } label: {
+                tokenLabel(token: token, revealed: revealed, isTarget: isTarget)
+            }
+            .buttonStyle(.plain)
+            .disabled(isTarget)
+        } else {
+            Text(token.surface)
+                .font(.system(.callout, design: .serif))
+                .foregroundStyle(Palette.sumi.opacity(0.7))
+        }
+    }
+
+    @ViewBuilder
+    private func tokenLabel(token: JapaneseToken, revealed: Bool, isTarget: Bool) -> some View {
+        let showReading = revealed && !token.reading.isEmpty && token.reading != token.surface
+        VStack(spacing: 0) {
+            if showReading {
+                Text(token.reading)
+                    .font(.system(size: 9, design: .rounded).weight(.medium))
+                    .foregroundStyle(Palette.indigo.opacity(0.85))
+            }
+            Text(token.surface)
+                .font(.system(.callout, design: .serif))
+                .foregroundStyle(isTarget ? Palette.sakura : Palette.sumi.opacity(0.85))
+                .underline(!revealed && !isTarget, pattern: .dot)
+        }
+        .padding(.horizontal, isTarget ? 4 : 0)
+        .padding(.vertical, isTarget ? 1 : 0)
+        .background(
+            isTarget
+                ? Capsule().fill(Palette.sakura.opacity(0.18))
+                : Capsule().fill(Color.clear)
+        )
+        .fixedSize()
+    }
+
+    private func toggle(_ id: UUID) {
+        if revealedTokenIds.contains(id) {
+            revealedTokenIds.remove(id)
+        } else {
+            revealedTokenIds.insert(id)
         }
     }
 }
