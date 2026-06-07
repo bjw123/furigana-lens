@@ -24,9 +24,10 @@
 		53B9C8F419640AD5A57D012A /* SentenceCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BBE4DFB2446B21FAB052A9 /* SentenceCard.swift */; };
 		5A90BFC5D59BD39EB63F0E93 /* JapaneseAnalysisService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE74DC8E0766DDCE99AE84A0 /* JapaneseAnalysisService.swift */; };
 		61FDAAD960CE24ACAC7DCE5D /* WordDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078463155A7D721875DACBCB /* WordDetailView.swift */; };
-		645DBAC9D540C34CD1CE55C3 /* DecksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8C8C427735498D90B8404 /* DecksView.swift */; };
 		65D77F5F5965EC36D73F8565 /* JapaneseMatchingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44137088A4E0B7FA40B5E1F2 /* JapaneseMatchingTests.swift */; };
 		6A89C7C3455B74C225ECA367 /* KnownWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFDA2F2F96AF807139D157C /* KnownWord.swift */; };
+		6D1B5DADD8D209E392D84168 /* NewDeckSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806EB814394FB9B862188B46 /* NewDeckSheet.swift */; };
+		6D8C530D53147B37F9D84249 /* DeckDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5207DD4636B514509A5A6D10 /* DeckDetailView.swift */; };
 		6DD48C04A348F165F1513880 /* SentenceSpeechCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7F418F74F7ECF043B26487 /* SentenceSpeechCheckView.swift */; };
 		70BE82B5E305CC19619700DF /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 0D5D0816363E11A19E12C706 /* Localizable.xcstrings */; };
 		73396257EEF5D432942E5C4C /* StatsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1D25565072B0B16D0C326E /* StatsService.swift */; };
@@ -38,6 +39,7 @@
 		7DB9BDE1985284FC7DE734BB /* ReviewStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC6C828402EB034B9C920 /* ReviewStats.swift */; };
 		7E41021C8B455F5157A455E1 /* SentenceSpeechCheckView+Summary.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22B974852322FD9A2151E1B /* SentenceSpeechCheckView+Summary.swift */; };
 		7E708069A3FF48EE9139E6CA /* KanjiTypedReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6335C5233FA238D2474A4BFB /* KanjiTypedReviewView.swift */; };
+		8076760C47FCFFBFC0E4BD66 /* TagEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F88334E40FA2E8484B370E3 /* TagEditor.swift */; };
 		8452BC03D2BA34EEFF543C34 /* Deck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639089187F485FCC4D5DD646 /* Deck.swift */; };
 		86DC4C622312559B8C1CDB84 /* ScanView+CameraViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49E349AD78BEC7CEEBB863B /* ScanView+CameraViews.swift */; };
 		8BFD46CD06D96BE81313B017 /* AppLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6A8A8602C62719745DEF29 /* AppLog.swift */; };
@@ -50,6 +52,7 @@
 		9B940DA9AF9BD960FFFD6C3D /* ReviewSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF244FA6F44A387A5A9EDB34 /* ReviewSessionView.swift */; };
 		9BFFB6C41F7F6EC329B05713 /* KnownnessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4519181C8A07B3CEB0A24CE2 /* KnownnessTests.swift */; };
 		9E2A8E495D0ECBD4B8EC5461 /* jmdict.sqlite.gz in Resources */ = {isa = PBXBuildFile; fileRef = F8960B4740139682A4D92446 /* jmdict.sqlite.gz */; };
+		A4AB75001EB3B8BFC9B7FB82 /* DecksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77D7EF86EFFE706B4A862A82 /* DecksView.swift */; };
 		AA3E3156B2D124565373C3C4 /* ReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBCEB7020E1F75F253EF2A99 /* ReviewView.swift */; };
 		AC3A19B66F6D8AB3B96A3F38 /* DeckExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EB596CEEFDA3F6371672E9 /* DeckExportService.swift */; };
 		B1FDBCF92CB85368FC0E3103 /* ReadingOverrideStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D4459A9CED977F1831952A /* ReadingOverrideStore.swift */; };
@@ -61,6 +64,7 @@
 		C6B1052E61C21B8D7E09AED0 /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B565DD4011B1B0CDAB9D3EBE /* CameraPreviewView.swift */; };
 		CE03F0C15E8272B916BB9A52 /* KanjiBreakdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11B6546558874D0C60DABD0 /* KanjiBreakdownView.swift */; };
 		CF05607C3ECCE1771285CE44 /* reading_overrides.json in Resources */ = {isa = PBXBuildFile; fileRef = 9328AB6145C00516601FA825 /* reading_overrides.json */; };
+		D7BEC72CE8E81D51C572B9E5 /* CardEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE1187D0E43ABCD788CF920 /* CardEditView.swift */; };
 		D872E99FE062A6223AF25FA6 /* JapaneseMatching.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F2BC7FD25E7D4F2813FE29 /* JapaneseMatching.swift */; };
 		DD0CF79499AA36384BBD44F5 /* JapaneseToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5621C2637E6ED31061C9DB /* JapaneseToken.swift */; };
 		EBF2A455ED97EBEA45840141 /* JLPTFallbackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DF95A8C683EA2602EC993D /* JLPTFallbackTests.swift */; };
@@ -99,12 +103,14 @@
 		267E38A68CB17A81D90AAC30 /* ScanView+FrozenCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ScanView+FrozenCapture.swift"; sourceTree = "<group>"; };
 		2712B8CEB681219D78FFA9C7 /* StatsServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsServiceTests.swift; sourceTree = "<group>"; };
 		2C5621C2637E6ED31061C9DB /* JapaneseToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapaneseToken.swift; sourceTree = "<group>"; };
+		2F88334E40FA2E8484B370E3 /* TagEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagEditor.swift; sourceTree = "<group>"; };
 		2FBC25869928C97C7893B5EB /* ScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
 		41349B7FE4C8941D99C95E93 /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
 		44137088A4E0B7FA40B5E1F2 /* JapaneseMatchingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapaneseMatchingTests.swift; sourceTree = "<group>"; };
 		4519181C8A07B3CEB0A24CE2 /* KnownnessTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownnessTests.swift; sourceTree = "<group>"; };
 		46D8DEC1AECBF7799793277B /* KanjiCrushApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiCrushApp.swift; sourceTree = "<group>"; };
 		4FFDA2F2F96AF807139D157C /* KnownWord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownWord.swift; sourceTree = "<group>"; };
+		5207DD4636B514509A5A6D10 /* DeckDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckDetailView.swift; sourceTree = "<group>"; };
 		59C0F7C9F456CFD1ACBE2ED0 /* ZoomableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomableImageView.swift; sourceTree = "<group>"; };
 		6335C5233FA238D2474A4BFB /* KanjiTypedReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiTypedReviewView.swift; sourceTree = "<group>"; };
 		639089187F485FCC4D5DD646 /* Deck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deck.swift; sourceTree = "<group>"; };
@@ -114,8 +120,10 @@
 		6AF06594A11C119C872E6A46 /* KanjiCrush.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = KanjiCrush.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		73EB596CEEFDA3F6371672E9 /* DeckExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckExportService.swift; sourceTree = "<group>"; };
 		7643DDD50575A5E940E3B785 /* UnlockedAchievement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockedAchievement.swift; sourceTree = "<group>"; };
+		77D7EF86EFFE706B4A862A82 /* DecksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecksView.swift; sourceTree = "<group>"; };
 		78F81B4592A468869DE9DC3C /* KanjiCrushUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiCrushUITests.swift; sourceTree = "<group>"; };
 		7D2165FACC51F9B6110D4F6A /* DictionaryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryService.swift; sourceTree = "<group>"; };
+		806EB814394FB9B862188B46 /* NewDeckSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDeckSheet.swift; sourceTree = "<group>"; };
 		81D4459A9CED977F1831952A /* ReadingOverrideStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingOverrideStore.swift; sourceTree = "<group>"; };
 		823A7BE537B3727C787980FE /* Flashcard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flashcard.swift; sourceTree = "<group>"; };
 		84BBE4DFB2446B21FAB052A9 /* SentenceCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentenceCard.swift; sourceTree = "<group>"; };
@@ -134,11 +142,11 @@
 		B565DD4011B1B0CDAB9D3EBE /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
 		BECF1C8F412A74FE3DFA3A8E /* SpeechRecognitionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognitionService.swift; sourceTree = "<group>"; };
 		C11B6546558874D0C60DABD0 /* KanjiBreakdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiBreakdownView.swift; sourceTree = "<group>"; };
-		C1F8C8C427735498D90B8404 /* DecksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecksView.swift; sourceTree = "<group>"; };
 		C343E4889C7E6027F261E7E8 /* SentenceSpeechCheckView+Editor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SentenceSpeechCheckView+Editor.swift"; sourceTree = "<group>"; };
 		C3DF95A8C683EA2602EC993D /* JLPTFallbackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JLPTFallbackTests.swift; sourceTree = "<group>"; };
 		C8F2BC7FD25E7D4F2813FE29 /* JapaneseMatching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapaneseMatching.swift; sourceTree = "<group>"; };
 		CA1D25565072B0B16D0C326E /* StatsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsService.swift; sourceTree = "<group>"; };
+		CCE1187D0E43ABCD788CF920 /* CardEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardEditView.swift; sourceTree = "<group>"; };
 		D22B974852322FD9A2151E1B /* SentenceSpeechCheckView+Summary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SentenceSpeechCheckView+Summary.swift"; sourceTree = "<group>"; };
 		D9247361A7CFC569566EA246 /* SentenceWrapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentenceWrapTests.swift; sourceTree = "<group>"; };
 		DC8CBDE0F1E948BA875541C2 /* KanjiDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiDetailView.swift; sourceTree = "<group>"; };
@@ -231,6 +239,18 @@
 			path = KanjiCrushTests;
 			sourceTree = "<group>";
 		};
+		59CCD3BE152464F8CCC7E548 /* Decks */ = {
+			isa = PBXGroup;
+			children = (
+				CCE1187D0E43ABCD788CF920 /* CardEditView.swift */,
+				5207DD4636B514509A5A6D10 /* DeckDetailView.swift */,
+				77D7EF86EFFE706B4A862A82 /* DecksView.swift */,
+				806EB814394FB9B862188B46 /* NewDeckSheet.swift */,
+				2F88334E40FA2E8484B370E3 /* TagEditor.swift */,
+			);
+			path = Decks;
+			sourceTree = "<group>";
+		};
 		7C6F5569B47B2C3F3DDABEBC /* Theme */ = {
 			isa = PBXGroup;
 			children = (
@@ -263,7 +283,7 @@
 		8FB43785D3063FCE0D38104D /* Decks */ = {
 			isa = PBXGroup;
 			children = (
-				C1F8C8C427735498D90B8404 /* DecksView.swift */,
+				59CCD3BE152464F8CCC7E548 /* Decks */,
 			);
 			path = Decks;
 			sourceTree = "<group>";
@@ -504,11 +524,13 @@
 				BA9C55549FA8826EE990EB41 /* AchievementService.swift in Sources */,
 				8BFD46CD06D96BE81313B017 /* AppLog.swift in Sources */,
 				C6B1052E61C21B8D7E09AED0 /* CameraPreviewView.swift in Sources */,
+				D7BEC72CE8E81D51C572B9E5 /* CardEditView.swift in Sources */,
 				8F5A76718CABD884F0328EC6 /* DailyChallengeLog.swift in Sources */,
 				03AB8D5F4ABFD4DCCD583AF1 /* DailyChallengeView.swift in Sources */,
 				8452BC03D2BA34EEFF543C34 /* Deck.swift in Sources */,
+				6D8C530D53147B37F9D84249 /* DeckDetailView.swift in Sources */,
 				AC3A19B66F6D8AB3B96A3F38 /* DeckExportService.swift in Sources */,
-				645DBAC9D540C34CD1CE55C3 /* DecksView.swift in Sources */,
+				A4AB75001EB3B8BFC9B7FB82 /* DecksView.swift in Sources */,
 				BF59D6A62B3A5B7A50FA4B5C /* DictionaryService.swift in Sources */,
 				3FEE86BE1357065B871E5C88 /* Flashcard.swift in Sources */,
 				018309967D9123C5791139E8 /* FuriganaText.swift in Sources */,
@@ -522,6 +544,7 @@
 				6A89C7C3455B74C225ECA367 /* KnownWord.swift in Sources */,
 				7803BBF04D20B19EDFD575EA /* Knownness.swift in Sources */,
 				90A8F6E72EA66EA2E75C028E /* MockDataSeeder.swift in Sources */,
+				6D1B5DADD8D209E392D84168 /* NewDeckSheet.swift in Sources */,
 				3D593FCDBA041E0B78A2FC51 /* OCRService.swift in Sources */,
 				B1FDBCF92CB85368FC0E3103 /* ReadingOverrideStore.swift in Sources */,
 				9B940DA9AF9BD960FFFD6C3D /* ReviewSessionView.swift in Sources */,
@@ -543,6 +566,7 @@
 				28A91D5AA739FA3A3B9488F5 /* SpeechRecognitionService.swift in Sources */,
 				F94226BF0A11AF288D8BB752 /* SpeechService.swift in Sources */,
 				73396257EEF5D432942E5C4C /* StatsService.swift in Sources */,
+				8076760C47FCFFBFC0E4BD66 /* TagEditor.swift in Sources */,
 				7B2E6E365771F20DC4C08C7C /* Theme.swift in Sources */,
 				C24C7A3409D414152A3823BB /* UnlockedAchievement.swift in Sources */,
 				9286232405F6B0E9BC18369C /* WordChipFlow.swift in Sources */,
