@@ -1,5 +1,7 @@
 import SwiftUI
 import SwiftData
+import Speech
+import UIKit
 
 /// Reusable speech-check sheet: shows a Japanese prompt (sentence or word),
 /// and walks the learner through it chunk-by-chunk so the speech recogniser
@@ -53,6 +55,12 @@ struct SentenceSpeechCheckView: View {
     /// as out-of-scope and the session auto-finishes when this chunk is
     /// matched. Default nil = read the whole sentence.
     @State var targetIndex: Int? = nil
+    @State var isDictionaryDegraded = false
+    /// `nil` once we've confirmed the recogniser is usable, otherwise the
+    /// specific reason it's blocked — drives the speech-unavailable banner in
+    /// place of the chunk runner. Populated in `.task` on first appearance so
+    /// we don't query Speech.framework on the main render path.
+    @State var speechUnavailableReason: SpeechUnavailableReason? = nil
     @FocusState var inputFocused: Bool
 
     init(sentence: String, expectedReading: String, meaning: String, showFurigana: Bool) {
@@ -126,9 +134,20 @@ struct SentenceSpeechCheckView: View {
                 WashiBackground()
                 ScrollView {
                     VStack(spacing: 18) {
+                        if isDictionaryDegraded {
+                            ErrorBanner.dictionaryDegraded()
+                        }
                         promptView
                         controlsRow
-                        if isEditing {
+                        if let reason = speechUnavailableReason {
+                            // Recogniser is dead in the water — surface a
+                            // banner instead of a non-functional chunk runner.
+                            // Edit mode is still allowed so the user can
+                            // inspect / tweak chunks while waiting on
+                            // authorisation.
+                            ErrorBanner.speechUnavailable(reason: reason, openSettings: openSystemSettings)
+                            if isEditing { editChunksPanel }
+                        } else if isEditing {
                             editChunksPanel
                         } else if sessionComplete {
                             summaryView
@@ -140,6 +159,8 @@ struct SentenceSpeechCheckView: View {
                     .padding(.horizontal, 16)
                 }
             }
+            .observingDictionaryDegraded($isDictionaryDegraded)
+            .task { await refreshSpeechAvailability() }
             .navigationTitle("Read aloud")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -206,5 +227,42 @@ struct SentenceSpeechCheckView: View {
             (0xF900...0xFAFF).contains(scalar.value) ||
             (0x20000...0x2A6DF).contains(scalar.value)
         }
+    }
+
+    // MARK: - Speech availability
+
+    /// Resolves the current speech-recognition gating: denied/restricted Speech
+    /// auth, or a Japanese recogniser that the OS reports as unavailable
+    /// (e.g. unsupported device, locale model not downloaded). Returns nil
+    /// when everything looks healthy — including `.notDetermined`, since the
+    /// mic button will trigger the actual prompt flow on first tap.
+    func refreshSpeechAvailability() async {
+        let status = SFSpeechRecognizer.authorizationStatus()
+        switch status {
+        case .denied:
+            speechUnavailableReason = .notAuthorized
+            return
+        case .restricted:
+            speechUnavailableReason = .restricted
+            return
+        case .authorized, .notDetermined:
+            break
+        @unknown default:
+            break
+        }
+        let recognizer = SFSpeechRecognizer(locale: Locale(identifier: "ja-JP"))
+        if recognizer == nil || recognizer?.isAvailable == false {
+            speechUnavailableReason = .recognizerUnavailable
+            return
+        }
+        speechUnavailableReason = nil
+    }
+
+    /// Opens the app's entry in Settings so the user can flip Speech
+    /// Recognition / Microphone permissions back on. No-op if the URL isn't
+    /// resolvable (basically never, but keeps the call safe).
+    func openSystemSettings() {
+        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+        UIApplication.shared.open(url)
     }
 }

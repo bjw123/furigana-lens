@@ -88,6 +88,7 @@ struct ScanView: View {
     @State var manualWord = ""
     @State var pinchBaseZoom: CGFloat = 1.0
     @State var pickedPhoto: PhotosPickerItem?
+    @State var isDictionaryDegraded = false
     @AppStorage("hideKanaOnlyTokens") var hideKanaOnlyTokens = true
     @AppStorage("hideKnownWords") var hideKnownWords = false
     @AppStorage("jlptLevel") var jlptLevel: Int = 0
@@ -155,7 +156,19 @@ struct ScanView: View {
                         )
                         .shadow(color: Palette.sumi.opacity(0.15), radius: 14, y: 6)
                 }
+
+                if isDictionaryDegraded {
+                    // Pinned to the top so word taps still surface the missing-
+                    // entry context without taking over the camera viewfinder.
+                    VStack {
+                        ErrorBanner.dictionaryDegraded()
+                            .padding(.horizontal, 12)
+                            .padding(.top, 8)
+                        Spacer()
+                    }
+                }
             }
+            .observingDictionaryDegraded($isDictionaryDegraded)
             .navigationTitle("Scan")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbarContent }

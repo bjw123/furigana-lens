@@ -33,19 +33,28 @@ struct KanjiTypedReviewView: View {
     }
 
     @State private var mode: Mode?
+    @State private var isDictionaryDegraded = false
 
     var body: some View {
         NavigationStack {
             ZStack {
                 WashiBackground()
-                if let mode {
-                    SessionRunner(kanji: kanji, info: info, examples: examples, mode: mode) {
-                        dismiss()
+                VStack(spacing: 0) {
+                    if isDictionaryDegraded {
+                        ErrorBanner.dictionaryDegraded()
+                            .padding(.horizontal)
+                            .padding(.top, 8)
                     }
-                } else {
-                    modePickerView
+                    if let mode {
+                        SessionRunner(kanji: kanji, info: info, examples: examples, mode: mode) {
+                            dismiss()
+                        }
+                    } else {
+                        modePickerView
+                    }
                 }
             }
+            .observingDictionaryDegraded($isDictionaryDegraded)
             .navigationTitle(mode == nil ? "Quiz" : "Quiz · \(String(kanji))")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

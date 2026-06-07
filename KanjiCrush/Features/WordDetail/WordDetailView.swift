@@ -19,6 +19,7 @@ struct WordDetailView: View {
     @State private var examples: [ExampleSentence] = []
     @State private var errorMessage: String?
     @State private var showSaveSheet = false
+    @State private var isDictionaryDegraded = false
 
     init(token: JapaneseToken, contextSentence: String?) {
         self.token = token
@@ -52,6 +53,11 @@ struct WordDetailView: View {
 
                 ScrollView {
                     VStack(spacing: 20) {
+                        if isDictionaryDegraded {
+                            ErrorBanner.dictionaryDegraded()
+                                .padding(.horizontal)
+                        }
+
                         heroCard
 
                         if let contextSentence, !contextSentence.isEmpty {
@@ -121,6 +127,7 @@ struct WordDetailView: View {
             } message: {
                 Text(errorMessage ?? "")
             }
+            .observingDictionaryDegraded($isDictionaryDegraded)
         }
     }
 

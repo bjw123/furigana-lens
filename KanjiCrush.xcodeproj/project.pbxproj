@@ -86,6 +86,7 @@
 		D7BEC72CE8E81D51C572B9E5 /* CardEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE1187D0E43ABCD788CF920 /* CardEditView.swift */; };
 		D872E99FE062A6223AF25FA6 /* JapaneseMatching.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F2BC7FD25E7D4F2813FE29 /* JapaneseMatching.swift */; };
 		DD0CF79499AA36384BBD44F5 /* JapaneseToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5621C2637E6ED31061C9DB /* JapaneseToken.swift */; };
+		E0D4742547955870187F955A /* ErrorBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873E90B27A92FBD497DA1D47 /* ErrorBanner.swift */; };
 		E18D1A662E7A25DEFD864179 /* test_gemTile_gold.1.png in Resources */ = {isa = PBXBuildFile; fileRef = EEC3BABC91C4EECD18E15C52 /* test_gemTile_gold.1.png */; };
 		E577AD171C8D99C19C9239B9 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 982EF24F51CF2CE8FE5419ED /* SnapshotTesting */; };
 		EBF2A455ED97EBEA45840141 /* JLPTFallbackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DF95A8C683EA2602EC993D /* JLPTFallbackTests.swift */; };
@@ -159,6 +160,7 @@
 		84BBE4DFB2446B21FAB052A9 /* SentenceCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentenceCard.swift; sourceTree = "<group>"; };
 		8573B1A7672F443BC2C42559 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		866691D39385329965546416 /* test_sectionHeader_titleOnly.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_sectionHeader_titleOnly.1.png; sourceTree = "<group>"; };
+		873E90B27A92FBD497DA1D47 /* ErrorBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorBanner.swift; sourceTree = "<group>"; };
 		891FD33B3970E032500E6843 /* OCRPipelineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRPipelineTests.swift; sourceTree = "<group>"; };
 		8966510A25D62F7A7CA6DF24 /* ReadmeScreenshotsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadmeScreenshotsTests.swift; sourceTree = "<group>"; };
 		8BBECDEE8D94AE948E9F3DF9 /* test_washiCard_withContent.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_washiCard_withContent.1.png; sourceTree = "<group>"; };
@@ -379,6 +381,7 @@
 			isa = PBXGroup;
 			children = (
 				FE6A8A8602C62719745DEF29 /* AppLog.swift */,
+				873E90B27A92FBD497DA1D47 /* ErrorBanner.swift */,
 				69AD71B6D179002407C5E6F4 /* FuriganaText.swift */,
 				C11B6546558874D0C60DABD0 /* KanjiBreakdownView.swift */,
 				A203BA7EE1851C1789C4A1A9 /* ShareSheet.swift */,
@@ -650,6 +653,7 @@
 				A4AB75001EB3B8BFC9B7FB82 /* DecksView.swift in Sources */,
 				7B4E08C9C61BEE037A361AD5 /* DiagnosticsReporter.swift in Sources */,
 				BF59D6A62B3A5B7A50FA4B5C /* DictionaryService.swift in Sources */,
+				E0D4742547955870187F955A /* ErrorBanner.swift in Sources */,
 				3FEE86BE1357065B871E5C88 /* Flashcard.swift in Sources */,
 				018309967D9123C5791139E8 /* FuriganaText.swift in Sources */,
 				5A90BFC5D59BD39EB63F0E93 /* JapaneseAnalysisService.swift in Sources */,
