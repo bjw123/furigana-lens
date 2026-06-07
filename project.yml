@@ -14,6 +14,10 @@ settings:
     SWIFT_VERSION: "5.9"
     TARGETED_DEVICE_FAMILY: "1"
     CODE_SIGN_STYLE: Automatic
+packages:
+  SnapshotTesting:
+    url: https://github.com/pointfreeco/swift-snapshot-testing
+    from: 1.17.0
 targets:
   KanjiCrush:
     type: application
@@ -49,6 +53,8 @@ targets:
       - path: KanjiCrushTests/Fixtures
     dependencies:
       - target: KanjiCrush
+      - package: SnapshotTesting
+        product: SnapshotTesting
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.kanjicrush.app.tests

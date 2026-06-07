@@ -8,23 +8,35 @@
 
 /* Begin PBXBuildFile section */
 		018309967D9123C5791139E8 /* FuriganaText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AD71B6D179002407C5E6F4 /* FuriganaText.swift */; };
+		01C74B64151B1D7B2243123A /* test_brushDivider_default.1.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DAF4FB22A9E0B815E8B2BBE /* test_brushDivider_default.1.png */; };
 		03AB8D5F4ABFD4DCCD583AF1 /* DailyChallengeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E29D376BBABE16AF1FB6E55A /* DailyChallengeView.swift */; };
+		054BE7D970A88DC34E9D1973 /* UserStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9412F17F40B1D277C3945618 /* UserStats.swift */; };
 		0B28383EBC05773F06DC9796 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A203BA7EE1851C1789C4A1A9 /* ShareSheet.swift */; };
+		0DFA052362F8FC5B8BC3E8E2 /* test_gemBadge_indigo.1.png in Resources */ = {isa = PBXBuildFile; fileRef = DCBC2D7A83D90447CA946324 /* test_gemBadge_indigo.1.png */; };
+		0E6185C7D780CCCF3CF307EA /* test_gemBadge_sakura.1.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F133D9F254DBA13E1CCA62D /* test_gemBadge_sakura.1.png */; };
+		12323CC22B43ED536B207AF5 /* test_washiCard_withContent.1.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BBECDEE8D94AE948E9F3DF9 /* test_washiCard_withContent.1.png */; };
+		1877A2994209EB1E66ECEF0A /* test_sectionHeader_titleOnly.1.png in Resources */ = {isa = PBXBuildFile; fileRef = 866691D39385329965546416 /* test_sectionHeader_titleOnly.1.png */; };
+		1CED960B4F20F1DEB3C6563F /* ThemeSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133E740F19C8E82CD087283D /* ThemeSnapshotTests.swift */; };
 		1F592127D2217B5B05EB7827 /* SRSService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9DA80B47F978748982EE4C /* SRSService.swift */; };
 		2079BFAA1F9B1AD945FE0E8E /* ScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBC25869928C97C7893B5EB /* ScanView.swift */; };
 		24E2ED4BE13B4C2E680B0976 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD372E4A3B23128F9B2FA6A2 /* SettingsView.swift */; };
 		28A91D5AA739FA3A3B9488F5 /* SpeechRecognitionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BECF1C8F412A74FE3DFA3A8E /* SpeechRecognitionService.swift */; };
 		2AC0B88E0F0DAE407402F00E /* OCRPipelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891FD33B3970E032500E6843 /* OCRPipelineTests.swift */; };
+		2E08AB5AA352E668F532508B /* test_mapleGlyph_size60.1.png in Resources */ = {isa = PBXBuildFile; fileRef = 6A50E3D426C5A731D0C8FC6D /* test_mapleGlyph_size60.1.png */; };
 		2E465C9206353DCBA7FF399F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9FBDF3600DFD26E6C1EBF305 /* Assets.xcassets */; };
 		2EC936FCFAFE03481E591BF5 /* SentenceSpeechCheckView+Matching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6913889441852B61BE44335C /* SentenceSpeechCheckView+Matching.swift */; };
 		33041D56A7B44C21DF899DA3 /* ReadmeScreenshotsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8966510A25D62F7A7CA6DF24 /* ReadmeScreenshotsTests.swift */; };
+		3600568A135EF2DD8BCB3B3D /* test_gemTile_bamboo.1.png in Resources */ = {isa = PBXBuildFile; fileRef = E231AE1E01BD195A11119DC1 /* test_gemTile_bamboo.1.png */; };
 		37D7D914AB8E35A2F9111C0D /* KanjiDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC8CBDE0F1E948BA875541C2 /* KanjiDetailView.swift */; };
+		3BD006D004D489697733895F /* test_gemBadge_bamboo.1.png in Resources */ = {isa = PBXBuildFile; fileRef = BC664C9786444B3D3B212E80 /* test_gemBadge_bamboo.1.png */; };
 		3D593FCDBA041E0B78A2FC51 /* OCRService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9A4D7694D52435FB445E95 /* OCRService.swift */; };
 		3FEE86BE1357065B871E5C88 /* Flashcard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 823A7BE537B3727C787980FE /* Flashcard.swift */; };
+		4DECC762C5F32C5F0A9D994F /* test_sectionHeader_withTrailing.1.png in Resources */ = {isa = PBXBuildFile; fileRef = 3691DF44E88E9D933AF37E54 /* test_sectionHeader_withTrailing.1.png */; };
 		53B9C8F419640AD5A57D012A /* SentenceCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BBE4DFB2446B21FAB052A9 /* SentenceCard.swift */; };
 		5A90BFC5D59BD39EB63F0E93 /* JapaneseAnalysisService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE74DC8E0766DDCE99AE84A0 /* JapaneseAnalysisService.swift */; };
 		61FDAAD960CE24ACAC7DCE5D /* WordDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078463155A7D721875DACBCB /* WordDetailView.swift */; };
 		65D77F5F5965EC36D73F8565 /* JapaneseMatchingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44137088A4E0B7FA40B5E1F2 /* JapaneseMatchingTests.swift */; };
+		69F07C1D9A657BCE325CDB74 /* test_gemTile_indigo.1.png in Resources */ = {isa = PBXBuildFile; fileRef = 141A2C1ADF86E63499AC8603 /* test_gemTile_indigo.1.png */; };
 		6A89C7C3455B74C225ECA367 /* KnownWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFDA2F2F96AF807139D157C /* KnownWord.swift */; };
 		6D1B5DADD8D209E392D84168 /* NewDeckSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806EB814394FB9B862188B46 /* NewDeckSheet.swift */; };
 		6D8C530D53147B37F9D84249 /* DeckDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5207DD4636B514509A5A6D10 /* DeckDetailView.swift */; };
@@ -33,6 +45,7 @@
 		73396257EEF5D432942E5C4C /* StatsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1D25565072B0B16D0C326E /* StatsService.swift */; };
 		736E518EA2DDB01286D03960 /* ScanView+FrozenCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267E38A68CB17A81D90AAC30 /* ScanView+FrozenCapture.swift */; };
 		74A473430634F8CE16BA19FE /* ZoomableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C0F7C9F456CFD1ACBE2ED0 /* ZoomableImageView.swift */; };
+		767F64E3EEA1ECF2814D97C8 /* test_kanjiGemBoard_default.1.png in Resources */ = {isa = PBXBuildFile; fileRef = A5274CD88F7FE695F221EC4D /* test_kanjiGemBoard_default.1.png */; };
 		7803BBF04D20B19EDFD575EA /* Knownness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B07B5DB94D5FF64743FDF90 /* Knownness.swift */; };
 		7A2CCBCFADAEA78E3C58578A /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41349B7FE4C8941D99C95E93 /* RootTabView.swift */; };
 		7B2E6E365771F20DC4C08C7C /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8573B1A7672F443BC2C42559 /* Theme.swift */; };
@@ -44,12 +57,14 @@
 		86DC4C622312559B8C1CDB84 /* ScanView+CameraViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49E349AD78BEC7CEEBB863B /* ScanView+CameraViews.swift */; };
 		8BFD46CD06D96BE81313B017 /* AppLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6A8A8602C62719745DEF29 /* AppLog.swift */; };
 		8E15288FCC502B3DF5BEA0D0 /* SentenceSpeechCheckView+Editor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C343E4889C7E6027F261E7E8 /* SentenceSpeechCheckView+Editor.swift */; };
+		8E2C2FDE0D0141531A2EEEDE /* test_gemBadge_gold.1.png in Resources */ = {isa = PBXBuildFile; fileRef = 6081A78DEFAD621449CED052 /* test_gemBadge_gold.1.png */; };
 		8F5A76718CABD884F0328EC6 /* DailyChallengeLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6401B2D2B89948F6523A4989 /* DailyChallengeLog.swift */; };
 		90926AFFD72C47CEB0290462 /* KanjiCrushApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46D8DEC1AECBF7799793277B /* KanjiCrushApp.swift */; };
 		90A8F6E72EA66EA2E75C028E /* MockDataSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE94356A1F078093DC61C52 /* MockDataSeeder.swift */; };
 		9286232405F6B0E9BC18369C /* WordChipFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064A177535DA9B028E5B32E9 /* WordChipFlow.swift */; };
 		96D08F3605D58B890A9D5F6A /* KanjiCrushUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F81B4592A468869DE9DC3C /* KanjiCrushUITests.swift */; };
 		9B940DA9AF9BD960FFFD6C3D /* ReviewSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF244FA6F44A387A5A9EDB34 /* ReviewSessionView.swift */; };
+		9B99F484E04303EBF0807B5B /* test_washiCard_empty.1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0003DCF40CE42B692DBEC98B /* test_washiCard_empty.1.png */; };
 		9BFFB6C41F7F6EC329B05713 /* KnownnessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4519181C8A07B3CEB0A24CE2 /* KnownnessTests.swift */; };
 		9E2A8E495D0ECBD4B8EC5461 /* jmdict.sqlite.gz in Resources */ = {isa = PBXBuildFile; fileRef = F8960B4740139682A4D92446 /* jmdict.sqlite.gz */; };
 		A4AB75001EB3B8BFC9B7FB82 /* DecksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77D7EF86EFFE706B4A862A82 /* DecksView.swift */; };
@@ -58,15 +73,19 @@
 		B1FDBCF92CB85368FC0E3103 /* ReadingOverrideStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D4459A9CED977F1831952A /* ReadingOverrideStore.swift */; };
 		B3D02AB614D88EE69A045F9D /* SRSServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13F60A5436DB97E16B2CD606 /* SRSServiceTests.swift */; };
 		BA9C55549FA8826EE990EB41 /* AchievementService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23877ACFD64791E83419B56C /* AchievementService.swift */; };
+		BC4C12F0FE3C66F2ECEAC74C /* test_gemTile_sakura.1.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D683919ADADCF464C3E9D88 /* test_gemTile_sakura.1.png */; };
 		BF59D6A62B3A5B7A50FA4B5C /* DictionaryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2165FACC51F9B6110D4F6A /* DictionaryService.swift */; };
 		C24C7A3409D414152A3823BB /* UnlockedAchievement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7643DDD50575A5E940E3B785 /* UnlockedAchievement.swift */; };
 		C4E4F79817E2EC33C3EE8D5E /* SentenceWrapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9247361A7CFC569566EA246 /* SentenceWrapTests.swift */; };
 		C6B1052E61C21B8D7E09AED0 /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B565DD4011B1B0CDAB9D3EBE /* CameraPreviewView.swift */; };
+		C76363CAEFD4B9D757FB4A1B /* test_gemTile_vermillion.1.png in Resources */ = {isa = PBXBuildFile; fileRef = B0F7F53E04C23BC0865A71F2 /* test_gemTile_vermillion.1.png */; };
 		CE03F0C15E8272B916BB9A52 /* KanjiBreakdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11B6546558874D0C60DABD0 /* KanjiBreakdownView.swift */; };
 		CF05607C3ECCE1771285CE44 /* reading_overrides.json in Resources */ = {isa = PBXBuildFile; fileRef = 9328AB6145C00516601FA825 /* reading_overrides.json */; };
 		D7BEC72CE8E81D51C572B9E5 /* CardEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE1187D0E43ABCD788CF920 /* CardEditView.swift */; };
 		D872E99FE062A6223AF25FA6 /* JapaneseMatching.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F2BC7FD25E7D4F2813FE29 /* JapaneseMatching.swift */; };
 		DD0CF79499AA36384BBD44F5 /* JapaneseToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5621C2637E6ED31061C9DB /* JapaneseToken.swift */; };
+		E18D1A662E7A25DEFD864179 /* test_gemTile_gold.1.png in Resources */ = {isa = PBXBuildFile; fileRef = EEC3BABC91C4EECD18E15C52 /* test_gemTile_gold.1.png */; };
+		E577AD171C8D99C19C9239B9 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 982EF24F51CF2CE8FE5419ED /* SnapshotTesting */; };
 		EBF2A455ED97EBEA45840141 /* JLPTFallbackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DF95A8C683EA2602EC993D /* JLPTFallbackTests.swift */; };
 		ECE80243F8EBD3417E175B68 /* SentenceSpeechCheckView+Views.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A56EC43E86273C9DEAA14B /* SentenceSpeechCheckView+Views.swift */; };
 		F94226BF0A11AF288D8BB752 /* SpeechService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AEE441BC1A1FC2D014BA884 /* SpeechService.swift */; };
@@ -91,20 +110,25 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0003DCF40CE42B692DBEC98B /* test_washiCard_empty.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_washiCard_empty.1.png; sourceTree = "<group>"; };
 		064A177535DA9B028E5B32E9 /* WordChipFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordChipFlow.swift; sourceTree = "<group>"; };
 		078463155A7D721875DACBCB /* WordDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordDetailView.swift; sourceTree = "<group>"; };
 		0B07B5DB94D5FF64743FDF90 /* Knownness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Knownness.swift; sourceTree = "<group>"; };
 		0B9DA80B47F978748982EE4C /* SRSService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SRSService.swift; sourceTree = "<group>"; };
 		0BE94356A1F078093DC61C52 /* MockDataSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDataSeeder.swift; sourceTree = "<group>"; };
 		0D5D0816363E11A19E12C706 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		133E740F19C8E82CD087283D /* ThemeSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSnapshotTests.swift; sourceTree = "<group>"; };
 		13F60A5436DB97E16B2CD606 /* SRSServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SRSServiceTests.swift; sourceTree = "<group>"; };
+		141A2C1ADF86E63499AC8603 /* test_gemTile_indigo.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_gemTile_indigo.1.png; sourceTree = "<group>"; };
 		1A3DC6C828402EB034B9C920 /* ReviewStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewStats.swift; sourceTree = "<group>"; };
+		1F133D9F254DBA13E1CCA62D /* test_gemBadge_sakura.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_gemBadge_sakura.1.png; sourceTree = "<group>"; };
 		23877ACFD64791E83419B56C /* AchievementService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementService.swift; sourceTree = "<group>"; };
 		267E38A68CB17A81D90AAC30 /* ScanView+FrozenCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ScanView+FrozenCapture.swift"; sourceTree = "<group>"; };
 		2712B8CEB681219D78FFA9C7 /* StatsServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsServiceTests.swift; sourceTree = "<group>"; };
 		2C5621C2637E6ED31061C9DB /* JapaneseToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapaneseToken.swift; sourceTree = "<group>"; };
 		2F88334E40FA2E8484B370E3 /* TagEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagEditor.swift; sourceTree = "<group>"; };
 		2FBC25869928C97C7893B5EB /* ScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
+		3691DF44E88E9D933AF37E54 /* test_sectionHeader_withTrailing.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_sectionHeader_withTrailing.1.png; sourceTree = "<group>"; };
 		41349B7FE4C8941D99C95E93 /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
 		44137088A4E0B7FA40B5E1F2 /* JapaneseMatchingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapaneseMatchingTests.swift; sourceTree = "<group>"; };
 		4519181C8A07B3CEB0A24CE2 /* KnownnessTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownnessTests.swift; sourceTree = "<group>"; };
@@ -112,12 +136,16 @@
 		4FFDA2F2F96AF807139D157C /* KnownWord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownWord.swift; sourceTree = "<group>"; };
 		5207DD4636B514509A5A6D10 /* DeckDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckDetailView.swift; sourceTree = "<group>"; };
 		59C0F7C9F456CFD1ACBE2ED0 /* ZoomableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomableImageView.swift; sourceTree = "<group>"; };
+		5DAF4FB22A9E0B815E8B2BBE /* test_brushDivider_default.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_brushDivider_default.1.png; sourceTree = "<group>"; };
+		6081A78DEFAD621449CED052 /* test_gemBadge_gold.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_gemBadge_gold.1.png; sourceTree = "<group>"; };
 		6335C5233FA238D2474A4BFB /* KanjiTypedReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiTypedReviewView.swift; sourceTree = "<group>"; };
 		639089187F485FCC4D5DD646 /* Deck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deck.swift; sourceTree = "<group>"; };
 		6401B2D2B89948F6523A4989 /* DailyChallengeLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyChallengeLog.swift; sourceTree = "<group>"; };
 		6913889441852B61BE44335C /* SentenceSpeechCheckView+Matching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SentenceSpeechCheckView+Matching.swift"; sourceTree = "<group>"; };
 		69AD71B6D179002407C5E6F4 /* FuriganaText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuriganaText.swift; sourceTree = "<group>"; };
+		6A50E3D426C5A731D0C8FC6D /* test_mapleGlyph_size60.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_mapleGlyph_size60.1.png; sourceTree = "<group>"; };
 		6AF06594A11C119C872E6A46 /* KanjiCrush.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = KanjiCrush.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6D683919ADADCF464C3E9D88 /* test_gemTile_sakura.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_gemTile_sakura.1.png; sourceTree = "<group>"; };
 		73EB596CEEFDA3F6371672E9 /* DeckExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckExportService.swift; sourceTree = "<group>"; };
 		7643DDD50575A5E940E3B785 /* UnlockedAchievement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockedAchievement.swift; sourceTree = "<group>"; };
 		77D7EF86EFFE706B4A862A82 /* DecksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecksView.swift; sourceTree = "<group>"; };
@@ -128,18 +156,24 @@
 		823A7BE537B3727C787980FE /* Flashcard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flashcard.swift; sourceTree = "<group>"; };
 		84BBE4DFB2446B21FAB052A9 /* SentenceCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentenceCard.swift; sourceTree = "<group>"; };
 		8573B1A7672F443BC2C42559 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		866691D39385329965546416 /* test_sectionHeader_titleOnly.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_sectionHeader_titleOnly.1.png; sourceTree = "<group>"; };
 		891FD33B3970E032500E6843 /* OCRPipelineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRPipelineTests.swift; sourceTree = "<group>"; };
 		8966510A25D62F7A7CA6DF24 /* ReadmeScreenshotsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadmeScreenshotsTests.swift; sourceTree = "<group>"; };
+		8BBECDEE8D94AE948E9F3DF9 /* test_washiCard_withContent.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_washiCard_withContent.1.png; sourceTree = "<group>"; };
 		8E26DBF657E311E2A17F97BB /* KanjiCrushTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = KanjiCrushTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9328AB6145C00516601FA825 /* reading_overrides.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = reading_overrides.json; sourceTree = "<group>"; };
+		9412F17F40B1D277C3945618 /* UserStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStats.swift; sourceTree = "<group>"; };
 		9AEE441BC1A1FC2D014BA884 /* SpeechService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechService.swift; sourceTree = "<group>"; };
 		9BC81C73CBABAE4B1F865E69 /* KanjiCrushUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = KanjiCrushUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FBDF3600DFD26E6C1EBF305 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A203BA7EE1851C1789C4A1A9 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		A4A56EC43E86273C9DEAA14B /* SentenceSpeechCheckView+Views.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SentenceSpeechCheckView+Views.swift"; sourceTree = "<group>"; };
+		A5274CD88F7FE695F221EC4D /* test_kanjiGemBoard_default.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_kanjiGemBoard_default.1.png; sourceTree = "<group>"; };
 		AD372E4A3B23128F9B2FA6A2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		AF9A4D7694D52435FB445E95 /* OCRService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRService.swift; sourceTree = "<group>"; };
+		B0F7F53E04C23BC0865A71F2 /* test_gemTile_vermillion.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_gemTile_vermillion.1.png; sourceTree = "<group>"; };
 		B565DD4011B1B0CDAB9D3EBE /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
+		BC664C9786444B3D3B212E80 /* test_gemBadge_bamboo.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_gemBadge_bamboo.1.png; sourceTree = "<group>"; };
 		BECF1C8F412A74FE3DFA3A8E /* SpeechRecognitionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognitionService.swift; sourceTree = "<group>"; };
 		C11B6546558874D0C60DABD0 /* KanjiBreakdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiBreakdownView.swift; sourceTree = "<group>"; };
 		C343E4889C7E6027F261E7E8 /* SentenceSpeechCheckView+Editor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SentenceSpeechCheckView+Editor.swift"; sourceTree = "<group>"; };
@@ -150,15 +184,29 @@
 		D22B974852322FD9A2151E1B /* SentenceSpeechCheckView+Summary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SentenceSpeechCheckView+Summary.swift"; sourceTree = "<group>"; };
 		D9247361A7CFC569566EA246 /* SentenceWrapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentenceWrapTests.swift; sourceTree = "<group>"; };
 		DC8CBDE0F1E948BA875541C2 /* KanjiDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiDetailView.swift; sourceTree = "<group>"; };
+		DCBC2D7A83D90447CA946324 /* test_gemBadge_indigo.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_gemBadge_indigo.1.png; sourceTree = "<group>"; };
+		E231AE1E01BD195A11119DC1 /* test_gemTile_bamboo.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_gemTile_bamboo.1.png; sourceTree = "<group>"; };
 		E29D376BBABE16AF1FB6E55A /* DailyChallengeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyChallengeView.swift; sourceTree = "<group>"; };
 		E49E349AD78BEC7CEEBB863B /* ScanView+CameraViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ScanView+CameraViews.swift"; sourceTree = "<group>"; };
 		EB7F418F74F7ECF043B26487 /* SentenceSpeechCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentenceSpeechCheckView.swift; sourceTree = "<group>"; };
 		EE74DC8E0766DDCE99AE84A0 /* JapaneseAnalysisService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapaneseAnalysisService.swift; sourceTree = "<group>"; };
+		EEC3BABC91C4EECD18E15C52 /* test_gemTile_gold.1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_gemTile_gold.1.png; sourceTree = "<group>"; };
 		EF244FA6F44A387A5A9EDB34 /* ReviewSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewSessionView.swift; sourceTree = "<group>"; };
 		F8960B4740139682A4D92446 /* jmdict.sqlite.gz */ = {isa = PBXFileReference; lastKnownFileType = archive.gzip; path = jmdict.sqlite.gz; sourceTree = "<group>"; };
 		FBCEB7020E1F75F253EF2A99 /* ReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewView.swift; sourceTree = "<group>"; };
 		FE6A8A8602C62719745DEF29 /* AppLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLog.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CE23E0DD8EC2CC63B91FAC0C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E577AD171C8D99C19C9239B9 /* SnapshotTesting in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		0A64AFC109CD6644BC9B1822 /* Features */ = {
@@ -235,6 +283,8 @@
 				891FD33B3970E032500E6843 /* OCRPipelineTests.swift */,
 				13F60A5436DB97E16B2CD606 /* SRSServiceTests.swift */,
 				2712B8CEB681219D78FFA9C7 /* StatsServiceTests.swift */,
+				133E740F19C8E82CD087283D /* ThemeSnapshotTests.swift */,
+				6B04FC7876EF60C29B5D2529 /* __Snapshots__ */,
 			);
 			path = KanjiCrushTests;
 			sourceTree = "<group>";
@@ -251,12 +301,43 @@
 			path = Decks;
 			sourceTree = "<group>";
 		};
+		6B04FC7876EF60C29B5D2529 /* __Snapshots__ */ = {
+			isa = PBXGroup;
+			children = (
+				807E2379DD660E095B7888AA /* ThemeSnapshotTests */,
+			);
+			path = __Snapshots__;
+			sourceTree = "<group>";
+		};
 		7C6F5569B47B2C3F3DDABEBC /* Theme */ = {
 			isa = PBXGroup;
 			children = (
 				8573B1A7672F443BC2C42559 /* Theme.swift */,
 			);
 			path = Theme;
+			sourceTree = "<group>";
+		};
+		807E2379DD660E095B7888AA /* ThemeSnapshotTests */ = {
+			isa = PBXGroup;
+			children = (
+				5DAF4FB22A9E0B815E8B2BBE /* test_brushDivider_default.1.png */,
+				BC664C9786444B3D3B212E80 /* test_gemBadge_bamboo.1.png */,
+				6081A78DEFAD621449CED052 /* test_gemBadge_gold.1.png */,
+				DCBC2D7A83D90447CA946324 /* test_gemBadge_indigo.1.png */,
+				1F133D9F254DBA13E1CCA62D /* test_gemBadge_sakura.1.png */,
+				E231AE1E01BD195A11119DC1 /* test_gemTile_bamboo.1.png */,
+				EEC3BABC91C4EECD18E15C52 /* test_gemTile_gold.1.png */,
+				141A2C1ADF86E63499AC8603 /* test_gemTile_indigo.1.png */,
+				6D683919ADADCF464C3E9D88 /* test_gemTile_sakura.1.png */,
+				B0F7F53E04C23BC0865A71F2 /* test_gemTile_vermillion.1.png */,
+				A5274CD88F7FE695F221EC4D /* test_kanjiGemBoard_default.1.png */,
+				6A50E3D426C5A731D0C8FC6D /* test_mapleGlyph_size60.1.png */,
+				866691D39385329965546416 /* test_sectionHeader_titleOnly.1.png */,
+				3691DF44E88E9D933AF37E54 /* test_sectionHeader_withTrailing.1.png */,
+				0003DCF40CE42B692DBEC98B /* test_washiCard_empty.1.png */,
+				8BBECDEE8D94AE948E9F3DF9 /* test_washiCard_withContent.1.png */,
+			);
+			path = ThemeSnapshotTests;
 			sourceTree = "<group>";
 		};
 		882356936639F95C6D2EFE07 /* Models */ = {
@@ -267,6 +348,7 @@
 				823A7BE537B3727C787980FE /* Flashcard.swift */,
 				4FFDA2F2F96AF807139D157C /* KnownWord.swift */,
 				7643DDD50575A5E940E3B785 /* UnlockedAchievement.swift */,
+				9412F17F40B1D277C3945618 /* UserStats.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -446,6 +528,8 @@
 			buildConfigurationList = 5A1BE1B1F1683D16374A1FE5 /* Build configuration list for PBXNativeTarget "KanjiCrushTests" */;
 			buildPhases = (
 				B64C8287EB84378ED4981D57 /* Sources */,
+				4A9BA3E456A1AA0C633746BA /* Resources */,
+				CE23E0DD8EC2CC63B91FAC0C /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -454,6 +538,7 @@
 			);
 			name = KanjiCrushTests;
 			packageProductDependencies = (
+				982EF24F51CF2CE8FE5419ED /* SnapshotTesting */,
 			);
 			productName = KanjiCrushTests;
 			productReference = 8E26DBF657E311E2A17F97BB /* KanjiCrushTests.xctest */;
@@ -490,6 +575,9 @@
 			);
 			mainGroup = F46DFA2FA26D4D68F1302EF4;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				3F9FEAC46B3082373BAA69C0 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0B865184A1D596D4005F7058 /* Products */;
 			projectDirPath = "";
@@ -511,6 +599,29 @@
 				70BE82B5E305CC19619700DF /* Localizable.xcstrings in Resources */,
 				9E2A8E495D0ECBD4B8EC5461 /* jmdict.sqlite.gz in Resources */,
 				CF05607C3ECCE1771285CE44 /* reading_overrides.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4A9BA3E456A1AA0C633746BA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01C74B64151B1D7B2243123A /* test_brushDivider_default.1.png in Resources */,
+				3BD006D004D489697733895F /* test_gemBadge_bamboo.1.png in Resources */,
+				8E2C2FDE0D0141531A2EEEDE /* test_gemBadge_gold.1.png in Resources */,
+				0DFA052362F8FC5B8BC3E8E2 /* test_gemBadge_indigo.1.png in Resources */,
+				0E6185C7D780CCCF3CF307EA /* test_gemBadge_sakura.1.png in Resources */,
+				3600568A135EF2DD8BCB3B3D /* test_gemTile_bamboo.1.png in Resources */,
+				E18D1A662E7A25DEFD864179 /* test_gemTile_gold.1.png in Resources */,
+				69F07C1D9A657BCE325CDB74 /* test_gemTile_indigo.1.png in Resources */,
+				BC4C12F0FE3C66F2ECEAC74C /* test_gemTile_sakura.1.png in Resources */,
+				C76363CAEFD4B9D757FB4A1B /* test_gemTile_vermillion.1.png in Resources */,
+				767F64E3EEA1ECF2814D97C8 /* test_kanjiGemBoard_default.1.png in Resources */,
+				2E08AB5AA352E668F532508B /* test_mapleGlyph_size60.1.png in Resources */,
+				1877A2994209EB1E66ECEF0A /* test_sectionHeader_titleOnly.1.png in Resources */,
+				4DECC762C5F32C5F0A9D994F /* test_sectionHeader_withTrailing.1.png in Resources */,
+				9B99F484E04303EBF0807B5B /* test_washiCard_empty.1.png in Resources */,
+				12323CC22B43ED536B207AF5 /* test_washiCard_withContent.1.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -569,6 +680,7 @@
 				8076760C47FCFFBFC0E4BD66 /* TagEditor.swift in Sources */,
 				7B2E6E365771F20DC4C08C7C /* Theme.swift in Sources */,
 				C24C7A3409D414152A3823BB /* UnlockedAchievement.swift in Sources */,
+				054BE7D970A88DC34E9D1973 /* UserStats.swift in Sources */,
 				9286232405F6B0E9BC18369C /* WordChipFlow.swift in Sources */,
 				61FDAAD960CE24ACAC7DCE5D /* WordDetailView.swift in Sources */,
 				74A473430634F8CE16BA19FE /* ZoomableImageView.swift in Sources */,
@@ -585,6 +697,7 @@
 				2AC0B88E0F0DAE407402F00E /* OCRPipelineTests.swift in Sources */,
 				B3D02AB614D88EE69A045F9D /* SRSServiceTests.swift in Sources */,
 				FD784B28380E4A7334771AA8 /* StatsServiceTests.swift in Sources */,
+				1CED960B4F20F1DEB3C6563F /* ThemeSnapshotTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -893,6 +1006,25 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3F9FEAC46B3082373BAA69C0 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.17.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		982EF24F51CF2CE8FE5419ED /* SnapshotTesting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F9FEAC46B3082373BAA69C0 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = SnapshotTesting;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5DF5569BB107B961B4197C98 /* Project object */;
 }
