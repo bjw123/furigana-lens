@@ -1,6 +1,6 @@
 # Kanji Crush
 
-Personal iOS app for reading Japanese from your TV while gaming. Point the camera, capture text, tap a word for furigana, optionally reveal meaning via [Jisho](https://jisho.org/), and save flashcards with SM-2 spaced repetition.
+Personal iOS app for reading Japanese from your TV while gaming. Point the camera, capture text, tap a word for furigana, optionally reveal meaning via opensourced data and libraries + internal iphone translation/language kit and save flashcards with SM-2 spaced repetition.
 
 ## Demo
 
