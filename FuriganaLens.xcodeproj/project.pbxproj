@@ -82,7 +82,7 @@
 		B958516913FBC091A0C0E858 /* KnownWord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownWord.swift; sourceTree = "<group>"; };
 		B9C26D99C6A5EB6A0020D435 /* FuriganaLensUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = FuriganaLensUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BACAF725ED82D56E29B6CF32 /* FuriganaText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuriganaText.swift; sourceTree = "<group>"; };
-		BDAA2D08AEA353C0DE67DC55 /* FuriganaLens.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = FuriganaLens.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BDAA2D08AEA353C0DE67DC55 /* FuriganaLens.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FuriganaLens.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D21FD0F67C53B46F9444F4C8 /* FuriganaLensApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuriganaLensApp.swift; sourceTree = "<group>"; };
 		D81C61B3DBE88D82DAB62038 /* reading_overrides.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = reading_overrides.json; sourceTree = "<group>"; };
 		D9B8455F0F0384CD2AF75A40 /* FuriganaLensUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuriganaLensUITests.swift; sourceTree = "<group>"; };
@@ -439,6 +439,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = S78FSRTY48;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Point your camera at Japanese text on your TV or screen to read words and furigana.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -494,6 +495,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = S78FSRTY48;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Point your camera at Japanese text on your TV or screen to read words and furigana.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
