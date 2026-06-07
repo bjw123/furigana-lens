@@ -18,6 +18,7 @@ struct ReviewSessionView: View {
     @State private var currentIndex = 0
     @State private var showBack = false
     @State private var seeMoreExpanded = false
+    @State private var showHint = false
     @State private var editingCard: Flashcard?
     @State private var readAloudRequest: ReadAloudRequest?
     @State private var comboCount: Int = 0
@@ -227,9 +228,6 @@ struct ReviewSessionView: View {
     @ViewBuilder
     private func front(for card: Flashcard) -> some View {
         VStack(spacing: 14) {
-            if let hint = card.hint, !hint.isEmpty {
-                hintBanner(hint: hint)
-            }
             switch card.cardType {
             case .word:
                 VStack(spacing: 14) {
@@ -259,6 +257,35 @@ struct ReviewSessionView: View {
                     )
                 }
             }
+            if let hint = card.hint, !hint.isEmpty {
+                hintSection(hint: hint)
+            }
+        }
+    }
+
+    /// Hint reveal on the card front. Shows a compact "💡 Hint" button until
+    /// the learner taps it (or — in typed-quiz mode — submits a wrong answer);
+    /// then reveals the hint text inline below the prompt.
+    @ViewBuilder
+    private func hintSection(hint: String) -> some View {
+        if showHint {
+            hintBanner(hint: hint)
+        } else {
+            Button {
+                withAnimation(.easeInOut(duration: 0.2)) { showHint = true }
+            } label: {
+                Label("Hint", systemImage: "lightbulb.fill")
+                    .font(.system(.caption, design: .rounded).weight(.semibold))
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(Capsule().fill(Palette.gold.opacity(0.12)))
+                    .foregroundStyle(Palette.gold)
+                    .overlay(
+                        Capsule().strokeBorder(Palette.gold.opacity(0.35), lineWidth: 0.75)
+                    )
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Show hint")
         }
     }
 
@@ -277,14 +304,15 @@ struct ReviewSessionView: View {
         .padding(.vertical, 10)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
-            Capsule(style: .continuous)
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
                 .fill(Palette.gold.opacity(0.15))
         )
         .overlay(
-            Capsule(style: .continuous)
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
                 .strokeBorder(Palette.gold.opacity(0.35), lineWidth: 0.75)
         )
         .padding(.horizontal, 16)
+        .transition(.opacity.combined(with: .move(edge: .top)))
     }
 
     @ViewBuilder
@@ -719,6 +747,7 @@ struct ReviewSessionView: View {
         withAnimation(.easeInOut(duration: 0.15)) {
             showBack = false
             seeMoreExpanded = false
+            showHint = false
             currentIndex += 1
         }
     }

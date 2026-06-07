@@ -122,6 +122,7 @@ private struct SessionRunner: View {
     @State private var feedback: Feedback?
     @State private var correctCount: Int = 0
     @State private var attemptCount: Int = 0
+    @State private var showHint: Bool = false
     @FocusState private var inputFocused: Bool
     @StateObject private var speech = SpeechRecognitionService()
     @State private var authChecked = false
@@ -262,6 +263,10 @@ private struct SessionRunner: View {
                 }
             }
 
+            if let hint = item.hint, !hint.isEmpty {
+                hintSection(hint: hint)
+            }
+
             TextField("Answer", text: $input)
                 .focused($inputFocused)
                 .submitLabel(.go)
@@ -311,6 +316,53 @@ private struct SessionRunner: View {
         case .speech(_, _, let allCorrect, _):
             return allCorrect ? Palette.bamboo.opacity(0.85) : Palette.vermillion.opacity(0.85)
         case nil: return Palette.hairline
+        }
+    }
+
+    /// Hint reveal on the typed-quiz front. Tap to reveal, or — after a wrong
+    /// submission — auto-revealed by `submit(item:)` so the learner gets the
+    /// nudge before being told the answer.
+    @ViewBuilder
+    private func hintSection(hint: String) -> some View {
+        if showHint {
+            HStack(alignment: .top, spacing: 8) {
+                Image(systemName: "lightbulb.fill")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(Palette.gold)
+                Text(hint)
+                    .font(.system(.subheadline, design: .rounded).weight(.medium))
+                    .foregroundStyle(Palette.gold)
+                    .multilineTextAlignment(.leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(.horizontal, 14)
+            .padding(.vertical, 10)
+            .background(
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .fill(Palette.gold.opacity(0.15))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .strokeBorder(Palette.gold.opacity(0.35), lineWidth: 0.75)
+            )
+            .padding(.horizontal)
+            .transition(.opacity.combined(with: .move(edge: .top)))
+        } else {
+            Button {
+                withAnimation(.easeInOut(duration: 0.2)) { showHint = true }
+            } label: {
+                Label("Hint", systemImage: "lightbulb.fill")
+                    .font(.system(.caption, design: .rounded).weight(.semibold))
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(Capsule().fill(Palette.gold.opacity(0.12)))
+                    .foregroundStyle(Palette.gold)
+                    .overlay(
+                        Capsule().strokeBorder(Palette.gold.opacity(0.35), lineWidth: 0.75)
+                    )
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Show hint")
         }
     }
 
@@ -561,6 +613,7 @@ private struct SessionRunner: View {
                 UINotificationFeedbackGenerator().notificationOccurred(.success)
             } else {
                 UINotificationFeedbackGenerator().notificationOccurred(.error)
+                revealHintIfAvailable(for: item)
             }
 
             feedback = .speech(
@@ -580,7 +633,16 @@ private struct SessionRunner: View {
             let expected = mode == .meaning ? item.meaningDisplay : item.readingDisplay
             feedback = .wrong(expected: expected, meaning: item.meaningDisplay)
             UINotificationFeedbackGenerator().notificationOccurred(.error)
+            revealHintIfAvailable(for: item)
         }
+    }
+
+    /// Auto-reveal the hint after a wrong submission so the learner sees the
+    /// nudge alongside (and conceptually before) the expected-answer feedback.
+    /// No-op if there's no hint or it's already shown.
+    private func revealHintIfAvailable(for item: TypedReviewItem) {
+        guard let hint = item.hint, !hint.isEmpty, !showHint else { return }
+        withAnimation(.easeInOut(duration: 0.2)) { showHint = true }
     }
 
     private func computeDiff(item: TypedReviewItem, transcript: String) -> [TokenDiff] {
@@ -652,6 +714,7 @@ private struct SessionRunner: View {
         }
         input = ""
         feedback = nil
+        showHint = false
         inputFocused = true
     }
 }
@@ -669,6 +732,11 @@ private struct TypedReviewItem: Identifiable {
     let readingDisplay: String
     /// Pretty meaning to display when the user gets it right.
     let meaningDisplay: String
+    /// Optional learner-authored hint. Surfaced via the "💡 Hint" button on
+    /// the front, and auto-revealed after a wrong submission. Nil for items
+    /// built from kanji on/kun readings or JLPT example data — those have no
+    /// per-card hint to carry over.
+    let hint: String?
 
     var meaningSuffix: String { meaningDisplay }
 
@@ -691,7 +759,8 @@ private struct TypedReviewItem: Identifiable {
                 acceptedReadings: [normalized],
                 acceptedMeanings: kanjiMeaningsNormalized,
                 readingDisplay: raw,
-                meaningDisplay: kanjiMeaning
+                meaningDisplay: kanjiMeaning,
+                hint: nil
             ))
         }
 
@@ -707,7 +776,8 @@ private struct TypedReviewItem: Identifiable {
                 acceptedReadings: readingNormalized.isEmpty ? [] : [readingNormalized],
                 acceptedMeanings: AnswerNormalizer.normalizeMeanings(glossParts),
                 readingDisplay: ex.reading,
-                meaningDisplay: ex.gloss
+                meaningDisplay: ex.gloss,
+                hint: nil
             ))
         }
 
