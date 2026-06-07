@@ -302,7 +302,7 @@ struct SettingsView: View {
                 Spacer()
             }
             Text(value)
-                .font(.system(size: 28, weight: .heavy, design: .rounded))
+                .font(.system(.title, design: .rounded).weight(.heavy))
                 .foregroundStyle(
                     LinearGradient(colors: [pair.0, pair.1], startPoint: .top, endPoint: .bottom)
                 )
@@ -389,7 +389,7 @@ struct SettingsView: View {
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
             Text(achievement.summary)
-                .font(.system(size: 9, design: .rounded))
+                .font(.system(.caption2, design: .rounded))
                 .foregroundStyle(Palette.cream.opacity(0.85))
                 .multilineTextAlignment(.center)
                 .lineLimit(3)
@@ -438,7 +438,7 @@ struct SettingsView: View {
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
             Text(achievement.summary)
-                .font(.system(size: 9, design: .rounded))
+                .font(.system(.caption2, design: .rounded))
                 .foregroundStyle(Palette.mist.opacity(0.85))
                 .multilineTextAlignment(.center)
                 .lineLimit(3)

@@ -57,7 +57,7 @@ extension SentenceSpeechCheckView {
         VStack(spacing: 0) {
             if showFuriganaState && chunk.hasKanji && !chunk.reading.isEmpty && chunk.reading != chunk.surface {
                 Text(chunk.reading)
-                    .font(.system(size: 10, design: .rounded).weight(.medium))
+                    .font(.system(.caption2, design: .rounded).weight(.medium))
                     .foregroundStyle(outOfScope ? Palette.mist.opacity(0.4) : state.readingColor)
             }
             Text(chunk.surface)

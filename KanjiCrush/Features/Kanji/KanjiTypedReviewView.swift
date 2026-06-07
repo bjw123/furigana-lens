@@ -71,6 +71,9 @@ struct KanjiTypedReviewView: View {
             Text(String(kanji))
                 .font(.system(size: 128, weight: .semibold, design: .serif))
                 .foregroundStyle(Palette.sumi)
+                .minimumScaleFactor(0.6)
+                .allowsTightening(true)
+                .dynamicTypeSize(...DynamicTypeSize.accessibility3)
             Text("Pick what you want to test")
                 .font(.system(.subheadline, design: .rounded))
                 .foregroundStyle(Palette.mist)
@@ -240,6 +243,9 @@ private struct SessionRunner: View {
                 .font(.system(size: 72, weight: .semibold, design: .serif))
                 .foregroundStyle(Palette.sumi)
                 .multilineTextAlignment(.center)
+                .minimumScaleFactor(0.6)
+                .allowsTightening(true)
+                .dynamicTypeSize(...DynamicTypeSize.accessibility3)
                 .padding(.top, 16)
 
             if mode == .meaning, !item.readingDisplay.isEmpty {

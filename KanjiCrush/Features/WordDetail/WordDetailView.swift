@@ -406,7 +406,7 @@ private struct ExampleRow: View {
                 if revealed, !token.reading.isEmpty, token.reading != token.surface {
                     VStack(spacing: 0) {
                         Text(token.reading)
-                            .font(.system(size: 10, weight: .medium, design: .rounded))
+                            .font(.system(.caption2, design: .rounded).weight(.medium))
                             .foregroundStyle(Palette.indigo)
                         Text(token.surface)
                             .font(.system(.body, design: .serif))

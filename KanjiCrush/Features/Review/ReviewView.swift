@@ -137,7 +137,7 @@ struct ReviewView: View {
         } else {
             VStack(spacing: -2) {
                 Text("\(dueAll.count)")
-                    .font(.system(size: 44, weight: .heavy, design: .rounded))
+                    .font(.system(.largeTitle, design: .rounded).weight(.heavy))
                     .foregroundStyle(Palette.cream)
                 Text("DUE")
                     .font(.system(.caption2, design: .rounded).weight(.bold))
@@ -330,7 +330,7 @@ struct ReviewView: View {
         let pair = Palette.gradientPair(for: tint)
         return VStack(alignment: .leading, spacing: 4) {
             Text(value)
-                .font(.system(size: 36, weight: .heavy, design: .rounded))
+                .font(.system(.title, design: .rounded).weight(.heavy))
                 .foregroundStyle(
                     LinearGradient(colors: [pair.0, pair.1], startPoint: .top, endPoint: .bottom)
                 )
@@ -452,13 +452,15 @@ struct ReviewView: View {
         let intensity = max(0.25, min(1.0, Double(item.againCount) / Double(max(maxAgain, 1))))
         return VStack(spacing: 2) {
             Text(item.reading ?? "—")
-                .font(.system(size: 11, design: .rounded).weight(.medium))
+                .font(.system(.caption2, design: .rounded).weight(.medium))
                 .foregroundStyle(item.reading == nil ? Palette.mist : Palette.indigo.opacity(0.85))
                 .padding(.top, 6)
 
             Text(String(item.kanji))
                 .font(.system(size: 36, weight: .semibold, design: .serif))
                 .foregroundStyle(Palette.sumi)
+                .minimumScaleFactor(0.6)
+                .allowsTightening(true)
 
             HStack(spacing: 3) {
                 Image(systemName: "arrow.counterclockwise")
@@ -469,7 +471,7 @@ struct ReviewView: View {
             .foregroundStyle(Palette.vermillion)
 
             Text("\(item.cards.count) word\(item.cards.count == 1 ? "" : "s")")
-                .font(.system(size: 10, design: .rounded))
+                .font(.system(.caption2, design: .rounded))
                 .foregroundStyle(Palette.mist)
                 .padding(.bottom, 6)
         }

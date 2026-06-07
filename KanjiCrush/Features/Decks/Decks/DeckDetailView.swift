@@ -149,7 +149,7 @@ struct DeckDetailView: View {
     private func statTile(label: String, value: String, tint: Color) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(value)
-                .font(.system(size: 28, weight: .bold, design: .rounded))
+                .font(.system(.title, design: .rounded).weight(.bold))
                 .foregroundStyle(tint)
             Text(label)
                 .font(.system(.caption, design: .rounded).weight(.semibold))

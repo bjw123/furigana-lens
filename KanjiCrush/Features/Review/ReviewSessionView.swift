@@ -235,6 +235,9 @@ struct ReviewSessionView: View {
                         .font(.system(size: 56, weight: .medium, design: .serif))
                         .foregroundStyle(Palette.sumi)
                         .multilineTextAlignment(.center)
+                        .minimumScaleFactor(0.6)
+                        .allowsTightening(true)
+                        .dynamicTypeSize(...DynamicTypeSize.accessibility3)
                     if let sentence = frontExampleSentence(for: card) {
                         WordCardExampleSentence(sentence: sentence, highlightSurface: card.expression)
                             .padding(.horizontal, 8)
@@ -438,7 +441,7 @@ struct ReviewSessionView: View {
             VStack(alignment: .leading, spacing: 1) {
                 if showReading {
                     Text(token.reading)
-                        .font(.system(size: 10, design: .rounded).weight(.medium))
+                        .font(.system(.caption2, design: .rounded).weight(.medium))
                         .foregroundStyle(Palette.indigo.opacity(0.85))
                 }
                 Text(token.surface)
@@ -815,7 +818,7 @@ private struct WordCardExampleSentence: View {
         VStack(spacing: 0) {
             if showReading {
                 Text(token.reading)
-                    .font(.system(size: 9, design: .rounded).weight(.medium))
+                    .font(.system(.caption2, design: .rounded).weight(.medium))
                     .foregroundStyle(Palette.indigo.opacity(0.85))
             }
             Text(token.surface)
@@ -935,6 +938,9 @@ private struct CrushOverlay: View {
                         endPoint: .bottom
                     )
                 )
+                .minimumScaleFactor(0.6)
+                .allowsTightening(true)
+                .dynamicTypeSize(...DynamicTypeSize.accessibility3)
                 .shadow(color: Palette.sakura.opacity(0.6), radius: 24)
                 .scaleEffect(hero ? 1.0 : 0.4)
                 .opacity(hero ? 0.95 : 0.0)

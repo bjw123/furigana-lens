@@ -74,6 +74,9 @@ struct DailyChallengeView: View {
                 .font(.system(size: 80, weight: .semibold, design: .serif))
                 .foregroundStyle(Palette.sumi)
                 .multilineTextAlignment(.center)
+                .minimumScaleFactor(0.6)
+                .allowsTightening(true)
+                .dynamicTypeSize(...DynamicTypeSize.accessibility3)
                 .padding(.top, 6)
 
             Text("Type the reading")

@@ -92,6 +92,8 @@ private struct KanjiBreakdownRow: View {
             Text(String(kanji))
                 .font(.system(size: 38, weight: .semibold, design: .serif))
                 .foregroundStyle(Palette.sumi)
+                .minimumScaleFactor(0.6)
+                .allowsTightening(true)
                 .frame(width: 52, height: 52)
                 .background(Palette.cream, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
                 .overlay(
@@ -153,7 +155,7 @@ private struct KanjiBreakdownRow: View {
     private func readingLine(label: String, readings: [String], tint: Color) -> some View {
         HStack(alignment: .firstTextBaseline, spacing: 6) {
             Text(label)
-                .font(.system(size: 9, design: .rounded).weight(.bold))
+                .font(.system(.caption2, design: .rounded).weight(.bold))
                 .foregroundStyle(tint.opacity(0.85))
                 .textCase(.uppercase)
                 .tracking(0.5)

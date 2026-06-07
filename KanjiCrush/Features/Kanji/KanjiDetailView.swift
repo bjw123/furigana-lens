@@ -86,6 +86,9 @@ struct KanjiDetailView: View {
             Text(String(overview.kanji))
                 .font(.system(size: 160, weight: .bold, design: .serif))
                 .foregroundStyle(Palette.sumi)
+                .minimumScaleFactor(0.6)
+                .allowsTightening(true)
+                .dynamicTypeSize(...DynamicTypeSize.accessibility3)
                 .padding(.top, 6)
 
             HStack(spacing: 8) {
@@ -395,7 +398,7 @@ struct KanjiDetailView: View {
             VStack(alignment: .leading, spacing: 1) {
                 if showReading {
                     Text(item.reading)
-                        .font(.system(size: 11, design: .rounded).weight(.medium))
+                        .font(.system(.caption2, design: .rounded).weight(.medium))
                         .foregroundStyle(Palette.indigo.opacity(0.85))
                 }
                 Text(item.form)

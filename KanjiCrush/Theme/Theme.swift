@@ -315,7 +315,9 @@ struct KanjiGemBadge: View {
                 .font(.system(size: size * 0.58, weight: fontWeight, design: .serif))
                 .foregroundStyle(foreground)
                 .minimumScaleFactor(0.6)
+                .allowsTightening(true)
         }
+        .dynamicTypeSize(...DynamicTypeSize.accessibility3)
     }
 }
 

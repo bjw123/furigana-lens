@@ -228,7 +228,7 @@ struct SentenceCard: View {
                 if revealed, !token.reading.isEmpty, token.reading != token.surface {
                     VStack(spacing: 0) {
                         Text(token.reading)
-                            .font(.system(size: 10, design: .rounded).weight(.medium))
+                            .font(.system(.caption2, design: .rounded).weight(.medium))
                             .foregroundStyle(isStruggling ? Palette.vermillion : Palette.indigo.opacity(0.85))
                         Text(token.surface)
                             .font(.system(.title3, design: .serif))

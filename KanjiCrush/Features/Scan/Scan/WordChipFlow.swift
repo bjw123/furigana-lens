@@ -103,7 +103,7 @@ private struct WordChip: View {
         VStack(spacing: 1) {
             if showReading {
                 Text(token.reading)
-                    .font(.system(size: 11, design: .rounded).weight(.medium))
+                    .font(.system(.caption2, design: .rounded).weight(.medium))
                     .foregroundStyle(Palette.indigo.opacity(0.85))
             }
             HStack(spacing: 5) {
