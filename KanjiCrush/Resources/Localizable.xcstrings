@@ -164,6 +164,9 @@
     "Aim at Japanese text and tap to capture" : {
 
     },
+    "All chunks removed — tap Reset to restore." : {
+
+    },
     "Appearance" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -337,7 +340,6 @@
       }
     },
     "Done" : {
-      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -429,6 +431,12 @@
           }
         }
       }
+    },
+    "Group, split or remove chunks" : {
+
+    },
+    "Heard: %@" : {
+
     },
     "Hide known words" : {
       "extractionState" : "stale",
@@ -718,6 +726,9 @@
         }
       }
     },
+    "Nice — moving on" : {
+
+    },
     "no ads, no paywall — made for myself" : {
 
     },
@@ -753,6 +764,9 @@
     "Not in the dictionary — type your own meaning (game/manga terms, slang, names, etc.) and save as a flashcard." : {
 
     },
+    "Not quite" : {
+
+    },
     "Nothing due" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -765,6 +779,9 @@
       }
     },
     "Nothing to drill yet" : {
+
+    },
+    "Nothing to read" : {
 
     },
     "OK" : {
@@ -841,6 +858,9 @@
 
     },
     "Read Japanese from anything" : {
+
+    },
+    "Read this part" : {
 
     },
     "Reading" : {
@@ -1011,7 +1031,13 @@
         }
       }
     },
+    "Some chunks were missed" : {
+
+    },
     "Some words were missed" : {
+
+    },
+    "Start reading" : {
 
     },
     "Struggling kanji" : {
@@ -1082,7 +1108,13 @@
         }
       }
     },
+    "Tap Edit to add some words back." : {
+
+    },
     "Tap save to add to a deck" : {
+
+    },
+    "Tap the mic, read the highlighted part, then Submit. Edit the transcript if needed." : {
 
     },
     "Tap to confirm" : {

@@ -588,10 +588,29 @@ private struct SessionRunner: View {
         let segments = JapaneseAnalysisService.shared.segments(item.prompt)
         var diff: [TokenDiff] = []
         for token in segments where token.hasKanji || (token.hasKana && token.surface.count >= 1) {
-            let expected = AnswerNormalizer.normalizeReading(token.reading)
-            guard !expected.isEmpty else { continue }
-            let matched = normalisedTranscript.contains(expected)
-            diff.append(TokenDiff(prompt: token.surface, expectedReading: expected, matched: matched))
+            // Candidate readings:
+            //   1. Tokenizer's reading — fast but unreliable on compounds
+            //      (e.g. 人間 often returns "じんかん", not "にんげん").
+            //   2. The token surface itself — for transcripts that came back
+            //      as kanji rather than kana.
+            //   3. JMdict's canonical kana forms — fixes the compound case
+            //      so "ningen" typed for 人間 matches "にんげん".
+            var rawCandidates: [String] = [token.reading, token.surface]
+            let dictEntries = DictionaryService.shared.lookup(token.surface, limit: 3)
+            rawCandidates.append(contentsOf: dictEntries.flatMap { $0.kana })
+            let candidates = rawCandidates
+                .map(AnswerNormalizer.normalizeReading)
+                .filter { !$0.isEmpty }
+            guard !candidates.isEmpty else { continue }
+            // Bidirectional containment so the transcript matches whether it's
+            // narrower or wider than the candidate.
+            let matched = candidates.contains { cand in
+                normalisedTranscript == cand
+                    || normalisedTranscript.contains(cand)
+                    || cand.contains(normalisedTranscript)
+            }
+            let displayReading = AnswerNormalizer.normalizeReading(token.reading)
+            diff.append(TokenDiff(prompt: token.surface, expectedReading: displayReading, matched: matched))
         }
         return diff
     }
