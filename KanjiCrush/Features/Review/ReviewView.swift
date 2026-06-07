@@ -11,6 +11,7 @@ struct ReviewView: View {
     @State private var sessionTitle: String = "Review"
     @State private var showDailyChallenge = false
     @Query private var dailyLogs: [DailyChallengeLog]
+    @StateObject private var stats = ReviewStats()
 
     private var dueAll: [Flashcard] {
         SRSService.shared.dueCards(from: allCards)
@@ -72,10 +73,10 @@ struct ReviewView: View {
                 if hasStats {
                     statsGrid
                     forecastCard
-                    if !strugglingKanji.isEmpty {
+                    if !stats.strugglingKanji.isEmpty {
                         strugglingKanjiCard
                     }
-                    if !struggling.isEmpty {
+                    if !stats.struggling.isEmpty {
                         strugglingCard
                     }
                 }
@@ -83,6 +84,9 @@ struct ReviewView: View {
                 Spacer(minLength: 12)
             }
             .padding(.vertical, 12)
+        }
+        .task(id: "\(reviewLogs.count)-\(allCards.count)") {
+            stats.refresh(logs: reviewLogs, cards: allCards)
         }
     }
 
@@ -304,42 +308,18 @@ struct ReviewView: View {
         !allCards.isEmpty || !reviewLogs.isEmpty
     }
 
-    private var forecast: [StatsService.ForecastDay] {
-        StatsService.forecast(days: 7, from: allCards)
-    }
-
-    private var successRate: Double? {
-        StatsService.successRate(logs: reviewLogs, days: 30)
-    }
-
-    private var totalReviews: Int {
-        StatsService.totalReviews(logs: reviewLogs)
-    }
-
-    private var streak: Int {
-        StatsService.currentStreak(logs: reviewLogs)
-    }
-
-    private var struggling: [StatsService.StrugglingCard] {
-        StatsService.strugglingCards(logs: reviewLogs, cards: allCards, days: 30, limit: 5)
-    }
-
-    private var strugglingKanji: [StatsService.StrugglingKanjiReading] {
-        StatsService.strugglingKanjiReadings(logs: reviewLogs, cards: allCards, days: 30, limit: 8)
-    }
-
     private var statsGrid: some View {
         HStack(spacing: 12) {
             statBox(
-                value: successRate.map { "\(Int(($0 * 100).rounded()))%" } ?? "—",
+                value: stats.successRate.map { "\(Int(($0 * 100).rounded()))%" } ?? "—",
                 label: "Success",
-                subtitle: totalReviews > 0 ? "\(totalReviews) reviews" : "no reviews yet",
+                subtitle: stats.totalReviews > 0 ? "\(stats.totalReviews) reviews" : "no reviews yet",
                 tint: Palette.bamboo
             )
             statBox(
-                value: "\(streak)",
+                value: "\(stats.streak)",
                 label: "Day streak",
-                subtitle: streak == 0 ? "start today" : (streak == 1 ? "keep it up" : "🌸 nice"),
+                subtitle: stats.streak == 0 ? "start today" : (stats.streak == 1 ? "keep it up" : "🌸 nice"),
                 tint: Palette.sakura
             )
         }
@@ -385,7 +365,7 @@ struct ReviewView: View {
     }
 
     private var forecastCard: some View {
-        let days = forecast
+        let days = stats.forecast
         let maxCount = max(days.map(\.count).max() ?? 0, 1)
         return VStack(alignment: .leading, spacing: 10) {
             SectionHeader(
@@ -442,14 +422,14 @@ struct ReviewView: View {
     }
 
     private var strugglingKanjiCard: some View {
-        let maxAgain = strugglingKanji.map(\.againCount).max() ?? 1
+        let maxAgain = stats.strugglingKanji.map(\.againCount).max() ?? 1
         return VStack(alignment: .leading, spacing: 10) {
             SectionHeader(title: "Struggling kanji", trailing: "last 30 days · by reading")
             BrushDivider()
 
             let columns = [GridItem(.adaptive(minimum: 92, maximum: 130), spacing: 10)]
             LazyVGrid(columns: columns, spacing: 10) {
-                ForEach(strugglingKanji) { item in
+                ForEach(stats.strugglingKanji) { item in
                     NavigationLink {
                         KanjiDetailView(overview: StatsService.StrugglingKanji(
                             kanji: item.kanji,
@@ -515,7 +495,7 @@ struct ReviewView: View {
             SectionHeader(title: "Struggling words", trailing: "last 30 days")
             BrushDivider()
             VStack(spacing: 8) {
-                ForEach(struggling) { item in
+                ForEach(stats.struggling) { item in
                     HStack(alignment: .center, spacing: 12) {
                         VStack(alignment: .leading, spacing: 2) {
                             Text(item.card.expression)
