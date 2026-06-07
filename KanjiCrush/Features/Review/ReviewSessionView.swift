@@ -16,6 +16,9 @@ struct ReviewSessionView: View {
     @State private var showBack = false
     @State private var seeMoreExpanded = false
     @State private var editingCard: Flashcard?
+    @State private var comboCount: Int = 0
+    @State private var comboBurstId: UUID?      // changes to trigger animation
+    @State private var crushKanji: String?      // non-nil while crush animation runs
     @ObservedObject private var speech = SpeechService.shared
 
     enum SessionKind {
@@ -31,6 +34,13 @@ struct ReviewSessionView: View {
                     completeView
                 } else {
                     sessionView
+                }
+                ComboOverlay(count: comboCount, triggerId: comboBurstId)
+                    .allowsHitTesting(false)
+                if let kanji = crushKanji {
+                    CrushOverlay(kanji: kanji)
+                        .allowsHitTesting(false)
+                        .transition(.opacity)
                 }
             }
             .navigationTitle(title)
@@ -499,12 +509,39 @@ struct ReviewSessionView: View {
     // MARK: - Actions
 
     private func apply(_ grade: ReviewGrade, to card: Flashcard) {
+        // Capture maturity *before* applying so we can detect a learning →
+        // mature transition and fire the crush effect.
+        let wasMature = card.repetitions >= 3 && card.interval >= 21
+
         if sessionKind == .review {
             SRSService.shared.applyReview(to: card, grade: grade)
         }
         let log = ReviewLog(flashcardId: card.id, quality: grade.rawValue)
         modelContext.insert(log)
         try? modelContext.save()
+
+        let isMature = card.repetitions >= 3 && card.interval >= 21
+        let graduated = !wasMature && isMature
+        let crushChar = graduated ? String(card.expression.first ?? Character(" ")) : nil
+
+        // Combo bookkeeping: Good (3) / Easy (4) extend the streak; Again /
+        // Hard reset it. Only fire the burst on extensions of length ≥ 2.
+        if grade.rawValue >= 3 {
+            comboCount += 1
+            if comboCount >= 2 {
+                comboBurstId = UUID()
+            }
+        } else {
+            comboCount = 0
+        }
+
+        if let crushChar {
+            crushKanji = crushChar
+            UINotificationFeedbackGenerator().notificationOccurred(.success)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) {
+                crushKanji = nil
+            }
+        }
 
         withAnimation(.easeInOut(duration: 0.15)) {
             showBack = false
@@ -611,5 +648,122 @@ private struct SessionGradeButtonStyle: ButtonStyle {
             )
             .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
             .animation(.easeOut(duration: 0.10), value: configuration.isPressed)
+    }
+}
+
+// MARK: - Gamification overlays
+
+/// Transient "Combo ×N" pill that animates in from the top and fades out.
+/// `triggerId` changes (via a new UUID) each time we want to re-run the
+/// animation — the `.id(...)` modifier on the inner view forces SwiftUI to
+/// remount it so the transition replays even for the same count.
+private struct ComboOverlay: View {
+    let count: Int
+    let triggerId: UUID?
+
+    @State private var visible = false
+
+    var body: some View {
+        VStack {
+            if let triggerId, count >= 2 {
+                HStack(spacing: 6) {
+                    Image(systemName: "flame.fill")
+                        .font(.system(size: 12, weight: .bold))
+                    Text("Combo ×\(count)")
+                        .font(.system(.subheadline, design: .rounded).weight(.bold))
+                }
+                .foregroundStyle(Palette.cream)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 8)
+                .background(Capsule().fill(Palette.sakura))
+                .overlay(Capsule().strokeBorder(Palette.cream.opacity(0.4), lineWidth: 1))
+                .shadow(color: Palette.sakura.opacity(0.5), radius: 12, y: 4)
+                .id(triggerId)
+                .transition(
+                    .asymmetric(
+                        insertion: .move(edge: .top).combined(with: .opacity),
+                        removal: .opacity
+                    )
+                )
+                .onAppear {
+                    visible = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        withAnimation(.easeOut(duration: 0.3)) { visible = false }
+                    }
+                }
+                .opacity(visible ? 1 : 0)
+            }
+            Spacer()
+        }
+        .padding(.top, 4)
+        .animation(.spring(response: 0.32, dampingFraction: 0.7), value: triggerId)
+    }
+}
+
+/// "Crush" effect when a card graduates from learning → mature: the kanji
+/// blooms outward from the centre with a burst of sakura petals scattering,
+/// then fades. Lives ~0.9s.
+private struct CrushOverlay: View {
+    let kanji: String
+
+    @State private var hero = false
+    @State private var burst = false
+
+    var body: some View {
+        ZStack {
+            Color.black.opacity(hero ? 0.10 : 0.0)
+                .ignoresSafeArea()
+
+            Text(kanji)
+                .font(.system(size: 220, weight: .heavy, design: .serif))
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [Palette.sakura, Color(red: 0.870, green: 0.486, blue: 0.580)],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+                .shadow(color: Palette.sakura.opacity(0.6), radius: 24)
+                .scaleEffect(hero ? 1.0 : 0.4)
+                .opacity(hero ? 0.95 : 0.0)
+
+            // Scattered sakura petals
+            ForEach(0..<10, id: \.self) { i in
+                let angle = Double(i) / 10.0 * 2 * .pi
+                let radius: CGFloat = burst ? 220 : 0
+                Circle()
+                    .fill(Palette.sakura)
+                    .frame(width: 14, height: 14)
+                    .offset(
+                        x: cos(angle) * Double(radius),
+                        y: sin(angle) * Double(radius)
+                    )
+                    .opacity(burst ? 0.0 : 0.9)
+                    .scaleEffect(burst ? 0.5 : 1.0)
+            }
+
+            VStack {
+                Spacer()
+                Text("MATURE!")
+                    .font(.system(.headline, design: .rounded).weight(.heavy))
+                    .foregroundStyle(Palette.cream)
+                    .tracking(2.0)
+                    .padding(.horizontal, 18)
+                    .padding(.vertical, 8)
+                    .background(Capsule().fill(Palette.indigo))
+                    .shadow(color: Palette.indigo.opacity(0.5), radius: 12, y: 6)
+                    .opacity(hero ? 1 : 0)
+                    .scaleEffect(hero ? 1.0 : 0.7)
+                    .padding(.bottom, 120)
+            }
+        }
+        .onAppear {
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.65)) {
+                hero = true
+            }
+            withAnimation(.easeOut(duration: 0.8).delay(0.05)) {
+                burst = true
+            }
+        }
     }
 }
