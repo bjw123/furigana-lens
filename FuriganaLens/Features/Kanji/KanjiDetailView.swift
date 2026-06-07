@@ -12,6 +12,7 @@ struct KanjiDetailView: View {
     @AppStorage("jlptLevel") private var jlptLevel: Int = 0
     @State private var cramQueue: [Flashcard]?
     @State private var cramTitle: String = ""
+    @State private var showTypedReview = false
 
     private var kanjiInfo: KanjiInfo? {
         DictionaryService.shared.kanjiInfo(overview.kanji)
@@ -35,6 +36,10 @@ struct KanjiDetailView: View {
 
                     if !jlptExamples.isEmpty {
                         jlptExamplesCard(examples: jlptExamples)
+                    }
+
+                    if hasTypedReviewContent {
+                        typedReviewActionCard
                     }
 
                     if !overview.cards.isEmpty {
@@ -64,6 +69,13 @@ struct KanjiDetailView: View {
                     sessionKind: .cram
                 )
             }
+        }
+        .fullScreenCover(isPresented: $showTypedReview) {
+            KanjiTypedReviewView(
+                kanji: overview.kanji,
+                info: kanjiInfo,
+                examples: jlptExamples
+            )
         }
     }
 
@@ -240,6 +252,48 @@ struct KanjiDetailView: View {
                     lineWidth: isKnown ? 1 : 0.5
                 )
         )
+    }
+
+    // MARK: - Typed review
+
+    private var hasTypedReviewContent: Bool {
+        let readings = (kanjiInfo?.on.count ?? 0) + (kanjiInfo?.kun.count ?? 0)
+        return readings > 0 || !jlptExamples.isEmpty
+    }
+
+    private var typedReviewActionCard: some View {
+        Button {
+            showTypedReview = true
+        } label: {
+            HStack(spacing: 14) {
+                ZStack {
+                    Circle()
+                        .fill(Palette.sakura.opacity(0.15))
+                        .frame(width: 40, height: 40)
+                    Image(systemName: "keyboard.fill")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(Palette.sakura)
+                }
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Typed review")
+                        .font(.system(.subheadline, design: .rounded).weight(.semibold))
+                        .foregroundStyle(Palette.sumi)
+                    Text("Type the reading or meaning — wrong answers retry.")
+                        .font(.caption)
+                        .foregroundStyle(Palette.mist)
+                        .multilineTextAlignment(.leading)
+                }
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(Palette.mist.opacity(0.7))
+            }
+            .padding(.vertical, 10)
+            .padding(.horizontal, 8)
+        }
+        .buttonStyle(.plain)
+        .washiCard(padding: 8)
+        .padding(.horizontal)
     }
 
     // MARK: - Readings + JLPT (Kanjidic2-backed)

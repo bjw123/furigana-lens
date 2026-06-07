@@ -21,6 +21,7 @@
 		538DB4BC178893D29D0518D5 /* SRSService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C8FD08B443AF870A38E276 /* SRSService.swift */; };
 		66B48ED85B93A8B4D875729E /* FuriganaLensApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21FD0F67C53B46F9444F4C8 /* FuriganaLensApp.swift */; };
 		78C9EEC4ABC2C014C7A3BCAA /* JapaneseAnalysisService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E4FDD3BF740C8D9F837AB4 /* JapaneseAnalysisService.swift */; };
+		8A9BCB47AAA54633DC358FC9 /* KanjiTypedReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE2C5570B812F966D02BE42 /* KanjiTypedReviewView.swift */; };
 		948B602892EFB02383FF1674 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EEF9636A06DFA207733AA3 /* Theme.swift */; };
 		95EFE26EA16FEB61330F03AB /* OCRPipelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 704166B92C215BBDC6145953 /* OCRPipelineTests.swift */; };
 		9E7EC109BE75BBB3B484115B /* Knownness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FCE25746BA0723495415CF6 /* Knownness.swift */; };
@@ -90,6 +91,7 @@
 		D9B8455F0F0384CD2AF75A40 /* FuriganaLensUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuriganaLensUITests.swift; sourceTree = "<group>"; };
 		F1E4FDD3BF740C8D9F837AB4 /* JapaneseAnalysisService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapaneseAnalysisService.swift; sourceTree = "<group>"; };
 		F3E5E147660194E664C313B2 /* Flashcard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flashcard.swift; sourceTree = "<group>"; };
+		FEE2C5570B812F966D02BE42 /* KanjiTypedReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiTypedReviewView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -199,6 +201,7 @@
 			isa = PBXGroup;
 			children = (
 				9EED61578E9C5E65535FC683 /* KanjiDetailView.swift */,
+				FEE2C5570B812F966D02BE42 /* KanjiTypedReviewView.swift */,
 			);
 			path = Kanji;
 			sourceTree = "<group>";
@@ -395,6 +398,7 @@
 				78C9EEC4ABC2C014C7A3BCAA /* JapaneseAnalysisService.swift in Sources */,
 				E1B9BE4CF94552F51392F2C8 /* JapaneseToken.swift in Sources */,
 				4E09875294FFE89DCD835944 /* KanjiDetailView.swift in Sources */,
+				8A9BCB47AAA54633DC358FC9 /* KanjiTypedReviewView.swift in Sources */,
 				0CDA836F51E09B06BA083DC6 /* KnownWord.swift in Sources */,
 				9E7EC109BE75BBB3B484115B /* Knownness.swift in Sources */,
 				F1DB622BE44317EF7BA23685 /* MockDataSeeder.swift in Sources */,
