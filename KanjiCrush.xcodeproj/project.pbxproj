@@ -11,11 +11,11 @@
 		03AB8D5F4ABFD4DCCD583AF1 /* DailyChallengeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E29D376BBABE16AF1FB6E55A /* DailyChallengeView.swift */; };
 		0B28383EBC05773F06DC9796 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A203BA7EE1851C1789C4A1A9 /* ShareSheet.swift */; };
 		1F592127D2217B5B05EB7827 /* SRSService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9DA80B47F978748982EE4C /* SRSService.swift */; };
-		200A2D3070C4F24B764033F2 /* SentenceSpeechCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 419B48C09125141359914874 /* SentenceSpeechCheckView.swift */; };
 		24E2ED4BE13B4C2E680B0976 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD372E4A3B23128F9B2FA6A2 /* SettingsView.swift */; };
 		28A91D5AA739FA3A3B9488F5 /* SpeechRecognitionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BECF1C8F412A74FE3DFA3A8E /* SpeechRecognitionService.swift */; };
 		2AC0B88E0F0DAE407402F00E /* OCRPipelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891FD33B3970E032500E6843 /* OCRPipelineTests.swift */; };
 		2E465C9206353DCBA7FF399F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9FBDF3600DFD26E6C1EBF305 /* Assets.xcassets */; };
+		2EC936FCFAFE03481E591BF5 /* SentenceSpeechCheckView+Matching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6913889441852B61BE44335C /* SentenceSpeechCheckView+Matching.swift */; };
 		33041D56A7B44C21DF899DA3 /* ReadmeScreenshotsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8966510A25D62F7A7CA6DF24 /* ReadmeScreenshotsTests.swift */; };
 		37D7D914AB8E35A2F9111C0D /* KanjiDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC8CBDE0F1E948BA875541C2 /* KanjiDetailView.swift */; };
 		3D593FCDBA041E0B78A2FC51 /* OCRService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF9A4D7694D52435FB445E95 /* OCRService.swift */; };
@@ -25,15 +25,18 @@
 		645DBAC9D540C34CD1CE55C3 /* DecksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8C8C427735498D90B8404 /* DecksView.swift */; };
 		65D77F5F5965EC36D73F8565 /* JapaneseMatchingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44137088A4E0B7FA40B5E1F2 /* JapaneseMatchingTests.swift */; };
 		6A89C7C3455B74C225ECA367 /* KnownWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFDA2F2F96AF807139D157C /* KnownWord.swift */; };
+		6DD48C04A348F165F1513880 /* SentenceSpeechCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7F418F74F7ECF043B26487 /* SentenceSpeechCheckView.swift */; };
 		70BE82B5E305CC19619700DF /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 0D5D0816363E11A19E12C706 /* Localizable.xcstrings */; };
 		73396257EEF5D432942E5C4C /* StatsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1D25565072B0B16D0C326E /* StatsService.swift */; };
 		7803BBF04D20B19EDFD575EA /* Knownness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B07B5DB94D5FF64743FDF90 /* Knownness.swift */; };
 		7A2CCBCFADAEA78E3C58578A /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41349B7FE4C8941D99C95E93 /* RootTabView.swift */; };
 		7B2E6E365771F20DC4C08C7C /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8573B1A7672F443BC2C42559 /* Theme.swift */; };
 		7DB9BDE1985284FC7DE734BB /* ReviewStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A3DC6C828402EB034B9C920 /* ReviewStats.swift */; };
+		7E41021C8B455F5157A455E1 /* SentenceSpeechCheckView+Summary.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22B974852322FD9A2151E1B /* SentenceSpeechCheckView+Summary.swift */; };
 		7E708069A3FF48EE9139E6CA /* KanjiTypedReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6335C5233FA238D2474A4BFB /* KanjiTypedReviewView.swift */; };
 		8452BC03D2BA34EEFF543C34 /* Deck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639089187F485FCC4D5DD646 /* Deck.swift */; };
 		8BFD46CD06D96BE81313B017 /* AppLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6A8A8602C62719745DEF29 /* AppLog.swift */; };
+		8E15288FCC502B3DF5BEA0D0 /* SentenceSpeechCheckView+Editor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C343E4889C7E6027F261E7E8 /* SentenceSpeechCheckView+Editor.swift */; };
 		8F5A76718CABD884F0328EC6 /* DailyChallengeLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6401B2D2B89948F6523A4989 /* DailyChallengeLog.swift */; };
 		90926AFFD72C47CEB0290462 /* KanjiCrushApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46D8DEC1AECBF7799793277B /* KanjiCrushApp.swift */; };
 		90A8F6E72EA66EA2E75C028E /* MockDataSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE94356A1F078093DC61C52 /* MockDataSeeder.swift */; };
@@ -56,6 +59,7 @@
 		D872E99FE062A6223AF25FA6 /* JapaneseMatching.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F2BC7FD25E7D4F2813FE29 /* JapaneseMatching.swift */; };
 		DD0CF79499AA36384BBD44F5 /* JapaneseToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5621C2637E6ED31061C9DB /* JapaneseToken.swift */; };
 		EBF2A455ED97EBEA45840141 /* JLPTFallbackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DF95A8C683EA2602EC993D /* JLPTFallbackTests.swift */; };
+		ECE80243F8EBD3417E175B68 /* SentenceSpeechCheckView+Views.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A56EC43E86273C9DEAA14B /* SentenceSpeechCheckView+Views.swift */; };
 		F94226BF0A11AF288D8BB752 /* SpeechService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AEE441BC1A1FC2D014BA884 /* SpeechService.swift */; };
 		FD784B28380E4A7334771AA8 /* StatsServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2712B8CEB681219D78FFA9C7 /* StatsServiceTests.swift */; };
 /* End PBXBuildFile section */
@@ -90,7 +94,6 @@
 		2712B8CEB681219D78FFA9C7 /* StatsServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsServiceTests.swift; sourceTree = "<group>"; };
 		2C5621C2637E6ED31061C9DB /* JapaneseToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapaneseToken.swift; sourceTree = "<group>"; };
 		41349B7FE4C8941D99C95E93 /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
-		419B48C09125141359914874 /* SentenceSpeechCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentenceSpeechCheckView.swift; sourceTree = "<group>"; };
 		44137088A4E0B7FA40B5E1F2 /* JapaneseMatchingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapaneseMatchingTests.swift; sourceTree = "<group>"; };
 		4519181C8A07B3CEB0A24CE2 /* KnownnessTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownnessTests.swift; sourceTree = "<group>"; };
 		46D8DEC1AECBF7799793277B /* KanjiCrushApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiCrushApp.swift; sourceTree = "<group>"; };
@@ -98,6 +101,7 @@
 		6335C5233FA238D2474A4BFB /* KanjiTypedReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiTypedReviewView.swift; sourceTree = "<group>"; };
 		639089187F485FCC4D5DD646 /* Deck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deck.swift; sourceTree = "<group>"; };
 		6401B2D2B89948F6523A4989 /* DailyChallengeLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyChallengeLog.swift; sourceTree = "<group>"; };
+		6913889441852B61BE44335C /* SentenceSpeechCheckView+Matching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SentenceSpeechCheckView+Matching.swift"; sourceTree = "<group>"; };
 		69AD71B6D179002407C5E6F4 /* FuriganaText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuriganaText.swift; sourceTree = "<group>"; };
 		6AF06594A11C119C872E6A46 /* KanjiCrush.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KanjiCrush.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		73EB596CEEFDA3F6371672E9 /* DeckExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckExportService.swift; sourceTree = "<group>"; };
@@ -115,18 +119,22 @@
 		9BC81C73CBABAE4B1F865E69 /* KanjiCrushUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = KanjiCrushUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FBDF3600DFD26E6C1EBF305 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A203BA7EE1851C1789C4A1A9 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
+		A4A56EC43E86273C9DEAA14B /* SentenceSpeechCheckView+Views.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SentenceSpeechCheckView+Views.swift"; sourceTree = "<group>"; };
 		AD372E4A3B23128F9B2FA6A2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		AF9A4D7694D52435FB445E95 /* OCRService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRService.swift; sourceTree = "<group>"; };
 		B565DD4011B1B0CDAB9D3EBE /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
 		BECF1C8F412A74FE3DFA3A8E /* SpeechRecognitionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognitionService.swift; sourceTree = "<group>"; };
 		C11B6546558874D0C60DABD0 /* KanjiBreakdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiBreakdownView.swift; sourceTree = "<group>"; };
 		C1F8C8C427735498D90B8404 /* DecksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecksView.swift; sourceTree = "<group>"; };
+		C343E4889C7E6027F261E7E8 /* SentenceSpeechCheckView+Editor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SentenceSpeechCheckView+Editor.swift"; sourceTree = "<group>"; };
 		C3DF95A8C683EA2602EC993D /* JLPTFallbackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JLPTFallbackTests.swift; sourceTree = "<group>"; };
 		C8F2BC7FD25E7D4F2813FE29 /* JapaneseMatching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapaneseMatching.swift; sourceTree = "<group>"; };
 		CA1D25565072B0B16D0C326E /* StatsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsService.swift; sourceTree = "<group>"; };
+		D22B974852322FD9A2151E1B /* SentenceSpeechCheckView+Summary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SentenceSpeechCheckView+Summary.swift"; sourceTree = "<group>"; };
 		D9247361A7CFC569566EA246 /* SentenceWrapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentenceWrapTests.swift; sourceTree = "<group>"; };
 		DC8CBDE0F1E948BA875541C2 /* KanjiDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiDetailView.swift; sourceTree = "<group>"; };
 		E29D376BBABE16AF1FB6E55A /* DailyChallengeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyChallengeView.swift; sourceTree = "<group>"; };
+		EB7F418F74F7ECF043B26487 /* SentenceSpeechCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentenceSpeechCheckView.swift; sourceTree = "<group>"; };
 		EE74DC8E0766DDCE99AE84A0 /* JapaneseAnalysisService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapaneseAnalysisService.swift; sourceTree = "<group>"; };
 		EF244FA6F44A387A5A9EDB34 /* ReviewSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewSessionView.swift; sourceTree = "<group>"; };
 		F8960B4740139682A4D92446 /* jmdict.sqlite.gz */ = {isa = PBXFileReference; lastKnownFileType = archive.gzip; path = jmdict.sqlite.gz; sourceTree = "<group>"; };
@@ -261,6 +269,18 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
+		A706C916ED1E83352896F3C5 /* SentenceSpeechCheck */ = {
+			isa = PBXGroup;
+			children = (
+				EB7F418F74F7ECF043B26487 /* SentenceSpeechCheckView.swift */,
+				C343E4889C7E6027F261E7E8 /* SentenceSpeechCheckView+Editor.swift */,
+				6913889441852B61BE44335C /* SentenceSpeechCheckView+Matching.swift */,
+				D22B974852322FD9A2151E1B /* SentenceSpeechCheckView+Summary.swift */,
+				A4A56EC43E86273C9DEAA14B /* SentenceSpeechCheckView+Views.swift */,
+			);
+			path = SentenceSpeechCheck;
+			sourceTree = "<group>";
+		};
 		B43F974BCB3DC1CA5B03EF8E /* WordDetail */ = {
 			isa = PBXGroup;
 			children = (
@@ -272,7 +292,7 @@
 		BAA1EDF02B67C57E6BF672E1 /* Speech */ = {
 			isa = PBXGroup;
 			children = (
-				419B48C09125141359914874 /* SentenceSpeechCheckView.swift */,
+				A706C916ED1E83352896F3C5 /* SentenceSpeechCheck */,
 			);
 			path = Speech;
 			sourceTree = "<group>";
@@ -487,7 +507,11 @@
 				7A2CCBCFADAEA78E3C58578A /* RootTabView.swift in Sources */,
 				1F592127D2217B5B05EB7827 /* SRSService.swift in Sources */,
 				CBC22BFE600F52A751C25745 /* ScanView.swift in Sources */,
-				200A2D3070C4F24B764033F2 /* SentenceSpeechCheckView.swift in Sources */,
+				8E15288FCC502B3DF5BEA0D0 /* SentenceSpeechCheckView+Editor.swift in Sources */,
+				2EC936FCFAFE03481E591BF5 /* SentenceSpeechCheckView+Matching.swift in Sources */,
+				7E41021C8B455F5157A455E1 /* SentenceSpeechCheckView+Summary.swift in Sources */,
+				ECE80243F8EBD3417E175B68 /* SentenceSpeechCheckView+Views.swift in Sources */,
+				6DD48C04A348F165F1513880 /* SentenceSpeechCheckView.swift in Sources */,
 				24E2ED4BE13B4C2E680B0976 /* SettingsView.swift in Sources */,
 				0B28383EBC05773F06DC9796 /* ShareSheet.swift in Sources */,
 				28A91D5AA739FA3A3B9488F5 /* SpeechRecognitionService.swift in Sources */,
