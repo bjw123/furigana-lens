@@ -43,7 +43,7 @@ struct KanjiTypedReviewView: View {
                     modePickerView
                 }
             }
-            .navigationTitle(mode == nil ? "Typed review" : "Review · \(String(kanji))")
+            .navigationTitle(mode == nil ? "Quiz" : "Quiz · \(String(kanji))")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

@@ -4,38 +4,46 @@ import SwiftData
 struct DecksView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Deck.createdAt, order: .reverse) private var decks: [Deck]
+    @Query private var allCards: [Flashcard]
+    @Query private var knownWords: [KnownWord]
+    @AppStorage("jlptLevel") private var jlptLevel: Int = 0
     @State private var showNewDeck = false
     @State private var showArchived = false
+    @State private var searchText = ""
 
     private var activeDecks: [Deck] { decks.filter { !$0.isArchived } }
     private var archivedDecks: [Deck] { decks.filter { $0.isArchived } }
+
+    private var trimmedQuery: String {
+        searchText.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+    }
+
+    private var isSearching: Bool { !trimmedQuery.isEmpty }
+
+    /// Cards whose expression / reading / meaning / deck name match the query.
+    private var searchResults: [Flashcard] {
+        guard isSearching else { return [] }
+        let q = trimmedQuery
+        return allCards.filter { card in
+            if card.expression.lowercased().contains(q) { return true }
+            if card.reading.lowercased().contains(q) { return true }
+            if let m = card.meaning?.lowercased(), m.contains(q) { return true }
+            if let d = card.deck?.name.lowercased(), d.contains(q) { return true }
+            return false
+        }
+    }
 
     var body: some View {
         NavigationStack {
             ZStack {
                 WashiBackground()
 
-                if decks.isEmpty {
+                if isSearching {
+                    searchResultsList
+                } else if decks.isEmpty {
                     emptyState
                 } else {
-                    ScrollView {
-                        VStack(spacing: 14) {
-                            ForEach(activeDecks) { deck in
-                                NavigationLink {
-                                    DeckDetailView(deck: deck)
-                                } label: {
-                                    DeckRowCard(deck: deck)
-                                }
-                                .buttonStyle(.plain)
-                            }
-
-                            if !archivedDecks.isEmpty {
-                                archivedSection
-                            }
-                        }
-                        .padding(.horizontal)
-                        .padding(.vertical, 8)
-                    }
+                    decksList
                 }
             }
             .navigationTitle("Decks")
@@ -53,6 +61,74 @@ struct DecksView: View {
             .sheet(isPresented: $showNewDeck) {
                 NewDeckSheet()
             }
+        }
+        .searchable(text: $searchText, prompt: "Search cards…")
+    }
+
+    private var decksList: some View {
+        ScrollView {
+            VStack(spacing: 14) {
+                ForEach(activeDecks) { deck in
+                    NavigationLink {
+                        DeckDetailView(deck: deck)
+                    } label: {
+                        DeckRowCard(deck: deck)
+                    }
+                    .buttonStyle(.plain)
+                }
+
+                if !archivedDecks.isEmpty {
+                    archivedSection
+                }
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 8)
+        }
+    }
+
+    private var searchResultsList: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("\(searchResults.count) match\(searchResults.count == 1 ? "" : "es")")
+                    .font(.system(.caption, design: .rounded).weight(.semibold))
+                    .foregroundStyle(Palette.mist)
+                    .textCase(.uppercase)
+                    .tracking(0.6)
+                    .padding(.horizontal, 4)
+
+                if searchResults.isEmpty {
+                    VStack(spacing: 8) {
+                        Image(systemName: "magnifyingglass")
+                            .font(.system(size: 36))
+                            .foregroundStyle(Palette.mist)
+                        Text("No cards match \"\(searchText)\"")
+                            .font(.system(.subheadline, design: .rounded))
+                            .foregroundStyle(Palette.mist)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 60)
+                } else {
+                    VStack(spacing: 10) {
+                        ForEach(searchResults) { card in
+                            NavigationLink {
+                                CardEditView(card: card)
+                            } label: {
+                                SearchResultRow(
+                                    card: card,
+                                    isKnown: Knownness.isKnown(
+                                        expression: card.expression,
+                                        knownWords: knownWords,
+                                        userJLPTLevel: jlptLevel
+                                    )
+                                )
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                }
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 8)
         }
     }
 
@@ -742,5 +818,65 @@ struct NewDeckSheet: View {
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
                     .strokeBorder(Palette.hairline, lineWidth: 0.75)
             )
+    }
+}
+
+/// One row in the cross-deck search results. Compact card row with the deck
+/// label so the user can tell where the match lives.
+private struct SearchResultRow: View {
+    let card: Flashcard
+    var isKnown: Bool = false
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(spacing: 8) {
+                    Text(card.expression)
+                        .font(.system(.title3, design: .serif))
+                        .foregroundStyle(Palette.sumi)
+                    if let deck = card.deck {
+                        Text(deck.name)
+                            .font(.system(.caption2, design: .rounded).weight(.semibold))
+                            .foregroundStyle(Palette.indigo.opacity(0.85))
+                            .padding(.horizontal, 7)
+                            .padding(.vertical, 2)
+                            .background(Capsule().fill(Palette.indigo.opacity(0.10)))
+                            .overlay(Capsule().strokeBorder(Palette.indigo.opacity(0.3), lineWidth: 0.5))
+                    }
+                    if isKnown {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .font(.system(size: 11, weight: .semibold))
+                            .foregroundStyle(Palette.gold)
+                    }
+                }
+                if !card.reading.isEmpty, card.reading != card.expression {
+                    Text(card.reading)
+                        .font(.system(.subheadline, design: .rounded))
+                        .foregroundStyle(Palette.indigo.opacity(0.85))
+                }
+                if let meaning = card.meaning, !meaning.isEmpty {
+                    Text(meaning)
+                        .font(.caption)
+                        .foregroundStyle(Palette.mist)
+                        .lineLimit(2)
+                }
+            }
+            Spacer(minLength: 8)
+            Image(systemName: "chevron.right")
+                .font(.caption2.weight(.semibold))
+                .foregroundStyle(Palette.mist.opacity(0.6))
+        }
+        .padding(14)
+        .background(
+            (isKnown ? Palette.gold.opacity(0.07) : Palette.washi),
+            in: RoundedRectangle(cornerRadius: 16, style: .continuous)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .strokeBorder(
+                    isKnown ? Palette.gold.opacity(0.45) : Palette.hairline,
+                    lineWidth: isKnown ? 1 : 0.75
+                )
+        )
     }
 }

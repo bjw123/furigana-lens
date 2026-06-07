@@ -275,7 +275,7 @@ struct KanjiDetailView: View {
                         .foregroundStyle(Palette.sakura)
                 }
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Typed review")
+                    Text("Quiz this kanji")
                         .font(.system(.subheadline, design: .rounded).weight(.semibold))
                         .foregroundStyle(Palette.sumi)
                     Text("Type the reading or meaning — wrong answers retry.")

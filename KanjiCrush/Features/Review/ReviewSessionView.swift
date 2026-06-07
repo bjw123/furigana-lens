@@ -15,6 +15,7 @@ struct ReviewSessionView: View {
     @State private var currentIndex = 0
     @State private var showBack = false
     @State private var seeMoreExpanded = false
+    @State private var editingCard: Flashcard?
     @ObservedObject private var speech = SpeechService.shared
 
     enum SessionKind {
@@ -37,6 +38,28 @@ struct ReviewSessionView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Done") { dismiss() }
+                }
+                ToolbarItem(placement: .primaryAction) {
+                    if currentIndex < queue.count {
+                        Button {
+                            editingCard = queue[currentIndex]
+                        } label: {
+                            Label("Edit", systemImage: "square.and.pencil")
+                        }
+                        .accessibilityLabel("Edit this card")
+                    }
+                }
+            }
+            .sheet(item: $editingCard) { card in
+                NavigationStack {
+                    CardEditView(card: card)
+                        .navigationTitle("Edit card")
+                        .navigationBarTitleDisplayMode(.inline)
+                        .toolbar {
+                            ToolbarItem(placement: .confirmationAction) {
+                                Button("Done") { editingCard = nil }
+                            }
+                        }
                 }
             }
         }
@@ -166,6 +189,9 @@ struct ReviewSessionView: View {
                         .padding(.horizontal)
                 }
                 audioButton(for: displayReading.isEmpty ? card.expression : displayReading)
+                if let sentence = frontExampleSentence(for: card) {
+                    contextSentenceBlock(sentence: sentence)
+                }
             }
         case .sentence:
             VStack(spacing: 12) {
@@ -181,6 +207,25 @@ struct ReviewSessionView: View {
                 sentenceBreakdown(for: card)
             }
         }
+    }
+
+    /// Captured / example sentence shown on the back of a word card with full
+    /// per-token furigana, so the learner sees the target word in its real
+    /// context with the readings of the surrounding kanji also revealed.
+    private func contextSentenceBlock(sentence: String) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("In context")
+                .font(.system(.caption2, design: .rounded).weight(.semibold))
+                .foregroundStyle(Palette.mist)
+                .textCase(.uppercase)
+                .tracking(0.6)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            FuriganaSentenceView(sentence: sentence, fontSize: 17, textAlignment: .left)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            audioButton(for: sentence)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .padding(.top, 8)
     }
 
     /// Inline per-token breakdown shown on the back of a sentence card. Each

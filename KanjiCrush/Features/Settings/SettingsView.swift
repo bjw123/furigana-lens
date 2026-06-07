@@ -9,7 +9,6 @@ struct SettingsView: View {
 
     @AppStorage("hideKanaOnlyTokens") private var hideKanaOnlyTokens = true
     @AppStorage("hideKnownWords") private var hideKnownWords = false
-    @AppStorage("liveFurigana") private var liveFurigana = true
     @AppStorage("appAccent") private var appAccentRaw: String = AppAccent.indigo.rawValue
     @AppStorage("showWavePattern") private var showWavePattern: Bool = true
     /// JLPT level the user is at: 0 = none, 5..1 maps to N5..N1.
@@ -180,14 +179,6 @@ struct SettingsView: View {
                 icon: "checkmark.seal.fill",
                 tint: Palette.bamboo,
                 isOn: $hideKnownWords
-            )
-            divider
-            settingsToggleRow(
-                title: "Live furigana",
-                subtitle: "Run OCR on the live camera feed and overlay readings.",
-                icon: "text.viewfinder",
-                tint: Palette.sakura,
-                isOn: $liveFurigana
             )
         }
         .washiCard()
